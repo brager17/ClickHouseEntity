@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClickHouseQueryProvider", "ClickHouseQueryProvider\ClickHouseQueryProvider.csproj", "{C1318322-69C3-4D5C-AC13-E757F376420A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressionTreeVisitor", "ExpressionTreeVisitor\ExpressionTreeVisitor.csproj", "{146B59BC-5D54-4ADA-8F50-B83A1A84BFB8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClickHouseDbContext", "ClickHouseDbContext\ClickHouseDbContext.csproj", "{ADB96FAB-F5B5-41A6-995F-68831546F5D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{9E2D6B8A-B430-45B0-905D-D10D0530B282}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClickDbContextInfrastructure", "ClickDbContextInfrastructure\ClickDbContextInfrastructure.csproj", "{80C41ECD-1C49-44F8-9B7A-F5FAC9209432}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C1318322-69C3-4D5C-AC13-E757F376420A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1318322-69C3-4D5C-AC13-E757F376420A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1318322-69C3-4D5C-AC13-E757F376420A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1318322-69C3-4D5C-AC13-E757F376420A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{146B59BC-5D54-4ADA-8F50-B83A1A84BFB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{146B59BC-5D54-4ADA-8F50-B83A1A84BFB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{146B59BC-5D54-4ADA-8F50-B83A1A84BFB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{146B59BC-5D54-4ADA-8F50-B83A1A84BFB8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADB96FAB-F5B5-41A6-995F-68831546F5D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADB96FAB-F5B5-41A6-995F-68831546F5D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADB96FAB-F5B5-41A6-995F-68831546F5D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADB96FAB-F5B5-41A6-995F-68831546F5D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E2D6B8A-B430-45B0-905D-D10D0530B282}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E2D6B8A-B430-45B0-905D-D10D0530B282}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E2D6B8A-B430-45B0-905D-D10D0530B282}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E2D6B8A-B430-45B0-905D-D10D0530B282}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80C41ECD-1C49-44F8-9B7A-F5FAC9209432}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80C41ECD-1C49-44F8-9B7A-F5FAC9209432}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80C41ECD-1C49-44F8-9B7A-F5FAC9209432}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80C41ECD-1C49-44F8-9B7A-F5FAC9209432}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="ClickHouse.Ado" Version="1.1.13" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ClickDbContextInfrastructure\ClickDbContextInfrastructure.csproj" />
+    </ItemGroup>
+
+   
+</Project>
