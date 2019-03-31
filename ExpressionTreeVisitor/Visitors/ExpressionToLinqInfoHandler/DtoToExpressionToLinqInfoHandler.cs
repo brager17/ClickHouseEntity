@@ -14,7 +14,7 @@ namespace ExpressionTreeVisitor
             var list = new List<KeyValuePair<PropertyInfo, InPropertySelectExpression>>();
 
             KeyValuePair<PropertyInfo, InPropertySelectExpression> keyValue;
-            //todo refact
+
             if (expression.Body is NewExpression newExpression)
             {
                 var props = newExpression.Members.Cast<PropertyInfo>();

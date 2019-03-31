@@ -11,32 +11,31 @@ namespace DbContext
 {
     public class ModelBinder : IModelBinder
     {
-        private readonly IEntityTypeBinder _valueTypeBinder;
-        private readonly IEntityTypeBinder _classTypeTypeBinder;
+        private readonly ObjectBinder _valueTypeBinder;
+        private readonly ObjectBinder _complexTypeBinder;
 
-        public ModelBinder(IEntityTypeBinder valueTypeBinder, IEntityTypeBinder classTypeTypeBinder)
+        public ModelBinder(ObjectBinder valueTypeBinder, ObjectBinder complexTypeBinder)
         {
             _valueTypeBinder = valueTypeBinder;
-            _classTypeTypeBinder = classTypeTypeBinder;
+            _complexTypeBinder = complexTypeBinder;
         }
 
-        
+
         // todo закешировать MethodInfo
         public T Bind<T>(IDataReader reader)
         {
             var type = typeof(T).GenericTypeArguments.Single();
+            var makeGenericMethod = typeof(ObjectBinder).GetMethod("Handle").MakeGenericMethod(type);
             if (type.IsSimpleType())
             {
-                var invoke = typeof(ValueTypeBinder).GetMethod("Handle").MakeGenericMethod(type)
-                    .Invoke(_valueTypeBinder, new[] {reader});
+                var invoke = makeGenericMethod.Invoke(_valueTypeBinder, new[] {reader});
 
                 return (T) invoke;
             }
 
-            if (type.IsClass)
+            if (!type.IsSimpleType())
             {
-                var invoke = typeof(ClassTypeBinder).GetMethod("Handle").MakeGenericMethod(type)
-                    .Invoke(_classTypeTypeBinder, new object[] {reader});
+                var invoke = makeGenericMethod.Invoke(_complexTypeBinder, new object[] {reader});
                 return (T) invoke;
             }
 

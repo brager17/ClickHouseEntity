@@ -4,6 +4,8 @@ namespace DbContext
     {
         public string Alias { get; set; }
         public object Value { get; set; }
+
+      
     }
 
 

@@ -122,7 +122,7 @@ namespace Tests
         public long SomeInt1 { get; set; }
     }
 
-    public class Tests
+    public class SelectTests
     {
         private TestDbContext _context { get; set; }
 

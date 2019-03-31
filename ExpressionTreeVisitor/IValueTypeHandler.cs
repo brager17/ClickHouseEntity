@@ -3,10 +3,14 @@ using System.Data;
 
 namespace DbContext
 {
-    public interface IEntityTypeBinder
+    public interface ISingleObjectBinder
     {
-        IEnumerator<T> Handle<T>(IDataReader dataReader);
+        T Handle<T>(Cell cell);
     }
 
-  
+
+    public interface IComplexEntityBinder
+    {
+        T Handle<T>(IEnumerable<Cell> cells);
+    }
 }
