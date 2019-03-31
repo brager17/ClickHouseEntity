@@ -9,7 +9,6 @@ namespace ExpressionTreeVisitor
         private SelectVisitor SelectVisitor { get; set; }
         private AggregateLinqInfo AggregateLinqInfo { get; set; }
 
-
         public AggregateLinqInfo GetInfo(Expression expression)
         {
             SelectVisitor = new SelectVisitor(new DtoToExpressionToLinqInfoHandler(),
@@ -26,7 +25,6 @@ namespace ExpressionTreeVisitor
             return base.VisitMethodCall(node);
         }
 
-        //todo добавить более корректную проверку, что ConstantExpression это именно ConstantExpression DbSet'а
         protected override Expression VisitConstant(ConstantExpression node)
         {
             // if node.type is DbSetType

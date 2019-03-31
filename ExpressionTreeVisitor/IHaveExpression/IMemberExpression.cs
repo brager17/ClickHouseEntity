@@ -4,6 +4,6 @@ namespace ExpressionTreeVisitor
 {
     public interface IMemberExpression
     {
-        MemberExpression _memberExpression { get; set; }
+        MemberExpression _memberExpression { get;  }
     }
 }

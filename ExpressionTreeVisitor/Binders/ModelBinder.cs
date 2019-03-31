@@ -11,13 +11,13 @@ namespace DbContext
 {
     public class ModelBinder : IModelBinder
     {
-        private readonly IEntityTypeHandler _valueTypeHandler;
-        private readonly IEntityTypeHandler _classTypeTypeHandler;
+        private readonly IEntityTypeBinder _valueTypeBinder;
+        private readonly IEntityTypeBinder _classTypeTypeBinder;
 
-        public ModelBinder(IEntityTypeHandler valueTypeHandler, IEntityTypeHandler classTypeTypeHandler)
+        public ModelBinder(IEntityTypeBinder valueTypeBinder, IEntityTypeBinder classTypeTypeBinder)
         {
-            _valueTypeHandler = valueTypeHandler;
-            _classTypeTypeHandler = classTypeTypeHandler;
+            _valueTypeBinder = valueTypeBinder;
+            _classTypeTypeBinder = classTypeTypeBinder;
         }
 
         
@@ -27,16 +27,16 @@ namespace DbContext
             var type = typeof(T).GenericTypeArguments.Single();
             if (type.IsSimpleType())
             {
-                var invoke = typeof(ValueTypeHandler).GetMethod("Handle").MakeGenericMethod(type)
-                    .Invoke(_valueTypeHandler, new[] {reader});
+                var invoke = typeof(ValueTypeBinder).GetMethod("Handle").MakeGenericMethod(type)
+                    .Invoke(_valueTypeBinder, new[] {reader});
 
                 return (T) invoke;
             }
 
             if (type.IsClass)
             {
-                var invoke = typeof(ClassTypeHandler).GetMethod("Handle").MakeGenericMethod(type)
-                    .Invoke(_classTypeTypeHandler, new object[] {reader});
+                var invoke = typeof(ClassTypeBinder).GetMethod("Handle").MakeGenericMethod(type)
+                    .Invoke(_classTypeTypeBinder, new object[] {reader});
                 return (T) invoke;
             }
 

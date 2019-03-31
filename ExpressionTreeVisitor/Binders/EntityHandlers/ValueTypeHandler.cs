@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace DbContext
 {
-    public class ValueTypeHandler : IEntityTypeHandler
+    public class ValueTypeBinder : IEntityTypeBinder
     {
         public IEnumerator<T> Handle<T>(IDataReader dataReader)
         {

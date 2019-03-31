@@ -4,6 +4,6 @@ namespace ExpressionTreeVisitor
 {
     public interface ICallExpression
     {
-        MethodCallExpression _callExpression { get; set; }
+        MethodCallExpression _callExpression { get;  }
     }
 }

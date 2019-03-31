@@ -3,7 +3,7 @@ using System.Data;
 
 namespace DbContext
 {
-    public interface IEntityTypeHandler
+    public interface IEntityTypeBinder
     {
         IEnumerator<T> Handle<T>(IDataReader dataReader);
     }

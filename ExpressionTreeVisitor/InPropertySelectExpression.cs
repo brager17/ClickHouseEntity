@@ -4,9 +4,23 @@ namespace ExpressionTreeVisitor
 {
     public class InPropertySelectExpression : ICallExpression, IMemberExpression, IConstantExpression
     {
-        public MethodCallExpression _callExpression { get; set; }
-        public MemberExpression _memberExpression { get; set; }
-        public ConstantExpression _contantExpression { get; set; }
+        public InPropertySelectExpression(MethodCallExpression callExpression)
+        {
+            _callExpression = callExpression;
+        }
+
+        public InPropertySelectExpression(MemberExpression memberExpression)
+        {
+            _memberExpression = memberExpression;
+        }
+
+        public InPropertySelectExpression(ConstantExpression contantExpression)
+        {
+            _contantExpression = contantExpression;
+        }
+        public MethodCallExpression _callExpression { get;  }
+        public MemberExpression _memberExpression { get;  }
+        public ConstantExpression _contantExpression { get;  }
     }
 
  

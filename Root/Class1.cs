@@ -14,8 +14,8 @@ namespace Root
                         new TableNameRequestHandler()),
                     new BaseExpressionVisitor()),
                 new DbHandler(ConnectionString,
-                    new ModelBinder(new ValueTypeHandler(),
-                        new ClassTypeHandler(new ConcreteClassRowToObject(), new AnonymousClassRowToObject()))),
+                    new ModelBinder(new ValueTypeBinder(),
+                        new ClassTypeBinder(new ConcreteClassRowToObject(), new AnonymousClassRowToObject()))),
                 new BaseExpressionVisitor());
     }
 }

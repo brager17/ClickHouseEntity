@@ -14,22 +14,6 @@ namespace ExpressionTreeVisitor
         {
             _propertyExpressions = new Dictionary<PropertyInfo, InPropertySelectExpression>();
         }
-
-        /// <summary>
-        /// example: Select(x=>x.Id) - simple select
-        /// </summary>
-        public bool IsPrimitiveSelect
-        {
-            get
-            {
-                var fromTypeName = LambdaType.Name;
-                if (_propertyExpressions.Count != 1)
-                    return false;
-                var singleTypeName = _propertyExpressions.Single().Key.DeclaringType.Name;
-               
-                return fromTypeName == singleTypeName;
-            }
-        }
     }
 
     public class WhereInfo : BaseLinqInfo, ICallExpression

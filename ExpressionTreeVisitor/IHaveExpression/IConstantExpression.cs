@@ -4,6 +4,6 @@ namespace ExpressionTreeVisitor
 {
     public interface IConstantExpression
     {
-        ConstantExpression _contantExpression { get; set; }
+        ConstantExpression _contantExpression { get;  }
     }
 }
