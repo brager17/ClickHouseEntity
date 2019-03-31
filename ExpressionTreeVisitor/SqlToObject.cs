@@ -22,12 +22,12 @@ namespace DbContext
             _baseExpressionVisitor = baseExpressionVisitor;
         }
 
-        //TResult type definition IEnumerable<>
+        //TResult type definition IEnumerator<T> where T DbSet type 
         public TResult Handle<TResult>(Expression expression)
         {
             var aggregateInfo = _baseExpressionVisitor.GetInfo(expression);
             var sql = _toSqlConverter.GetSql(aggregateInfo);
-            var data = _dbHandler.GetData<TResult>(sql, aggregateInfo.BindInfo);
+            var data = _dbHandler.GetData<TResult>(sql);
             return data;
         }
     }

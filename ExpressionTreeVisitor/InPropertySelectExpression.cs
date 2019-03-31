@@ -9,9 +9,5 @@ namespace ExpressionTreeVisitor
         public ConstantExpression _contantExpression { get; set; }
     }
 
-    public class InPrimitiveTypeSelectExpression : ICallExpression, IConstantExpression
-    {
-        public MethodCallExpression _callExpression { get; set; }
-        public ConstantExpression _contantExpression { get; set; }
-    }
+ 
 }

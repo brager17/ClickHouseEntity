@@ -173,20 +173,89 @@ namespace Tests
                 {
                     Long = x.SomeInt, Date = x.SomeDate, Float = x.SomeFloat, String = x.SomeString
                 })
-                .Select(x => new
-                {
-                    x.Date, x.Long
-                })
-                .Select(x => x.Long)
-                .ToList();
-//            CollectionAssert.AreEqual(TestHelper.SomeDtoDate().Select(x => x.Date),
-//                expression.ToList().Select(x => x.Date));
+                ;
+            CollectionAssert.AreEqual(TestHelper.SomeDtoDate().Select(x => x.Date),
+                expression.ToList().Select(x => x.Date));
+            CollectionAssert.AreEqual(TestHelper.SomeDtoDate().Select(x => x.Long),
+                expression.ToList().Select(x => x.Long));
+            CollectionAssert.AreEqual(TestHelper.SomeDtoDate().Select(x => x.Float),
+                expression.ToList().Select(x => x.Float));
+            CollectionAssert.AreEqual(TestHelper.SomeDtoDate().Select(x => x.String),
+                expression.ToList().Select(x => x.String));
+        }
+
+        [Test]
+        public void Test4()
+        {
+            _context = new TestDbContext();
+            var expression = _context.TestTables.Select(x => new SomeDto
+            {
+                Long = x.SomeInt, Date = x.SomeDate, Float = x.SomeFloat, String = x.SomeString
+            }).Select(x => x.Long);
+            ;
             CollectionAssert.AreEqual(TestHelper.SomeDtoDate().Select(x => x.Long),
                 expression.ToList().Select(x => x));
-//            CollectionAssert.AreEqual(TestHelper.SomeDtoDate().Select(x => x.Float),
-//                expression.ToList().Select(x => x.Float));
-//            CollectionAssert.AreEqual(TestHelper.SomeDtoDate().Select(x => x.String),
-//                expression.ToList().Select(x => x.String));
+        }
+
+        [Test]
+        public void Test5()
+        {
+            _context = new TestDbContext();
+            var expression = _context.TestTables.Select(x => new SomeDto
+            {
+                Long = x.SomeInt, Date = x.SomeDate, Float = x.SomeFloat, String = x.SomeString
+            }).Select(x => new {l = x.Long, f = x.Float});
+            ;
+
+            CollectionAssert.AreEqual(TestHelper.SomeDtoDate().Select(x => x.Long),
+                expression.ToList().Select(x => x.l));
+
+            CollectionAssert.AreEqual(TestHelper.SomeDtoDate().Select(x => x.Float),
+                expression.ToList().Select(x => x.f));
+        }
+
+
+        [Test]
+        public void Test6()
+        {
+            _context = new TestDbContext();
+            var expression = _context.TestTables.Select(x => new SomeDto
+                {
+                    Long = x.SomeInt, Date = x.SomeDate, Float = x.SomeFloat, String = x.SomeString
+                }).Select(x => new {l = x.Long, f = x.Float})
+                .Select(x => new SomeDto()
+                {
+                    Long = x.l,
+                    Float = x.f
+                });
+            ;
+
+            CollectionAssert.AreEqual(TestHelper.SomeDtoDate().Select(x => x.Long),
+                expression.ToList().Select(x => x.Long));
+
+            CollectionAssert.AreEqual(TestHelper.SomeDtoDate().Select(x => x.Float),
+                expression.ToList().Select(x => x.Float));
+        }
+
+
+        [Test]
+        public void Test7()
+        {
+            _context = new TestDbContext();
+            var expression = _context.TestTables.Select(x => new SomeDto
+                {
+                    Long = x.SomeInt, Date = x.SomeDate, Float = x.SomeFloat, String = x.SomeString
+                }).Select(x => new {l = x.Long, f = x.Float})
+                .Select(x => new SomeDto()
+                {
+                    Long = x.l,
+                    Float = x.f
+                })
+                .Select(x => x.Float);
+            ;
+
+            CollectionAssert.AreEqual(TestHelper.SomeDtoDate().Select(x => x.Float),
+                expression.ToList().Select(x => x));
         }
     }
 }

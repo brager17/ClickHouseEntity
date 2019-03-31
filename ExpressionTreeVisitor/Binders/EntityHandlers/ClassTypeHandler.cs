@@ -1,24 +1,24 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
 using ExpressionTreeVisitor;
 
 namespace DbContext
 {
     public class ClassTypeHandler : IEntityTypeHandler
     {
-        private readonly IRowToObject _rowToObject;
+        private readonly IRowToObject _concreteClassRowToObject;
+        private readonly IRowToObject _anonymousClassRowToObject;
 
-        public ClassTypeHandler(IRowToObject rowToObject)
+        public ClassTypeHandler(IRowToObject concreteClassRowToObject, IRowToObject anonymousClassRowToObject)
         {
-            _rowToObject = rowToObject;
+            _concreteClassRowToObject = concreteClassRowToObject;
+            _anonymousClassRowToObject = anonymousClassRowToObject;
         }
 
-        public IEnumerator<T> Handle<T>(IDataReader dataReader, BindInfo bindInfo)
+        public IEnumerator<T> Handle<T>(IDataReader dataReader)
         {
             var arr = new List<IEnumerable<Cell>>();
             var fields = dataReader.FieldCount;
@@ -28,9 +28,16 @@ namespace DbContext
                     arr.Add(names.Select(name => new Cell {Value = dataReader[name], Alias = name}).ToList());
             while (dataReader.NextResult());
 
-            var buildMethodInfo = typeof(EntityRowToObject).GetMethod("Build").MakeGenericMethod(typeof(T));
-            var result = arr.Select(x => buildMethodInfo.Invoke(_rowToObject, new object[] {x, bindInfo})).ToList()
-                .Cast<T>();
+
+            IRowToObject rowToObjectType;
+
+            if (typeof(T).IsAnonymouseClass())
+                rowToObjectType = _anonymousClassRowToObject;
+            else
+                rowToObjectType = _concreteClassRowToObject;
+
+            var result = arr.Select(x => rowToObjectType.GetType().GetMethod("Build").MakeGenericMethod(typeof(T))
+                .Invoke(rowToObjectType, new object[] {x})).ToList().Cast<T>();
 
             return result.GetEnumerator();
         }
@@ -44,34 +51,38 @@ namespace DbContext
 
     public interface IRowToObject
     {
-        T Build<T>(IEnumerable<Cell> cells, BindInfo bindInfo);
+        T Build<T>(IEnumerable<Cell> cells);
     }
 
-    // todo adding cache
-    public class EntityRowToObject : IRowToObject
+    public class AnonymousClassRowToObject : IRowToObject
     {
-        public T Build<T>(IEnumerable<Cell> cells, BindInfo bindInfo)
+        public T Build<T>(IEnumerable<Cell> cells)
+        {
+            var props = typeof(T).GetProperties();
+            // строим констуктор
+            var cellProps = props.Join(cells, x => x.Name, x => x.Alias,
+                (x, y) => new {type = x.PropertyType, value = y.Value});
+            var constantExpressions =
+                cellProps.Select(x => Expression.Convert(Expression.Constant(x.value), x.type));
+            var ctor = typeof(T).GetConstructors().Single();
+            var expressionNew = Expression.New(ctor, constantExpressions);
+            var ctorLambda = Expression.Lambda<Func<T>>(expressionNew);
+            return ctorLambda.Compile().Invoke();
+        }
+    }
+
+
+// todo adding cache
+    public class ConcreteClassRowToObject : IRowToObject
+    {
+        public T Build<T>(IEnumerable<Cell> cells)
         {
             var props = typeof(T).GetProperties();
 
-            // строим констуктор
-            if (bindInfo.DestType.IsAnonymouseClass())
-            {
-                var cellProps = props.Join(cells, x => x.Name, x => x.Alias,
-                    (x, y) => new {type = x.PropertyType, value = y.Value});
-                var constantExpressions =
-                    cellProps.Select(x => Expression.Convert(Expression.Constant(x.value), x.type));
-                var ctor = bindInfo.DestType.GetConstructors().Single();
-                var expressionNew = Expression.New(ctor, constantExpressions);
-                var ctorLambda = Expression.Lambda<Func<T>>(expressionNew);
-                return ctorLambda.Compile().Invoke();
-            }
-
-            // через инициализатор
-
-            var cellPropss = props.Join(cells, x => x.Name, x => x.Alias,
+            // строим инициализатор
+            var cellProps = props.Join(cells, x => x.Name, x => x.Alias,
                 (x, y) => new {propertyType = x, value = y.Value});
-            var assignments = cellPropss.Select(x
+            var assignments = cellProps.Select(x
                 => Expression.Bind(x.propertyType,
                     Expression.Convert(Expression.Constant(x.value), x.propertyType.PropertyType)));
 

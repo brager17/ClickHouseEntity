@@ -8,6 +8,6 @@ namespace ExpressionTreeVisitor
         public static bool IsSimpleType(this Type type) => type.IsPrimitive || type == typeof(string);
 
         // todo refact this
-        public static bool IsAnonymouseClass(this Type type) => type.Name.Contains("Anonymous");
+        public static bool IsAnonymouseClass(this Type type) => type.Name.Contains("AnonymousType");
     }
 }

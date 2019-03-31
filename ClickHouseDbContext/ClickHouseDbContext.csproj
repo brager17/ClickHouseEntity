@@ -4,22 +4,11 @@
         <TargetFramework>netcoreapp2.2</TargetFramework>
         <RootNamespace>DbContext</RootNamespace>
     </PropertyGroup>
-
- 
-
-   
-
     <ItemGroup>
       <PackageReference Include="ClickHouse.Ado" Version="1.1.13" />
     </ItemGroup>
-
- 
-
-   
-
     <ItemGroup>
-      <ProjectReference Include="..\ClickDbContextInfrastructure\ClickDbContextInfrastructure.csproj" />
-      <ProjectReference Include="..\ExpressionTreeVisitor\ExpressionTreeVisitor.csproj" />
+      <ProjectReference Include="..\ClickHouseDbContextInterfaces\ClickHouseDbContextInterfaces.csproj" />
+      <ProjectReference Include="..\Root\Root.csproj" />
     </ItemGroup>
-
 </Project>

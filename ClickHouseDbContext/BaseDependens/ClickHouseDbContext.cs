@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
-using System.Reflection.Metadata.Ecma335;
+using ClickDbContextInfrastructure;
 using DbContext;
 using ExpressionTreeVisitor;
+using Root;
 
 namespace Context
 {
-    public class ClickHouseDbContext
+    public class ClickHouseDbContext:IClickHouseDbContext
     {
         private string ConnectionString { get; set; }
 
@@ -23,20 +23,11 @@ namespace Context
                 {
                     var propertyType = x.PropertyType.GenericTypeArguments.First();
                     x.SetValue(this, Activator.CreateInstance(typeof(DbSet<>).MakeGenericType(propertyType),
-                        new ClickHouseQueryProvider(
-                            new SqlToObject(
-                                new ExpressionToSqlConverter(new SqlRequestHandler(
-                                        new SelectRequestHandler(new GetBindingInfo()),
-                                        new TableNameRequestHandler()),
-                                    new BaseExpressionVisitor(new GetBindingInfo())),
-                                new DbHandler(ConnectionString,
-                                    new ModelBinder(new ValueTypeHandler(),
-                                        new ClassTypeHandler(new EntityRowToObject()))),
-                                new BaseExpressionVisitor(new GetBindingInfo())))));
+                        new ClickHouseQueryProvider(GetClickHouseProvider.Get(connectionString))));
                 });
         }
 
-        public class DbSet<T> : ClickHouseQueryable<T>
+        public class DbSet<T> : ClickHouseQueryable<T>,IDbSet
         {
             public DbSet(IQueryProvider queryProvider) :
                 base(Expression.Constant(new T[] { }.AsQueryable()), queryProvider)

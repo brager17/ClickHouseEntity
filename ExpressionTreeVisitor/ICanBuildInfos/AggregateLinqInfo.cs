@@ -14,8 +14,6 @@ namespace ExpressionTreeVisitor
 
     public class AggregateLinqInfo : ForSqlRequestInfo
     {
-        public BindInfo BindInfo { get; set; }
-
         public AggregateLinqInfo()
         {
             SelectInfo = new List<SelectInfo>();
@@ -23,11 +21,5 @@ namespace ExpressionTreeVisitor
         }
     }
 
-    /// <summary>
-    /// SelectInfo и WhereInfo отсортированы
-    /// </summary>
-    public class OrderingAggregateLinqInfo : AggregateLinqInfo
-    {
-        
-    }
+    
 }

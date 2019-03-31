@@ -9,7 +9,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ClickDbContextInfrastructure\ClickDbContextInfrastructure.csproj" />
+      <ProjectReference Include="..\ClickHouseDbContextInterfaces\ClickHouseDbContextInterfaces.csproj" />
     </ItemGroup>
 
    

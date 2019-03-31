@@ -6,6 +6,6 @@ namespace DbContext
 {
     public interface IDbHandler
     {
-        T GetData<T>(string sql, BindInfo bindInfo);
+        T GetData<T>(string sql);
     }
 }

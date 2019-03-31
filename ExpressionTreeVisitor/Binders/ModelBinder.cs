@@ -11,16 +11,18 @@ namespace DbContext
 {
     public class ModelBinder : IModelBinder
     {
-        private readonly IValueTypeHandler _valueTypeHandler;
+        private readonly IEntityTypeHandler _valueTypeHandler;
         private readonly IEntityTypeHandler _classTypeTypeHandler;
 
-        public ModelBinder(IValueTypeHandler valueTypeHandler, IEntityTypeHandler classTypeTypeHandler)
+        public ModelBinder(IEntityTypeHandler valueTypeHandler, IEntityTypeHandler classTypeTypeHandler)
         {
             _valueTypeHandler = valueTypeHandler;
             _classTypeTypeHandler = classTypeTypeHandler;
         }
 
-        public T Bind<T>(IDataReader reader, BindInfo bindInfo)
+        
+        // todo закешировать MethodInfo
+        public T Bind<T>(IDataReader reader)
         {
             var type = typeof(T).GenericTypeArguments.Single();
             if (type.IsSimpleType())
@@ -34,7 +36,7 @@ namespace DbContext
             if (type.IsClass)
             {
                 var invoke = typeof(ClassTypeHandler).GetMethod("Handle").MakeGenericMethod(type)
-                    .Invoke(_classTypeTypeHandler, new object[] {reader, bindInfo});
+                    .Invoke(_classTypeTypeHandler, new object[] {reader});
                 return (T) invoke;
             }
 

@@ -5,6 +5,6 @@ namespace DbContext
 {
     public interface IModelBinder
     {
-        T Bind<T>(IDataReader reader,BindInfo bindInfo);
+        T Bind<T>(IDataReader reader);
     }
 }

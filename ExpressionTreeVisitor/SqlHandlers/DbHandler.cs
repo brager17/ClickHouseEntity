@@ -19,13 +19,13 @@ namespace DbContext
             _modelBinder = modelBinder;
         }
 
-        public T GetData<T>(string sqlCommand, BindInfo bindInfo)
+        public T GetData<T>(string sqlCommand)
         {
             using (var cnn = new ClickHouseConnection(new ClickHouseConnectionSettings(_connectionString)))
             {
                 cnn.Open();
                 var reader = cnn.CreateCommand(sqlCommand).ExecuteReader();
-                var result = _modelBinder.Bind<T>(reader, bindInfo);
+                var result = _modelBinder.Bind<T>(reader);
                 cnn.Close();
                 return result;
             }
