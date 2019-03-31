@@ -12,10 +12,12 @@ namespace Tests
         [Test]
         public void Test1()
         {
+            var s = 111;
+            var sss = Enumerable.Range(1, 100).Aggregate(string.Empty, (a, c) => a.ToString() + " " + c.ToString());
             _testDbContext = new TestDbContext();
             var l = _testDbContext.TestTables
-                .Where(x => x.SomeInt == 1 || x.SomeInt == 2 || x.SomeInt == 3 &&
-                            x.SomeInt == 0 || x.SomeInt == 4 || x.SomeInt == 5)
+                .Where(x => x.SomeInt == 1 || x.SomeInt == s || x.SomeInt == 3 &&
+                            x.SomeInt == 0 || x.SomeString == sss || x.SomeInt == 5)
                 .Select(x => new Dto()
                 {
                     SomeStr = x.SomeString,

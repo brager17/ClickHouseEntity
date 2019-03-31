@@ -1,95 +1,100 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace ExpressionTreeVisitor
 {
-    public class UnaryExpressionToLinqInfoHandler : IExpressionToLinqInfoHandler<WhereInfo>
+    public class WhereToSqlVisitor
     {
-        public WhereInfo GetLinqInfo<T>(Expression<T> expression)
+        public string VisitUnaryExpression(UnaryExpression expression)
         {
-            throw new System.NotImplementedException();
+            if (expression.Operand is MemberExpression member && member.Expression is ConstantExpression constant)
+                return $"{GetValueFromFieldInAutoGenerateClass(expression)}";
+
+
+            return VisitLambda((LambdaExpression) expression.Operand);
+        }
+
+        public string VisitExpression(Expression expression)
+        {
+            return VisitLambda((LambdaExpression) expression);
+        }
+
+        public string VisitLambda(LambdaExpression node)
+        {
+            if (node.Body is BinaryExpression binaryExpression)
+                return VisitBinaryExpression(binaryExpression);
+            throw new NotSupportedException();
+        }
+
+        public string VisitBinaryExpression(BinaryExpression expression)
+        {
+            var left = LeftAndRightVisitBinaryExpression(expression.Left);
+            var right = LeftAndRightVisitBinaryExpression(expression.Right);
+            var @operator = VisitExpressionType(expression.NodeType);
+            return $"{left} {@operator} {right}";
+        }
+
+        private string LeftAndRightVisitBinaryExpression(Expression expression)
+        {
+            var memberSql = string.Empty;
+            if (expression is MemberExpression memberExpression)
+                memberSql = VisitMemberExpression(memberExpression);
+            if (expression is BinaryExpression binaryExpression)
+                memberSql = VisitBinaryExpression(binaryExpression);
+            if (expression is ConstantExpression constantExpression)
+                memberSql = VisitExpressionConstant(constantExpression);
+            if (expression is UnaryExpression unaryExpression)
+                memberSql = VisitUnaryExpression(unaryExpression);
+            if (expression is MethodCallExpression methodCallExpression)
+                throw new NotImplementedException();
+            return memberSql;
+        }
+
+
+        private string VisitMemberExpression(MemberExpression memberExpression)
+        {
+            if (memberExpression.Expression is ConstantExpression)
+                return $"{GetValueFromFieldInAutoGenerateClass(memberExpression)}";
+            return $"{memberExpression}";
+        }
+
+        //todo refactoring сделать нормальное сравнение типов
+        //todo заменить компиляцию на поиск значения в автосгенерированном классе
+        private object GetValueFromFieldInAutoGenerateClass(Expression expression)
+        {
+            if (expression.Type == typeof(string))
+                return $"'{Expression.Lambda(expression).Compile().DynamicInvoke()}'";
+            else if (new Type[] {typeof(int), typeof(long), typeof(float), typeof(bool), typeof(double)}.Contains(
+                expression.Type))
+                return $"{Expression.Lambda(expression).Compile().DynamicInvoke()}";
+            else throw new NotSupportedException();
+        }
+
+        public string VisitExpressionType(ExpressionType type)
+        {
+            if (type == ExpressionType.AndAlso) return "AND";
+            if (type == ExpressionType.OrElse) return ("OR");
+            if (type == ExpressionType.Equal) return ("=");
+            if (type == ExpressionType.GreaterThan) return (">");
+            if (type == ExpressionType.LessThan) return ("<");
+            if (type == ExpressionType.NotEqual) return ("!=");
+
+            throw new NotImplementedException();
+        }
+
+        public string VisitExpressionConstant(ConstantExpression expression)
+        {
+            return expression.ToString();
+            return string.Empty;
+        }
+
+        public string VisitMethodCallExpression(MethodCallExpression expression)
+        {
+            throw new NotImplementedException();
         }
     }
 
-    public class WhereVisitor : ExpressionVisitor, IGetInfo<WhereInfo>
-    {
-
-        public string WhereStr { get; set; } = string.Empty;
-        private WhereInfo WhereInfo { get; set; }
-
-        private MemberExpression MemberExpression { get; set; }
-
-        private ConstantExpression _constantExpression { get; set; }
-        
-        private List<BetweenUnaryOperationOperator> orAndOperators { get; set; }
-
-        public WhereInfo GetInfo(Expression expression)
-        {
-            orAndOperators = new List<BetweenUnaryOperationOperator>();
-            base.Visit(expression);
-            return WhereInfo;
-        }
-
-        public override Expression Visit(Expression node)
-        {
-            return base.Visit(node);
-        }
-
-        protected override Expression VisitLambda<T>(Expression<T> node)
-        {
-            return base.VisitLambda(node);
-        }
-
-        protected override Expression VisitUnary(UnaryExpression node)
-        {
-            return base.VisitUnary(node);
-        }
-
-        protected override Expression VisitBinary(BinaryExpression node)
-        {
-            // если это полная лябмда их Where
-               
-            if (!(node.Left is BinaryExpression) && !(node.Right is BinaryExpression))
-            {
-                var left = GetExpressionInfo((dynamic) node.Left);
-                var right = GetExpressionInfo((dynamic) node.Right);
-                var @operator = node.NodeType.GetBetweenUnaryOperandOperator();
-            }
-
-            return base.VisitBinary(node);
-        }
-
-        private UnaryOperand GetExpressionInfo(ConstantExpression node)
-        {
-            return new UnaryOperand(node);
-        }
-
-        protected override Expression VisitConstant(ConstantExpression node)
-        {
-            _constantExpression = node;
-            return node;
-        }
-
-        private UnaryOperand GetExpressionInfo(MemberExpression node)
-        {
-            return new UnaryOperand(node);
-        }
-
-        protected override Expression VisitMember(MemberExpression node)
-        {
-            MemberExpression = node;
-            return base.VisitMember(node);
-        }
-
-        private UnaryOperand GetExpressionInfo(MethodCallExpression node)
-        {
-            // todo вызвать метод и вернуть константу
-            return new UnaryOperand(node);
-        }
-
-        protected override Expression VisitMethodCall(MethodCallExpression node)
-        {
-            return base.VisitMethodCall(node);
-        }
-    }
+    
 }

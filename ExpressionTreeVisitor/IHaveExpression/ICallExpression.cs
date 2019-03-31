@@ -6,9 +6,4 @@ namespace ExpressionTreeVisitor
     {
         MethodCallExpression _callExpression { get; }
     }
-
-    public interface IUnaryExpression
-    {
-        UnaryLinqInfo UnaryLinqInfo { get; }
-    }
 }

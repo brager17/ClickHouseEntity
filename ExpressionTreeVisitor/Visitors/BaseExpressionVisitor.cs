@@ -7,12 +7,10 @@ namespace ExpressionTreeVisitor
     public class BaseExpressionVisitor : ExpressionVisitor
     {
         private SelectVisitor SelectVisitor { get; set; }
-        private WhereVisitor WhereVisitor { get; set; }
         private AggregateLinqInfo AggregateLinqInfo { get; set; }
 
         public AggregateLinqInfo GetInfo(Expression expression)
         {
-            WhereVisitor = new WhereVisitor();
             SelectVisitor = new SelectVisitor(new DtoToExpressionToLinqInfoHandler(),
                 new ValueTypeExpressionToLinqInfoHandler());
             AggregateLinqInfo = new AggregateLinqInfo();
@@ -25,7 +23,11 @@ namespace ExpressionTreeVisitor
             if (node.Method.Name == "Select")
                 AggregateLinqInfo.SelectInfo.Add(SelectVisitor.GetInfo(node.Arguments.Last()));
             if (node.Method.Name == "Where")
-                AggregateLinqInfo.WhereInfo.Add(WhereVisitor.GetInfo(node.Arguments.Last()));
+//                AggregateLinqInfo.WhereInfo.Add(WhereVisitor.GetInfo(node.Arguments.Last()));
+            {
+                var s = new WhereToSqlVisitor().VisitUnaryExpression((UnaryExpression)node.Arguments.Last());
+            }
+
             return base.VisitMethodCall(node);
         }
 

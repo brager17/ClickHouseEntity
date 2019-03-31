@@ -12,6 +12,7 @@ namespace ExpressionTreeVisitor
         public List<WhereInfo> WhereInfo { get; set; }
     }
 
+  
     public class AggregateLinqInfo : ForSqlRequestInfo
     {
         public AggregateLinqInfo()
