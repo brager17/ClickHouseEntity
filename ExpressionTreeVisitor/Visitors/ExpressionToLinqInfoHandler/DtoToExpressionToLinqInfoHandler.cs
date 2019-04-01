@@ -6,9 +6,9 @@ using System.Reflection;
 
 namespace ExpressionTreeVisitor
 {
-    class DtoToExpressionToLinqInfoHandler : IExpressionToLinqInfoHandler<SelectInfo>
+    public class DtoToExpressionToLinqInfoHandler : IExpressionToLinqInfoHandler<SelectInfo>
     {
-        public SelectInfo GetLinqInfo<T>(Expression<T> expression)
+        public SelectInfo GetLinqInfo(LambdaExpression expression)
         {
             var selectInfo = new SelectInfo {LambdaType = expression.Parameter().Type};
             var list = new List<KeyValuePair<PropertyInfo, InPropertySelectExpression>>();

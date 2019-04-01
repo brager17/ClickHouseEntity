@@ -4,6 +4,6 @@ namespace ExpressionTreeVisitor
 {
     public interface IExpressionToLinqInfoHandler<TInfo>
     {
-        TInfo GetLinqInfo<T>(Expression<T> expression);
+        TInfo GetLinqInfo(LambdaExpression expression);
     }
 }

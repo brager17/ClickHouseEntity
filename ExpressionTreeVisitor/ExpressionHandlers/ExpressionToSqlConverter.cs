@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Linq.Expressions;
 using ExpressionTreeVisitor;
 
@@ -17,7 +18,10 @@ namespace DbContext
         public string GetSql(ForSqlRequestInfo sqlRequestInfo)
         {
             var sql = _sqlRequestHandler.Handle(sqlRequestInfo);
-            return sql.Select + sql.TableName;
+            var sqlString = $"SELECT {sql.Select} FROM {sql.TableName} ";
+            if (sql.Where.Any())
+                sqlString += $" WHERE {sql.Where} ";
+            return sqlString;
         }
 
         public string SelectParser(SelectInfo info)

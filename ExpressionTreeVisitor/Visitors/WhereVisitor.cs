@@ -2,18 +2,26 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
+using DbContext;
 
 namespace ExpressionTreeVisitor
 {
     public class WhereToSqlVisitor
     {
+        private readonly IHasMapPropInfo _hasMapPropInfo;
+
         public string VisitUnaryExpression(UnaryExpression expression)
         {
             if (expression.Operand is MemberExpression member && member.Expression is ConstantExpression constant)
                 return $"{GetValueFromFieldInAutoGenerateClass(expression)}";
 
-
             return VisitLambda((LambdaExpression) expression.Operand);
+        }
+
+        public WhereToSqlVisitor(IHasMapPropInfo hasMapPropInfo)
+        {
+            _hasMapPropInfo = hasMapPropInfo;
         }
 
         public string VisitExpression(Expression expression)
@@ -57,7 +65,8 @@ namespace ExpressionTreeVisitor
         {
             if (memberExpression.Expression is ConstantExpression)
                 return $"{GetValueFromFieldInAutoGenerateClass(memberExpression)}";
-            return $"{memberExpression}";
+
+            return $"{GetNameMapProperty(memberExpression)}";
         }
 
         //todo refactoring сделать нормальное сравнение типов
@@ -65,7 +74,7 @@ namespace ExpressionTreeVisitor
         private object GetValueFromFieldInAutoGenerateClass(Expression expression)
         {
             if (expression.Type == typeof(string))
-                return $"'{Expression.Lambda(expression).Compile().DynamicInvoke()}'";
+                return $"\'{Expression.Lambda(expression).Compile().DynamicInvoke()}\'";
             else if (new Type[] {typeof(int), typeof(long), typeof(float), typeof(bool), typeof(double)}.Contains(
                 expression.Type))
                 return $"{Expression.Lambda(expression).Compile().DynamicInvoke()}";
@@ -94,7 +103,9 @@ namespace ExpressionTreeVisitor
         {
             throw new NotImplementedException();
         }
-    }
 
-    
+
+        private string GetNameMapProperty(MemberExpression memberExpression) =>
+            _hasMapPropInfo.GetSourcePropInfo(memberExpression).GetColumnName();
+    }
 }

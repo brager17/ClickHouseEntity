@@ -16,14 +16,13 @@ namespace Tests
             var sss = Enumerable.Range(1, 100).Aggregate(string.Empty, (a, c) => a.ToString() + " " + c.ToString());
             _testDbContext = new TestDbContext();
             var l = _testDbContext.TestTables
-                .Where(x => x.SomeInt == 1 || x.SomeInt == s || x.SomeInt == 3 &&
-                            x.SomeInt == 0 || x.SomeString == sss || x.SomeInt == 5)
                 .Select(x => new Dto()
                 {
                     SomeStr = x.SomeString,
                     SomeInt1 = x.SomeInt
-                });
-            l.ToList();
+                })
+                .Where(x => x.SomeInt1 == 28194901262 && x.SomeStr == "8006-6129-3130-5580");
+            var ss = l.ToList();
         }
     }
 }

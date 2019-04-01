@@ -15,8 +15,9 @@ namespace ExpressionTreeVisitor
             _propertyExpressions = new Dictionary<PropertyInfo, InPropertySelectExpression>();
         }
     }
+
     public class WhereInfo
     {
+        public string WhereStr { get; set; }
     }
-   
 }

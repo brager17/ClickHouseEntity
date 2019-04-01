@@ -11,7 +11,8 @@ namespace Root
             new SqlToObject(
                 new ExpressionToSqlConverter(new SqlRequestHandler(
                         new SelectRequestHandler(),
-                        new TableNameRequestHandler()),
+                        new TableNameRequestHandler(),
+                        new WhereOperationRequestHandler()),
                     new BaseExpressionVisitor()),
                 new DbHandler(ConnectionString,
                     new ModelBinder(

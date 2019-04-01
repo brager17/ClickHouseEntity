@@ -7,7 +7,7 @@ namespace ExpressionTreeVisitor
 {
     public class ValueTypeExpressionToLinqInfoHandler : IExpressionToLinqInfoHandler<SelectInfo>
     {
-        public SelectInfo GetLinqInfo<T>(Expression<T> expression)
+        public SelectInfo GetLinqInfo(LambdaExpression expression)
         {
             var selectInfo = new SelectInfo {LambdaType = expression.Parameter().Type};
             var propertyExpressionInfos = new List<KeyValuePair<PropertyInfo, InPropertySelectExpression>>();

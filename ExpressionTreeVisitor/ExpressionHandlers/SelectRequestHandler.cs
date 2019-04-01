@@ -18,7 +18,7 @@ namespace DbContext
                 return $"{source.GetColumnName()} AS {dest.Name}";
             }));
 
-            return "SELECT " + selectString + " FROM ";
+            return selectString;
         }
 
         private IEnumerable<(PropertyInfo, PropertyInfo)> GetSourcePropertyInfo(IEnumerable<SelectInfo> infos)
