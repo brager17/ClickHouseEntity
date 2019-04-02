@@ -10,18 +10,26 @@ namespace Tests
         private TestDbContext _testDbContext { get; set; }
 
         [Test]
+        public void Test0()
+        {
+            _testDbContext = new TestDbContext();
+            var l = _testDbContext.TestTables.Where(x=>x.SomeString == "соси").ToList();
+            var s = l.ToList();
+        }
+
+        [Test]
         public void Test1()
         {
             var s = 111;
-            var sss = Enumerable.Range(1, 100).Aggregate(string.Empty, (a, c) => a.ToString() + " " + c.ToString());
-            _testDbContext = new TestDbContext();
+            var _testDbContext = new TestDbContext();
             var l = _testDbContext.TestTables
-                .Select(x => new Dto()
+                .Select(x => new Dto
                 {
                     SomeStr = x.SomeString,
                     SomeInt1 = x.SomeInt
                 })
-                .Where(x => x.SomeInt1 == 28194901262 && x.SomeStr == "8006-6129-3130-5580");
+                .Select(x => new {s = x.SomeStr})
+                .Where(x => x.s == "8006-6129-3130-5580");
             var ss = l.ToList();
         }
     }

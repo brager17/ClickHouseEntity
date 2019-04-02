@@ -7,13 +7,13 @@ using ExpressionTreeVisitor;
 
 namespace DbContext
 {
-    public class SqlToObject : ISqlToObject
+    public class ExpressionsToObject : IExpressionsToObject
     {
         private readonly IExpressionToSqlConverter _toSqlConverter;
         private readonly IDbHandler _dbHandler;
         private readonly BaseExpressionVisitor _baseExpressionVisitor;
 
-        public SqlToObject(
+        public ExpressionsToObject(
             IExpressionToSqlConverter toSqlConverter,
             IDbHandler dbHandler, BaseExpressionVisitor baseExpressionVisitor)
         {

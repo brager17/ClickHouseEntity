@@ -6,25 +6,25 @@ namespace DbContext
     //todo добавить кэширование MethodInfo
     public class ClassTypeBinder : IComplexEntityBinder
     {
-        private readonly IRowToObject _concreteClassRowToObject;
-        private readonly IRowToObject _anonymousClassRowToObject;
+        private readonly INameValueListToObject _concreteClassNameValueListToObject;
+        private readonly INameValueListToObject _anonymousClassNameValueListToObject;
 
-        public ClassTypeBinder(IRowToObject concreteClassRowToObject, IRowToObject anonymousClassRowToObject)
+        public ClassTypeBinder(INameValueListToObject concreteClassNameValueListToObject, INameValueListToObject anonymousClassNameValueListToObject)
         {
-            _concreteClassRowToObject = concreteClassRowToObject;
-            _anonymousClassRowToObject = anonymousClassRowToObject;
+            _concreteClassNameValueListToObject = concreteClassNameValueListToObject;
+            _anonymousClassNameValueListToObject = anonymousClassNameValueListToObject;
         }
 
-        public T Handle<T>(IEnumerable<Cell> cells)
+        public T Handle<T>(IEnumerable<NameValue> cells)
         {
-            IRowToObject rowToObjectType;
+            INameValueListToObject nameValueListToObjectType;
 
             if (typeof(T).IsAnonymouseClass())
-                rowToObjectType = _anonymousClassRowToObject;
+                nameValueListToObjectType = _anonymousClassNameValueListToObject;
             else
-                rowToObjectType = _concreteClassRowToObject;
-            var result = (T) rowToObjectType.GetType().GetMethod("Build").MakeGenericMethod(typeof(T))
-                .Invoke(rowToObjectType, new object[] {cells});
+                nameValueListToObjectType = _concreteClassNameValueListToObject;
+            var result = (T) nameValueListToObjectType.GetType().GetMethod("Build").MakeGenericMethod(typeof(T))
+                .Invoke(nameValueListToObjectType, new object[] {cells});
 
             return result;
         }

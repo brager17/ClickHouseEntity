@@ -134,6 +134,15 @@ namespace ExpressionTreeVisitor
                 }
             }
 
+            //todo refactoring pattern matching
+            if (new[] {"Take"}.Contains(node.Method.Name))
+            {
+                if (node.Arguments.Last() is ConstantExpression contant)
+                {
+                    AggregateLinqInfo.TakeInfo = new TakeInfo(Convert.ToInt64(contant.Value));
+                }
+            }
+
             return base.VisitMethodCall(node);
         }
 

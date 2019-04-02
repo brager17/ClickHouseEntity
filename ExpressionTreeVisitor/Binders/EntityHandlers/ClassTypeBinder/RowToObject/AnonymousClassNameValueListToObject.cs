@@ -5,14 +5,14 @@ using System.Linq.Expressions;
 
 namespace DbContext
 {
-    public class AnonymousClassRowToObject : IRowToObject
+    public class AnonymousClassNameValueListToObject : INameValueListToObject
     {
         // todo кэшировать лямбду
-        public T Build<T>(IEnumerable<Cell> cells)
+        public T Build<T>(IEnumerable<NameValue> cells)
         {
             var props = typeof(T).GetProperties();
             // строим констуктор
-            var cellProps = props.Join(cells, x => x.Name, x => x.Alias,
+            var cellProps = props.Join(cells, x => x.Name, x => x.Name,
                 (x, y) => new {type = x.PropertyType, value = y.Value});
             var constantExpressions =
                 cellProps.Select(x => Expression.Convert(Expression.Constant(x.value), x.type));

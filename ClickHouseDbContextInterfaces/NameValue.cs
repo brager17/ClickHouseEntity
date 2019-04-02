@@ -1,13 +1,8 @@
 namespace DbContext
 {
-    public class Cell
+    public class NameValue
     {
-        public string Alias { get; set; }
+        public string Name { get; set; }
         public object Value { get; set; }
-
-      
     }
-
-
-
 }

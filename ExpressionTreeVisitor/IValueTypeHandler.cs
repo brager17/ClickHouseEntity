@@ -5,12 +5,12 @@ namespace DbContext
 {
     public interface ISingleObjectBinder
     {
-        T Handle<T>(Cell cell);
+        T Handle<T>(NameValue nameValue);
     }
 
 
     public interface IComplexEntityBinder
     {
-        T Handle<T>(IEnumerable<Cell> cells);
+        T Handle<T>(IEnumerable<NameValue> cells);
     }
 }

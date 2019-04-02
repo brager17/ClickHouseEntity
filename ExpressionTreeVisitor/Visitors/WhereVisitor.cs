@@ -72,14 +72,7 @@ namespace ExpressionTreeVisitor
         //todo refactoring сделать нормальное сравнение типов
         //todo заменить компиляцию на поиск значения в автосгенерированном классе
         private object GetValueFromFieldInAutoGenerateClass(Expression expression)
-        {
-            if (expression.Type == typeof(string))
-                return $"\'{Expression.Lambda(expression).Compile().DynamicInvoke()}\'";
-            else if (new Type[] {typeof(int), typeof(long), typeof(float), typeof(bool), typeof(double)}.Contains(
-                expression.Type))
-                return $"{Expression.Lambda(expression).Compile().DynamicInvoke()}";
-            else throw new NotSupportedException();
-        }
+            => FormatConstantExpression(expression.Type, Expression.Lambda(expression).Compile().DynamicInvoke());
 
         public string VisitExpressionType(ExpressionType type)
         {
@@ -93,10 +86,17 @@ namespace ExpressionTreeVisitor
             throw new NotImplementedException();
         }
 
-        public string VisitExpressionConstant(ConstantExpression expression)
+        public string VisitExpressionConstant(ConstantExpression expression) =>
+            FormatConstantExpression(expression.Type, expression.Value);
+
+        private string FormatConstantExpression(Type expressionConstantType, object value)
         {
-            return expression.ToString();
-            return string.Empty;
+            if (expressionConstantType == typeof(string))
+                return $"\'{value}\'";
+            else if (new Type[] {typeof(int), typeof(long), typeof(float), typeof(bool), typeof(double)}
+                .Contains(expressionConstantType))
+                return $"{value}";
+            else throw new NotSupportedException();
         }
 
         public string VisitMethodCallExpression(MethodCallExpression expression)

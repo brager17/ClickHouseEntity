@@ -10,9 +10,28 @@ namespace ExpressionTreeVisitor
         public Type SetType { get; set; }
         public List<SelectInfo> SelectInfo { get; set; }
         public List<WhereInfo> WhereInfo { get; set; }
+
+        public TakeInfo TakeInfo { get; set; }
     }
 
-  
+    public enum SkipTakeType
+    {
+        Skip,
+        Take
+    }
+
+    public class TakeInfo
+    {
+        public TakeInfo(long? take)
+        {
+            Take = take;
+        }
+
+       
+
+        public long? Take { get; }
+    }
+
     public class AggregateLinqInfo : ForSqlRequestInfo
     {
         public AggregateLinqInfo()
@@ -21,6 +40,4 @@ namespace ExpressionTreeVisitor
             WhereInfo = new List<WhereInfo>();
         }
     }
-
-    
 }

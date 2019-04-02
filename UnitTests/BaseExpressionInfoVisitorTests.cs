@@ -1,4 +1,5 @@
 using System.Linq;
+using ClickDbContextInfrastructure;
 using Context;
 using ExpressionTreeVisitor;
 using NUnit.Framework;
@@ -33,5 +34,7 @@ namespace Tests
                 }).Select(x => x.SomeInt1);
             var ss = s.Visit(expression.Expression);
         }
+
+      
     }
 }

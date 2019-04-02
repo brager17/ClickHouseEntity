@@ -8,5 +8,6 @@ namespace DbContext
         public string Select { get; set; }
         public string Where { get; set; }
         public string OrderBy { get; set; }
+        public string Take { get; set; }
     }
 }

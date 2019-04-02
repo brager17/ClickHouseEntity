@@ -7,6 +7,11 @@ namespace DbContext
 {
     public class ValueTypeBinder : ISingleObjectBinder
     {
-        public T Handle<T>(Cell cell) => (T) Convert.ChangeType(cell.Value, typeof(T));
+        public T Handle<T>(NameValue nameValue)
+        {
+            var changeType = Convert.ChangeType(nameValue.Value, typeof(T));
+            var handle = (T) changeType;
+            return handle;
+        }
     }
 }

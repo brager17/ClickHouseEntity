@@ -21,6 +21,8 @@ namespace DbContext
             var sqlString = $"SELECT {sql.Select} FROM {sql.TableName} ";
             if (sql.Where.Any())
                 sqlString += $" WHERE {sql.Where} ";
+            if (sql.Take != null)
+                sqlString += sql.Take;
             return sqlString;
         }
 

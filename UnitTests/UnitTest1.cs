@@ -132,6 +132,13 @@ namespace Tests
         }
 
         [Test]
+        public void Test0()
+        {
+            _context = new TestDbContext();
+            var s = _context.TestTables.ToList();
+        }
+
+        [Test]
         public void Test1()
         {
             _context = new TestDbContext();
@@ -219,7 +226,7 @@ namespace Tests
         public void Test6()
         {
             _context = new TestDbContext();
-            
+
             var expression = _context.TestTables.Select(x => new SomeDto
                 {
                     Long = x.SomeInt, Date = x.SomeDate, Float = x.SomeFloat, String = x.SomeString

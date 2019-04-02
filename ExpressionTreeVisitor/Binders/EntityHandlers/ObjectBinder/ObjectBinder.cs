@@ -21,7 +21,7 @@ namespace DbContext
             do
                 while (dataReader.Read())
                     list.Add(_entityBuilder.Handle<T>(names
-                        .Select(name => new Cell {Value = dataReader[name], Alias = name}).ToList()));
+                        .Select(name => new NameValue {Value = dataReader[name], Name = name}).ToList()));
             while (dataReader.NextResult());
 
             return list.GetEnumerator();

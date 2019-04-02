@@ -7,11 +7,11 @@ namespace DbContext
 {
     public class ClickHouseQueryProvider : IQueryProvider
     {
-        private readonly ISqlToObject _sqlToObject;
+        private readonly IExpressionsToObject _expressionsToObject;
 
-        public ClickHouseQueryProvider(ISqlToObject sqlToObject)
+        public ClickHouseQueryProvider(IExpressionsToObject expressionsToObject)
         {
-            _sqlToObject = sqlToObject;
+            _expressionsToObject = expressionsToObject;
         }
 
         public IQueryable CreateQuery(Expression expression)
@@ -27,7 +27,7 @@ namespace DbContext
             throw new NotImplementedException();
         }
 
-        public TResult Execute<TResult>(Expression expression) => _sqlToObject.Handle<TResult>(expression);
+        public TResult Execute<TResult>(Expression expression) => _expressionsToObject.Handle<TResult>(expression);
         
 
     }

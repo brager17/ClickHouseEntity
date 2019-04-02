@@ -7,18 +7,19 @@ namespace Root
 {
     public static class GetClickHouseProvider
     {
-        public static SqlToObject Get(string ConnectionString) =>
-            new SqlToObject(
+        public static ExpressionsToObject Get(string ConnectionString) =>
+            new ExpressionsToObject(
                 new ExpressionToSqlConverter(new SqlRequestHandler(
                         new SelectRequestHandler(),
                         new TableNameRequestHandler(),
-                        new WhereOperationRequestHandler()),
+                        new WhereOperationRequestHandler(),
+                        new TakeOperationRequestHandle()),
                     new BaseExpressionVisitor()),
                 new DbHandler(ConnectionString,
                     new ModelBinder(
                         new ObjectBinder(new SimpleTypeBuilderAdapter(new ValueTypeBinder())),
                         new ObjectBinder(
-                            new ClassTypeBinder(new ConcreteClassRowToObject(),
-                                new AnonymousClassRowToObject())))), new BaseExpressionVisitor());
+                            new ClassTypeBinder(new ConcreteClassNameValueListToObject(),
+                                new AnonymousClassNameValueListToObject())))), new BaseExpressionVisitor());
     }
 }

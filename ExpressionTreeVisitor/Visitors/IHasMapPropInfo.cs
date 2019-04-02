@@ -21,29 +21,15 @@ namespace ExpressionTreeVisitor
 
         public PropertyInfo GetSourcePropInfo(MemberExpression memberExpression)
         {
-            var ss = Infos.Select((x, i) => new
-            {
-                isFlag = x._propertyExpressions.Any(xx => xx.Key.Name == memberExpression.Member.Name),
-                counter = i,
-                prop = x._propertyExpressions.Where(xx => xx.Key.Name == memberExpression.Member.Name)
-            });
-
-            var ssss = Infos.Select((x, i) => new
-            {
-                isFlag = x._propertyExpressions.Any(xx => xx.Key.Name == memberExpression.Member.Name),
-                counter = i,
-                prop = x._propertyExpressions.Where(xx => xx.Key.Name == memberExpression.Member.Name)
-            });
             var selectInfo = Infos.Select((x, i) => new
                 {
                     isFlag = x._propertyExpressions.Any(xx => xx.Key.Name == memberExpression.Member.Name),
-                    counter = i,
-                    prop = x._propertyExpressions.Single(xx => xx.Key.Name == memberExpression.Member.Name)
-
+                    counter = i + 1,
+                    prop = x._propertyExpressions.SingleOrDefault(xx => xx.Key.Name == memberExpression.Member.Name)
                 })
                 .Single(x => x.isFlag);
 
-            return Upstairs(selectInfo.prop, Infos.Take(selectInfo.counter));
+            return Upstairs(selectInfo.prop, Infos.Skip(selectInfo.counter));
         }
 
 
