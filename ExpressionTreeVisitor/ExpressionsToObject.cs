@@ -11,26 +11,24 @@ namespace DbContext
     {
         private readonly IExpressionToSqlConverter _toSqlConverter;
         private readonly IDbHandler _dbHandler;
-        private readonly BaseExpressionVisitor _baseExpressionVisitor;
+        private readonly IVisitorHandler _visitorHandler;
 
         public ExpressionsToObject(
             IExpressionToSqlConverter toSqlConverter,
-            IDbHandler dbHandler, BaseExpressionVisitor baseExpressionVisitor)
+            IDbHandler dbHandler, IVisitorHandler visitorHandler)
         {
             _toSqlConverter = toSqlConverter;
             _dbHandler = dbHandler;
-            _baseExpressionVisitor = baseExpressionVisitor;
+            _visitorHandler = visitorHandler;
         }
 
         //TResult type definition IEnumerator<T> where T DbSet type 
         public TResult Handle<TResult>(Expression expression)
         {
-            var aggregateInfo = _baseExpressionVisitor.GetInfo(expression);
+            var aggregateInfo = _visitorHandler.Handle(expression);
             var sql = _toSqlConverter.GetSql(aggregateInfo);
-            var data = _dbHandler.GetData<TResult>(sql);
-            return data;
+            var enumerator = _dbHandler.GetData<TResult>(sql);
+            return enumerator;
         }
     }
-
-  
 }

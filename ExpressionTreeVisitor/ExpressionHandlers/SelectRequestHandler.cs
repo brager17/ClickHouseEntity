@@ -11,6 +11,7 @@ namespace DbContext
         public string Handle(IEnumerable<SelectInfo> operationInfo)
         {
             var infos = operationInfo.ToList();
+            // todo метод GetSourcePropertyInfo заменить на HasMapPropInfo
             var sourceDestProps = GetSourcePropertyInfo(infos);
             var selectString = string.Join(",", sourceDestProps.Select(x =>
             {

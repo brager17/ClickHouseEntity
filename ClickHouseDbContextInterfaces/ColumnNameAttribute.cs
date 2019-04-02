@@ -1,4 +1,5 @@
 using System;
+using ExpressionTreeVisitor;
 
 namespace DbContext
 {
@@ -15,17 +16,6 @@ namespace DbContext
     {
         public TableNameAttribute(string tableName) : base(tableName)
         {
-        }
-    }
-
-
-    public class NameAttribute : Attribute
-    {
-        public string Name { get; }
-
-        protected NameAttribute(string name)
-        {
-            Name = name;
         }
     }
 }

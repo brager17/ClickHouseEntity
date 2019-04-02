@@ -34,7 +34,7 @@ namespace UnitTests.TestDbContext
         public int IsRobot { get; set; }
 
 //        public int[] RefererCategories { get; set; }
-        public long[] URLCategories { get; set; }
+//        public long[] URLCategories { get; set; }
 //        public long[] URLRegions { get; set; }
 //        public long[] RefererRegions { get; set; }
         public int ResolutionWidth { get; set; }

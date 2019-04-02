@@ -7,29 +7,27 @@ namespace DbContext
     public class ExpressionToSqlConverter : IExpressionToSqlConverter
     {
         private readonly ISqlRequestHandler _sqlRequestHandler;
-        private BaseExpressionVisitor BaseVisitor { get; set; }
+        private AggregateLinqVisitor BaseVisitor { get; set; }
 
-        public ExpressionToSqlConverter(ISqlRequestHandler sqlRequestHandler, BaseExpressionVisitor baseVisitor)
+        public ExpressionToSqlConverter(ISqlRequestHandler sqlRequestHandler, AggregateLinqVisitor baseVisitor)
         {
             _sqlRequestHandler = sqlRequestHandler;
             BaseVisitor = baseVisitor;
         }
 
+        //TODO добавить нормальный pattern mathing
         public string GetSql(ForSqlRequestInfo sqlRequestInfo)
         {
             var sql = _sqlRequestHandler.Handle(sqlRequestInfo);
             var sqlString = $"SELECT {sql.Select} FROM {sql.TableName} ";
             if (sql.Where.Any())
                 sqlString += $" WHERE {sql.Where} ";
+            if (sql.OrderBy != null)
+                sqlString += $"ORDER BY {sql.OrderBy} ";
             if (sql.Take != null)
-                sqlString += sql.Take;
-            return sqlString;
-        }
+                sqlString += $"LIMIT {sql.Take}";
 
-        public string SelectParser(SelectInfo info)
-        {
-            //SELECT some_int FROM MYTABLE
-            return string.Empty;
+            return sqlString;
         }
     }
 }

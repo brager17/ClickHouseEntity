@@ -3,8 +3,8 @@ using System.Linq.Expressions;
 
 namespace DbContext
 {
-    public interface IModelBinder
+    public interface IDataHandler
     {
-        T Bind<T>(IDataReader reader);
+        T Handle<T>(IDataReader reader);
     }
 }

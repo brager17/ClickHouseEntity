@@ -9,12 +9,12 @@ using ExpressionTreeVisitor;
 
 namespace DbContext
 {
-    public class ModelBinder : IModelBinder
+    public class DataHandler : IDataHandler
     {
         private readonly ObjectBinder _valueTypeBinder;
         private readonly ObjectBinder _complexTypeBinder;
 
-        public ModelBinder(ObjectBinder valueTypeBinder, ObjectBinder complexTypeBinder)
+        public DataHandler(ObjectBinder valueTypeBinder, ObjectBinder complexTypeBinder)
         {
             _valueTypeBinder = valueTypeBinder;
             _complexTypeBinder = complexTypeBinder;
@@ -22,14 +22,13 @@ namespace DbContext
 
 
         // todo закешировать MethodInfo
-        public T Bind<T>(IDataReader reader)
+        public T Handle<T>(IDataReader reader)
         {
             var type = typeof(T).GenericTypeArguments.Single();
             var makeGenericMethod = typeof(ObjectBinder).GetMethod("Handle").MakeGenericMethod(type);
             if (type.IsSimpleType())
             {
                 var invoke = makeGenericMethod.Invoke(_valueTypeBinder, new[] {reader});
-
                 return (T) invoke;
             }
 

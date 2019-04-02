@@ -18,8 +18,9 @@ namespace DbContext
             var assignments = cellProps.Select(x
                 =>
             {
-                // todo обработать ошибку еще не заходя в этот хэндлер(ошибка конвертации)
-                //todo обработать заполнение массива (ошибка в получении данных от Ado.Net Provider'a)
+                //это не реализовано в ClickHouseAdoNetReader'es
+                if (x.propertyType.PropertyType.IsArray)
+                    throw new NotSupportedException();
                 try
                 {
                     return Expression.Bind(x.propertyType,

@@ -10,8 +10,9 @@ namespace ExpressionTreeVisitor
     public class WhereToSqlVisitor
     {
         private readonly IHasMapPropInfo _hasMapPropInfo;
+        private IEnumerable<SelectInfo> _selectInfos { get; set; }
 
-        public string VisitUnaryExpression(UnaryExpression expression)
+        private string VisitUnaryExpression(UnaryExpression expression)
         {
             if (expression.Operand is MemberExpression member && member.Expression is ConstantExpression constant)
                 return $"{GetValueFromFieldInAutoGenerateClass(expression)}";
@@ -24,19 +25,20 @@ namespace ExpressionTreeVisitor
             _hasMapPropInfo = hasMapPropInfo;
         }
 
-        public string VisitExpression(Expression expression)
+        public string Visit(IEnumerable<SelectInfo> Infos, LambdaExpression expression)
         {
-            return VisitLambda((LambdaExpression) expression);
+            _selectInfos = Infos;
+            return VisitLambda(expression);
         }
 
-        public string VisitLambda(LambdaExpression node)
+        private string VisitLambda(LambdaExpression node)
         {
             if (node.Body is BinaryExpression binaryExpression)
                 return VisitBinaryExpression(binaryExpression);
             throw new NotSupportedException();
         }
 
-        public string VisitBinaryExpression(BinaryExpression expression)
+        private string VisitBinaryExpression(BinaryExpression expression)
         {
             var left = LeftAndRightVisitBinaryExpression(expression.Left);
             var right = LeftAndRightVisitBinaryExpression(expression.Right);
@@ -55,8 +57,7 @@ namespace ExpressionTreeVisitor
                 memberSql = VisitExpressionConstant(constantExpression);
             if (expression is UnaryExpression unaryExpression)
                 memberSql = VisitUnaryExpression(unaryExpression);
-            if (expression is MethodCallExpression methodCallExpression)
-                throw new NotImplementedException();
+            if (expression is MethodCallExpression) throw new NotImplementedException();
             return memberSql;
         }
 
@@ -66,7 +67,7 @@ namespace ExpressionTreeVisitor
             if (memberExpression.Expression is ConstantExpression)
                 return $"{GetValueFromFieldInAutoGenerateClass(memberExpression)}";
 
-            return $"{GetNameMapProperty(memberExpression)}";
+            return $"{_hasMapPropInfo.GetNameMapProperty(_selectInfos, memberExpression)}";
         }
 
         //todo refactoring сделать нормальное сравнение типов
@@ -74,7 +75,7 @@ namespace ExpressionTreeVisitor
         private object GetValueFromFieldInAutoGenerateClass(Expression expression)
             => FormatConstantExpression(expression.Type, Expression.Lambda(expression).Compile().DynamicInvoke());
 
-        public string VisitExpressionType(ExpressionType type)
+        private string VisitExpressionType(ExpressionType type)
         {
             if (type == ExpressionType.AndAlso) return "AND";
             if (type == ExpressionType.OrElse) return ("OR");
@@ -86,14 +87,14 @@ namespace ExpressionTreeVisitor
             throw new NotImplementedException();
         }
 
-        public string VisitExpressionConstant(ConstantExpression expression) =>
+        private string VisitExpressionConstant(ConstantExpression expression) =>
             FormatConstantExpression(expression.Type, expression.Value);
 
         private string FormatConstantExpression(Type expressionConstantType, object value)
         {
             if (expressionConstantType == typeof(string))
                 return $"\'{value}\'";
-            else if (new Type[] {typeof(int), typeof(long), typeof(float), typeof(bool), typeof(double)}
+            else if (new[] {typeof(int), typeof(long), typeof(float), typeof(bool), typeof(double)}
                 .Contains(expressionConstantType))
                 return $"{value}";
             else throw new NotSupportedException();
@@ -103,9 +104,5 @@ namespace ExpressionTreeVisitor
         {
             throw new NotImplementedException();
         }
-
-
-        private string GetNameMapProperty(MemberExpression memberExpression) =>
-            _hasMapPropInfo.GetSourcePropInfo(memberExpression).GetColumnName();
     }
 }

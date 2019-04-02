@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Context;
 
 namespace UnitTests.TestDbContext
@@ -10,6 +11,8 @@ namespace UnitTests.TestDbContext
         public YandexMetrikaDbContext() : base(ConnectionString)
         {
         }
+
+        protected override IEnumerable<IDbLogger> _dbLoggers => new[] {new ConsoleDbLogger(),};
         public DbSet<YandexMetrikaTestTable> YandexMetrikaTable { get; set; }
     }
 }

@@ -18,10 +18,10 @@ namespace Tests
             context = new TestDbContext();
         }
 
-        [Test]
+//        [Test]
         public void Test1()
         {
-            var s = new InfoVisitor();
+            var s = new PropertyMapInfoVisitor(new DtoToExpressionToLinqInfoHandler(), new ValueTypeExpressionToLinqInfoHandler());
             var expression = context.TestTables.Select(x => new Dto
                 {
                     SomeStr = x.SomeString,
@@ -32,7 +32,7 @@ namespace Tests
                 {
                     x.SomeStr, x.SomeInt1
                 }).Select(x => x.SomeInt1);
-            var ss = s.Visit(expression.Expression);
+            var ss = s.GetInfo(expression.Expression);
         }
 
       

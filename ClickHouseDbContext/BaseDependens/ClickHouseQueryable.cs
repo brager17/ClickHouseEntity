@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace DbContext
 {
-    public class ClickHouseQueryable<T> : IQueryable<T>
+    public class ClickHouseQueryable<T> : IOrderedQueryable<T>
     {
         public ClickHouseQueryable(Expression expression, IQueryProvider queryProvider)
         {

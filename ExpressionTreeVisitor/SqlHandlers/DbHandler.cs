@@ -11,12 +11,12 @@ namespace DbContext
     public class DbHandler : IDbHandler
     {
         private readonly string _connectionString;
-        private readonly IModelBinder _modelBinder;
+        private readonly IDataHandler _dataHandler;
 
-        public DbHandler(string connectionString, IModelBinder modelBinder)
+        public DbHandler(string connectionString, IDataHandler dataHandler)
         {
             _connectionString = connectionString;
-            _modelBinder = modelBinder;
+            _dataHandler = dataHandler;
         }
 
         public T GetData<T>(string sqlCommand)
@@ -25,7 +25,7 @@ namespace DbContext
             {
                 cnn.Open();
                 var reader = cnn.CreateCommand(sqlCommand).ExecuteReader();
-                var result = _modelBinder.Bind<T>(reader);
+                var result = _dataHandler.Handle<T>(reader);
                 cnn.Close();
                 return result;
             }

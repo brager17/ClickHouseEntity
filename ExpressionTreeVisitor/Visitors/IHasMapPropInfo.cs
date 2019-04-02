@@ -2,34 +2,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using DbContext;
 
 namespace ExpressionTreeVisitor
 {
     public interface IHasMapPropInfo
     {
-        PropertyInfo GetSourcePropInfo(MemberExpression info);
+        PropertyInfo GetSourcePropInfo(IEnumerable<SelectInfo> infos, MemberExpression info);
+        string GetNameMapProperty(IEnumerable<SelectInfo> infos, MemberExpression memberExpression);
     }
 
-    class HasMapPropInfo : IHasMapPropInfo
+    public class HasMapPropInfo : IHasMapPropInfo
     {
-        public IEnumerable<SelectInfo> Infos { get; }
-
-        public HasMapPropInfo(IEnumerable<SelectInfo> infos)
+        public PropertyInfo GetSourcePropInfo(IEnumerable<SelectInfo> infos, MemberExpression memberExpression)
         {
-            Infos = infos;
-        }
-
-        public PropertyInfo GetSourcePropInfo(MemberExpression memberExpression)
-        {
-            var selectInfo = Infos.Select((x, i) => new
+            var selectInfo = infos.Select((x, i) => new
                 {
                     isFlag = x._propertyExpressions.Any(xx => xx.Key.Name == memberExpression.Member.Name),
                     counter = i + 1,
                     prop = x._propertyExpressions.SingleOrDefault(xx => xx.Key.Name == memberExpression.Member.Name)
                 })
-                .Single(x => x.isFlag);
+                .First(x => x.isFlag);
 
-            return Upstairs(selectInfo.prop, Infos.Skip(selectInfo.counter));
+            return Upstairs(selectInfo.prop, infos.Skip(selectInfo.counter));
         }
 
 
@@ -43,5 +38,8 @@ namespace ExpressionTreeVisitor
 
             return (PropertyInfo) memberProp.Member;
         }
+
+        public string GetNameMapProperty(IEnumerable<SelectInfo> infos, MemberExpression memberExpression) =>
+            GetSourcePropInfo(infos, memberExpression).GetColumnName();
     }
 }

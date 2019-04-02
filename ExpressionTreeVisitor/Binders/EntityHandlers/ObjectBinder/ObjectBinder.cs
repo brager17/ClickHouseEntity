@@ -13,10 +13,12 @@ namespace DbContext
             _entityBuilder = entityBuilder;
         }
 
+        // UsedImplicitly //
         public IEnumerator<T> Handle<T>(IDataReader dataReader)
         {
             var list = new List<T>();
             var fields = dataReader.FieldCount;
+
             var names = Enumerable.Range(0, fields).Select(dataReader.GetName).ToList();
             do
                 while (dataReader.Read())
