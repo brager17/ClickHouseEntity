@@ -5,7 +5,4 @@
         <RootNamespace>ClickHouseDbContextExntensions</RootNamespace>
     </PropertyGroup>
 
-    <ItemGroup>
-    </ItemGroup>
-
 </Project>

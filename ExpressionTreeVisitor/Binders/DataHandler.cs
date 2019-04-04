@@ -13,11 +13,13 @@ namespace DbContext
     {
         private readonly ObjectBinder _valueTypeBinder;
         private readonly ObjectBinder _complexTypeBinder;
+        private readonly ObjectBinder _simpleArrayBinder;
 
-        public DataHandler(ObjectBinder valueTypeBinder, ObjectBinder complexTypeBinder)
+        public DataHandler(ObjectBinder valueTypeBinder, ObjectBinder complexTypeBinder, ObjectBinder simpleArrayBinder)
         {
             _valueTypeBinder = valueTypeBinder;
             _complexTypeBinder = complexTypeBinder;
+            _simpleArrayBinder = simpleArrayBinder;
         }
 
 
@@ -32,7 +34,13 @@ namespace DbContext
                 return (T) invoke;
             }
 
-            if (!type.IsSimpleType())
+            if (type.IsArray)
+            {
+                var invoke = makeGenericMethod.Invoke(_simpleArrayBinder, new[] {reader});
+                return (T) invoke;
+            }
+
+            if (type.IsClassType())
             {
                 var invoke = makeGenericMethod.Invoke(_complexTypeBinder, new object[] {reader});
                 return (T) invoke;
@@ -42,4 +50,6 @@ namespace DbContext
             throw new NotSupportedException();
         }
     }
+
+  
 }

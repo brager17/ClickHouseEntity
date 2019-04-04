@@ -100,7 +100,7 @@ namespace ExpressionTreeVisitor
             else throw new NotSupportedException();
         }
 
-        public string VisitMethodCallExpression(MethodCallExpression expression)
+        private string VisitMethodCallExpression(MethodCallExpression expression)
         {
             throw new NotImplementedException();
         }

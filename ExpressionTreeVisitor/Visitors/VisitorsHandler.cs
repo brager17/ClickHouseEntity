@@ -19,4 +19,4 @@ namespace ExpressionTreeVisitor
             return _aggregateLinqVisitor.GetInfo(selectInfos, expression);
         }
     }
-}
+}    

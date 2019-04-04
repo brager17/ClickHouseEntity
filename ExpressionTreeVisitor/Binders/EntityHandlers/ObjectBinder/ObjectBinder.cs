@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using ClickHouseDbContextExntensions.CQRS;
 
 namespace DbContext
 {
@@ -22,8 +23,10 @@ namespace DbContext
             var names = Enumerable.Range(0, fields).Select(dataReader.GetName).ToList();
             do
                 while (dataReader.Read())
+                {
                     list.Add(_entityBuilder.Handle<T>(names
                         .Select(name => new NameValue {Value = dataReader[name], Name = name}).ToList()));
+                }
             while (dataReader.NextResult());
 
             return list.GetEnumerator();

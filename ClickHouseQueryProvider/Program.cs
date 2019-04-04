@@ -22,10 +22,12 @@ namespace ClickHouseQueryProvider
     class Program
     {
         private const string ConnectionString =
-            "Host=localhost;Port=9000;User=default;Password=;SocketTimeout=600000;Database=test";
+            "Host=localhost;Port=9000;User=default;Password=;SocketTimeout=600000;Database=datasets";
 
         static void Main(string[] args)
         {
+            var s = Array.CreateInstance(typeof(long), 10);
+            var ss = (long[]) s;
             var operation = new SelectOperation();
             operation.Get();
         }
@@ -51,11 +53,7 @@ namespace ClickHouseQueryProvider
                         {
                             while (reader.Read())
                             {
-                                var ssss = reader;
-                                var sss = Convert.ToString(reader["String"]);
-                                var s = Convert.ToInt64(reader["Int"]);
-                                var ss = Convert.ToDateTime(reader["Date"]);
-                                var fss = Convert.ToSingle(reader["Float"]);
+                                var ssss = reader["RefererRegions"];
                             }
                         } while (reader.NextResult());
                     }
@@ -70,7 +68,7 @@ namespace ClickHouseQueryProvider
 
         public class SelectOperation : DatabaseOperation
         {
-            public override string Query => "select String,Int,Float,Date from TestTable";
+            public override string Query => "select * from hits_v1 LIMIT 10000";
         }
 
         private static void PrintData(IDataReader reader)

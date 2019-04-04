@@ -37,7 +37,7 @@ namespace UnitTests.TestDbContext
             var allMetrika = _metrikaDbContext.YandexMetrikaTable
                 .Take(10)
                 .ToList();
-            Assert.AreEqual(10, allMetrika.Count);
+            Assert.AreEqual(10, allMetrika.Count());
         }
 
         [Test]
@@ -58,6 +58,8 @@ namespace UnitTests.TestDbContext
             Assert.AreEqual(10, allMetrika.Count);
         }
 
+        public class A:B{}
+        public class B{}
         [Test]
         public void SelectWhereTakeTest()
         {

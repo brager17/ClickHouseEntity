@@ -18,9 +18,15 @@ namespace DbContext
             var assignments = cellProps.Select(x
                 =>
             {
-                //это не реализовано в ClickHouseAdoNetReader'es
                 if (x.propertyType.PropertyType.IsArray)
-                    throw new NotSupportedException();
+                {
+                    var elementType = x.propertyType.PropertyType.GetElementType();
+                    var arrayItems =
+                        ((object[]) x.value).Select(xx => Expression.Convert(Expression.Constant(xx), elementType));
+                    var arrayInit = Expression.NewArrayInit(elementType, arrayItems);
+                    return Expression.Bind(x.propertyType, arrayInit);
+                }
+
                 try
                 {
                     return Expression.Bind(x.propertyType,

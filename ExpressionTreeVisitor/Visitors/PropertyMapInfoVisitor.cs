@@ -30,10 +30,6 @@ namespace ExpressionTreeVisitor
                 return VisitMethodCall(methodCallExpression);
             if (expression is ConstantExpression)
             {
-                if (expression.Type.IsDbSetType())
-                {
-                }
-
                 return LinqInfoPropertiesMap;
             }
 

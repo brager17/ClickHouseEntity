@@ -36,7 +36,7 @@ namespace UnitTests.TestDbContext
 //        public int[] RefererCategories { get; set; }
 //        public long[] URLCategories { get; set; }
 //        public long[] URLRegions { get; set; }
-//        public long[] RefererRegions { get; set; }
+        public long[] RefererRegions { get; set; }
         public int ResolutionWidth { get; set; }
         public int ResolutionHeight { get; set; }
         public int ResolutionDepth { get; set; }
