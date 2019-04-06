@@ -13,6 +13,7 @@ namespace UnitTests.TestDbContext
         }
 
         protected override IEnumerable<IDbLogger> _dbLoggers => new[] {new ConsoleDbLogger(),};
+//        protected override IEnumerable<IDbLogger> _dbLoggers => new[] {new StubConsoleLogger(),};
         public DbSet<YandexMetrikaTestTable> YandexMetrikaTable { get; set; }
     }
 }

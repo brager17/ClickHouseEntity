@@ -12,4 +12,8 @@
       <PackageReference Include="ClickHouse.Ado" Version="1.1.13" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\UnitTests\UnitTests.csproj" />
+    </ItemGroup>
+
 </Project>

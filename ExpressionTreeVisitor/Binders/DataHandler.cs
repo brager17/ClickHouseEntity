@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Numerics;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using ExpressionTreeVisitor;
@@ -11,11 +12,12 @@ namespace DbContext
 {
     public class DataHandler : IDataHandler
     {
-        private readonly ObjectBinder _valueTypeBinder;
-        private readonly ObjectBinder _complexTypeBinder;
-        private readonly ObjectBinder _simpleArrayBinder;
+        private readonly SimpleTypeObjectBinder _valueTypeBinder;
+        private readonly ComplexObjectBinder _complexTypeBinder;
+        private readonly ArrayObjectBinder _simpleArrayBinder;
 
-        public DataHandler(ObjectBinder valueTypeBinder, ObjectBinder complexTypeBinder, ObjectBinder simpleArrayBinder)
+        public DataHandler(SimpleTypeObjectBinder valueTypeBinder, ComplexObjectBinder complexTypeBinder,
+            ArrayObjectBinder simpleArrayBinder)
         {
             _valueTypeBinder = valueTypeBinder;
             _complexTypeBinder = complexTypeBinder;
@@ -27,29 +29,28 @@ namespace DbContext
         public T Handle<T>(IDataReader reader)
         {
             var type = typeof(T).GenericTypeArguments.Single();
-            var makeGenericMethod = typeof(ObjectBinder).GetMethod("Handle").MakeGenericMethod(type);
             if (type.IsSimpleType())
             {
-                var invoke = makeGenericMethod.Invoke(_valueTypeBinder, new[] {reader});
-                return (T) invoke;
+                return (T) GetMethod<T>(typeof(SimpleTypeObjectBinder)).Invoke(_valueTypeBinder, new object[] {reader});
             }
 
             if (type.IsArray)
             {
-                var invoke = makeGenericMethod.Invoke(_simpleArrayBinder, new[] {reader});
-                return (T) invoke;
+                return (T) GetMethod<T>(typeof(ArrayObjectBinder))
+                    .Invoke(_simpleArrayBinder, new object[] {reader});
             }
 
             if (type.IsClassType())
             {
-                var invoke = makeGenericMethod.Invoke(_complexTypeBinder, new object[] {reader});
-                return (T) invoke;
+                var methodInfo = GetMethod<T>(typeof(ComplexObjectBinder));
+                return (T) methodInfo.Invoke(_complexTypeBinder, new object[] {reader});
             }
 
 
             throw new NotSupportedException();
         }
-    }
 
-  
+        private MethodInfo GetMethod<T>(Type handlerType) =>
+            handlerType.GetMethod("Handle").MakeGenericMethod(typeof(T).GenericTypeArguments.Single());
+    }
 }

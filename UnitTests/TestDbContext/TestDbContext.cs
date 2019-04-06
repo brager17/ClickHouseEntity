@@ -8,7 +8,7 @@ namespace UnitTests.TestDbContext
     public class TestTable
     {
         [ColumnName("some_date")] public DateTime SomeDate { get; set; }
-        [ColumnName("some_int")] public long SomeInt { get; set; }
+        [ColumnName("some_int")] public ulong SomeInt { get; set; }
         [ColumnName("some_str")] public string SomeString { get; set; }
         [ColumnName("some_float")] public float SomeFloat { get; set; }
     }

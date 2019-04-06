@@ -18,7 +18,8 @@ namespace ClickDbContextInfrastructure
     {
         private static IEnumerable<Type> _dbSetTypes { get; set; }
 
-        private static IEnumerable<Type> DbSetTypes => _dbSetTypes ?? (_dbSetTypes = AppDomain.CurrentDomain
+        private static IEnumerable<Type> DbSetTypes => _dbSetTypes ?? (_dbSetTypes = 
+                                                           AppDomain.CurrentDomain
                                                            .GetAssemblies().SelectMany(x => x.GetTypes())
                                                            .Where(x =>
                                                                typeof(IClickHouseDbContext)

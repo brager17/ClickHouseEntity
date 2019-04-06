@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net.Http.Headers;
 using System.Reflection.Metadata.Ecma335;
 using System.Runtime.InteropServices.ComTypes;
 using ClickHouseDbContextExntensions.CQRS;
@@ -55,6 +57,24 @@ namespace Root
                 }
             };
         }
+        
+        private static ClassTypeBinder GetClassTypeBinder()
+        {
+            return new ClassTypeBinder(
+                new ConcreteClassNameValueListToObject(
+                    new CacheQueryWithHashCodeDto<TypePropertiesInfo, Delegate>(
+                        new Aggregate2Query<TypePropertiesInfo, LambdaExpression, Delegate>(
+                            new BuildCreationInitializerLambda(),
+                            new LambdaCompileQuery()))),
+                new AnonymousClassNameValueListToObject());
+        }
+
+
+        private class TypePropertiesInfoComIEquatable : IEquatableByFunc<TypePropertiesInfo>
+        {
+            public bool Equals(TypePropertiesInfo item1, TypePropertiesInfo item2) =>
+                item1.Type.Name == item2.Type.Name;
+        }
 
         #endregion
 
@@ -71,12 +91,14 @@ namespace Root
                         new AggregateLinqVisitor(new ConditionQuery<LambdaListSelectInfo, AggregateLinqInfo>(
                             AggregateLinqVisitorConditions()))), loggers),
                 new DbHandler(connectionString, new DataHandler(
-                    new ObjectBinder(new SimpleTypeBuilderAdapter(new ValueTypeBinder())),
-                    new ObjectBinder(new ClassTypeBinder(new ConcreteClassNameValueListToObject(),
-                        new AnonymousClassNameValueListToObject())),
-                    new ObjectBinder(new SimpleTypeBuilderAdapter(new SingleArrayObjectBinder())))),
+                    new SimpleTypeObjectBinder(new ValueTypeBinder()),
+                    new ComplexObjectBinder(GetClassTypeBinder()),
+                    new ArrayObjectBinder(new SingleArrayObjectBinder()))),
                 new VisitorsHandler(new PropertyMapInfoVisitor(new DtoToExpressionToLinqInfoHandler(),
                     new ValueTypeExpressionToLinqInfoHandler()), new AggregateLinqVisitor(
-                    new ConditionQuery<LambdaListSelectInfo, AggregateLinqInfo>(AggregateLinqVisitorConditions()))));
+                    new ConditionQuery<LambdaListSelectInfo, AggregateLinqInfo>(
+                        AggregateLinqVisitorConditions()))));
+
+       
     }
 }

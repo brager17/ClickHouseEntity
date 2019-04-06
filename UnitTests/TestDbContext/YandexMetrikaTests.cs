@@ -1,5 +1,11 @@
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
+using ClickHouse.Ado;
 using NUnit.Framework;
 
 namespace UnitTests.TestDbContext
@@ -58,11 +64,19 @@ namespace UnitTests.TestDbContext
             Assert.AreEqual(10, allMetrika.Count);
         }
 
-        public class A:B{}
-        public class B{}
+        public class A : B
+        {
+        }
+
+        public class B
+        {
+        }
+
         [Test]
         public void SelectWhereTakeTest()
         {
+            var sw = new Stopwatch();
+            sw.Start();
             var allMetrika = _metrikaDbContext.YandexMetrikaTable.Select(x => new SelectYandexMetrikaTestDto()
                 {
                     title = x.Title,
@@ -73,14 +87,17 @@ namespace UnitTests.TestDbContext
                 }).Where(x => x.title != "")
                 .Take(10)
                 .ToList();
-
+            Console.WriteLine(sw.Elapsed);
             Assert.False(allMetrika.Any(x => x.title == ""));
         }
 
         [Test]
         public void SelectWhereSimpleSelectTakeTest()
         {
-            var allMetrika = _metrikaDbContext.YandexMetrikaTable.Select(x => new SelectYandexMetrikaTestDto()
+            var sw = new Stopwatch();
+            sw.Start();
+
+            var allMetrika1 = _metrikaDbContext.YandexMetrikaTable.Select(x => new SelectYandexMetrikaTestDto()
                 {
                     title = x.Title,
                     eventTime = x.EventTime,
@@ -91,8 +108,7 @@ namespace UnitTests.TestDbContext
                 .Select(x => x.title)
                 .Take(10)
                 .ToList();
-
-            Assert.False(allMetrika.Any(x => x == ""));
+            Console.WriteLine(sw.Elapsed);
         }
 
         [Test]
@@ -157,6 +173,12 @@ namespace UnitTests.TestDbContext
             var lastItem = allMetrika.Last();
             Assert.True(allMetrika.TrueForAll(x => x.Age <= lastItem.Age));
             Assert.True(allMetrika.TrueForAll(x => x.Sex <= lastItem.Sex));
+        }
+
+        [Test]
+        public void ArraySelectTest()
+        {
+            var all = _metrikaDbContext.YandexMetrikaTable.Select(x => x.RefererRegions).Take(10).ToList();
         }
     }
 }

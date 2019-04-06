@@ -1,3 +1,5 @@
+using System;
+using System.Diagnostics;
 using System.Linq.Expressions;
 
 namespace ExpressionTreeVisitor
@@ -16,7 +18,8 @@ namespace ExpressionTreeVisitor
         public AggregateLinqInfo Handle(Expression expression)
         {
             var selectInfos = _propertyMapInfoVisitor.GetInfo(expression).SelectInfos;
-            return _aggregateLinqVisitor.GetInfo(selectInfos, expression);
+            var aggregateLinqInfo = _aggregateLinqVisitor.GetInfo(selectInfos, expression);
+            return aggregateLinqInfo;
         }
     }
-}    
+}

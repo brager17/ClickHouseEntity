@@ -4,5 +4,9 @@
         <TargetFramework>netcoreapp2.2</TargetFramework>
         <RootNamespace>ClickHouseDbContextExntensions</RootNamespace>
     </PropertyGroup>
-
+    <ItemGroup>
+        <Reference Include="ReflectionCache, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>..\..\ReflectionCache\ReflectionCache\bin\Debug\netcoreapp2.2\ReflectionCache.dll</HintPath>
+        </Reference>
+    </ItemGroup>
 </Project>

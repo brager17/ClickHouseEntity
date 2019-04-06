@@ -6,7 +6,11 @@ using System.Data.Common;
 using System.Linq;
 using AutoMapper;
 using AutoMapper.Data;
+using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Running;
+using BenchmarkDotNet.Validators;
 using ClickHouse.Ado;
+using UnitTests.TestDbContext.BenchmarkTests;
 
 namespace ClickHouseQueryProvider
 {
@@ -26,11 +30,26 @@ namespace ClickHouseQueryProvider
 
         static void Main(string[] args)
         {
-            var s = Array.CreateInstance(typeof(long), 10);
-            var ss = (long[]) s;
-            var operation = new SelectOperation();
-            operation.Get();
+            var s = BenchmarkRunner.Run<YandexMetrikaBenchmarkTests>(new AllowNonOptimized());
+//            var s = Array.CreateInstance(typeof(long), 10);
+//            var ss = (long[]) s;
+//            var operation = new SelectOperation();
+//            operation.Get();
         }
+        
+        public class AllowNonOptimized : ManualConfig
+        {
+            public AllowNonOptimized()
+            {
+                Add(JitOptimizationsValidator.DontFailOnError); // ALLOW NON-OPTIMIZED DLLS
+
+                Add(DefaultConfig.Instance.GetLoggers().ToArray()); // manual config has no loggers by default
+                Add(DefaultConfig.Instance.GetExporters().ToArray()); // manual config has no exporters by default
+                Add(DefaultConfig.Instance.GetColumnProviders().ToArray()); // manual config has no columns by default
+            }
+        }
+
+
 
         public class TestTable
         {
@@ -53,7 +72,6 @@ namespace ClickHouseQueryProvider
                         {
                             while (reader.Read())
                             {
-                                var ssss = reader["RefererRegions"];
                             }
                         } while (reader.NextResult());
                     }
@@ -71,41 +89,6 @@ namespace ClickHouseQueryProvider
             public override string Query => "select * from hits_v1 LIMIT 10000";
         }
 
-        private static void PrintData(IDataReader reader)
-        {
-            do
-            {
-                Console.Write("Fields: ");
-                for (var i = 0; i < reader.FieldCount; i++)
-                {
-                    Console.Write("{0}:{1} ", reader.GetName(i), reader.GetDataTypeName(i));
-                }
 
-                Console.WriteLine();
-                while (reader.Read())
-                {
-                    for (var i = 0; i < reader.FieldCount; i++)
-                    {
-                        var val = reader.GetValue(i);
-                        if (val.GetType().IsArray)
-                        {
-                            Console.Write('[');
-                            Console.Write(string.Join(", ", ((IEnumerable) val).Cast<object>()));
-                            Console.Write(']');
-                        }
-                        else
-                        {
-                            Console.Write(val);
-                        }
-
-                        Console.Write(", ");
-                    }
-
-                    Console.WriteLine();
-                }
-
-                Console.WriteLine();
-            } while (reader.NextResult());
-        }
     }
 }

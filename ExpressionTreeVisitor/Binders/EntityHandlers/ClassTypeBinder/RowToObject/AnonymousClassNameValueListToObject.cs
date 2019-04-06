@@ -2,24 +2,31 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using ClickHouseDbContextExntensions.CQRS;
 
 namespace DbContext
 {
-    public class AnonymousClassNameValueListToObject : INameValueListToObject
+    public class AnonymousClassNameValueListToObject : IGenericQuery<PropertiesNameValues>
     {
         // todo кэшировать лямбду
-        public T Build<T>(IEnumerable<NameValue> cells)
+        
+        public T Query<T>(PropertiesNameValues cells)
         {
-            var props = typeof(T).GetProperties();
+            var props = cells.Properties;
             // строим констуктор
-            var cellProps = props.Join(cells, x => x.Name, x => x.Name,
-                (x, y) => new {type = x.PropertyType, value = y.Value});
-            var constantExpressions =
-                cellProps.Select(x => Expression.Convert(Expression.Constant(x.value), x.type));
+
+            var constantExpressions = new UnaryExpression[cells.Properties.Length];
+            for (int i = 0; i < cells.Properties.Length; i++)
+            {
+                constantExpressions[i] =
+                    Expression.Convert(Expression.Constant(cells.Values[i]), cells.Properties[i].PropertyType);
+            }
+           
             var ctor = typeof(T).GetConstructors().Single();
             var expressionNew = Expression.New(ctor, constantExpressions);
             var ctorLambda = Expression.Lambda<Func<T>>(expressionNew);
             return ctorLambda.Compile().Invoke();
         }
     }
+
 }

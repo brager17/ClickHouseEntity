@@ -8,9 +8,9 @@ namespace Context
         {
             Console.WriteLine(log);
         }
-    }    
+    }
 
-    internal class StubConsoleLogger : IDbLogger
+    public class StubConsoleLogger : IDbLogger
     {
         public void WriteLog(LogLevel logLevel, string log)
         {

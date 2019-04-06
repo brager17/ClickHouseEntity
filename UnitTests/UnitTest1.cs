@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using NUnit.Framework;
 using Context;
 using Microsoft.VisualStudio.TestPlatform.Common.ExtensionFramework;
@@ -13,7 +14,7 @@ namespace Tests
         public DateTime Date { get; set; }
         public string String { get; set; }
         public float Float { get; set; }
-        public long Long { get; set; }
+        public ulong Long { get; set; }
     }
 
     #region helpers
@@ -55,14 +56,14 @@ namespace Tests
         {
             return new[]
             {
-                new {s = 28194901262, SomeDate = new DateTime(2010, 03, 10)},
-                new {s = 28194901262, SomeDate = new DateTime(2010, 03, 10)},
-                new {s = 28194901262, SomeDate = new DateTime(2010, 03, 10)},
-                new {s = 28194901262, SomeDate = new DateTime(2010, 03, 10)},
-                new {s = 28194901262, SomeDate = new DateTime(2010, 03, 10)},
-                new {s = 28194901262, SomeDate = new DateTime(2010, 03, 10)},
-                new {s = 28194901262, SomeDate = new DateTime(2010, 03, 10)},
-                new {s = 28194901262, SomeDate = new DateTime(2010, 03, 10)},
+                new {s = (ulong) 28194901262, SomeDate = new DateTime(2010, 03, 10)},
+                new {s = (ulong) 28194901262, SomeDate = new DateTime(2010, 03, 10)},
+                new {s = (ulong) 28194901262, SomeDate = new DateTime(2010, 03, 10)},
+                new {s = (ulong) 28194901262, SomeDate = new DateTime(2010, 03, 10)},
+                new {s = (ulong) 28194901262, SomeDate = new DateTime(2010, 03, 10)},
+                new {s = (ulong) 28194901262, SomeDate = new DateTime(2010, 03, 10)},
+                new {s = (ulong) 28194901262, SomeDate = new DateTime(2010, 03, 10)},
+                new {s = (ulong) 28194901262, SomeDate = new DateTime(2010, 03, 10)},
             };
         }
 
@@ -119,7 +120,7 @@ namespace Tests
     public class Dto
     {
         public string SomeStr { get; set; }
-        public long SomeInt1 { get; set; }
+        public ulong SomeInt1 { get; set; }
     }
 
     public class SelectTests
