@@ -81,25 +81,33 @@ namespace Root
 
         #endregion
 
+        public class EquatableByFuncAggregateLinqVisitorDto : IEquatableByFunc<AggregateLinqVisitorDto>
+        {
+            public bool Equals(AggregateLinqVisitorDto item1, AggregateLinqVisitorDto item2)
+            {
+                return item1.expression.ToString() == item2.expression.ToString();
+            }
+        }
+
         //todo add DI Container(хотя он тут нахуй не нужен
         public static ExpressionsToObject Get(string connectionString, IEnumerable<IDbLogger> loggers) =>
             new ExpressionsToObject(
-                new LoggerDecaoratorToSqlConverter(
-                    new ExpressionToSqlConverter(new SqlRequestHandler(
+                new LoggerDecaoratorToSqlConverter<ForSqlRequestInfo>(
+                    new ExpressionToSqlConverter(
+                        new SqlRequestHandler(
                             new SelectRequestHandler(),
                             new TableNameRequestHandler(),
                             new WhereOperationRequestHandler(),
                             new TakeOperationRequestHandle(),
-                            new OrderOperationRequestHandler()),
-                        new AggregateLinqVisitor(new ConditionQuery<LambdaListSelectInfo, AggregateLinqInfo>(
-                            AggregateLinqVisitorConditions()))), loggers),
+                            new OrderOperationRequestHandler())), loggers),
                 new DbHandler(connectionString, new DataHandler(
                     new SimpleTypeObjectBinder(new PrimitiveTypeCreator()),
                     new ComplexObjectBinder(GetClassTypeBinder()),
                     new ArrayObjectBinder(new ArrayCreator()))),
                 new VisitorsHandler(new PropertyMapInfoVisitor(new DtoToExpressionToLinqInfoHandler(),
-                    new ValueTypeExpressionToLinqInfoHandler()), new AggregateLinqVisitor(
-                    new ConditionQuery<LambdaListSelectInfo, AggregateLinqInfo>(
-                        AggregateLinqVisitorConditions()))));
+                        new ValueTypeExpressionToLinqInfoHandler()),
+                    new CacheQuery<AggregateLinqVisitorDto, AggregateLinqInfo>(new AggregateLinqVisitor(
+                        new ConditionQuery<LambdaListSelectInfo, AggregateLinqInfo>(
+                            AggregateLinqVisitorConditions())), new EquatableByFuncAggregateLinqVisitorDto())));
     }
 }

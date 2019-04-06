@@ -19,6 +19,8 @@ namespace DbContext
             _dataHandler = dataHandler;
         }
 
+        // todo рассмотреть вариант рефакторинга, считывать все в структуру данных и закрывать соединение,
+        // todo а потом уже обрабатывать
         public T GetData<T>(string sqlCommand)
         {
             using (var cnn = new ClickHouseConnection(new ClickHouseConnectionSettings(_connectionString)))
@@ -30,5 +32,5 @@ namespace DbContext
                 return result;
             }
         }
-    }
+    }    
 }

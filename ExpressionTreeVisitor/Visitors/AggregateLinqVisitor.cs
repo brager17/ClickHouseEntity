@@ -9,7 +9,13 @@ using ClickHouseDbContextExntensions.CQRS;
 
 namespace ExpressionTreeVisitor
 {
-    public class AggregateLinqVisitor : ExpressionVisitor
+    public class AggregateLinqVisitorDto
+    {
+        public IEnumerable<SelectInfo> selectInfos { get; set; }
+        public Expression expression { get; set; }
+    }
+
+    public class AggregateLinqVisitor : ExpressionVisitor, IQuery<AggregateLinqVisitorDto, AggregateLinqInfo>
     {
         private readonly ConditionQuery<LambdaListSelectInfo, AggregateLinqInfo> _aggregateLinqInfoQuery;
         private readonly OrderingToSqlVisitor _orderingToSqlVisitor;
@@ -23,18 +29,20 @@ namespace ExpressionTreeVisitor
             _aggregateLinqInfoQuery = aggregateLinqInfoQuery;
         }
 
-        public AggregateLinqInfo GetInfo(IEnumerable<SelectInfo> selectInfos, Expression expression)
+        public AggregateLinqInfo Query(AggregateLinqVisitorDto input)
         {
             AggregateLinqInfo = new AggregateLinqInfo();
-            AggregateLinqInfo.SelectInfo = (_selectInfos = selectInfos).ToList();
-            base.Visit(expression);
+            AggregateLinqInfo.SelectInfo = (_selectInfos = input.selectInfos).ToList();
+            base.Visit(input.expression);
             return AggregateLinqInfo;
         }
 
         protected override Expression VisitMethodCall(MethodCallExpression node)
         {
-            _aggregateLinqInfoQuery.Query(new LambdaListSelectInfo{
-                SelectInfos = _selectInfos, AggregateLinqInfo = AggregateLinqInfo, MethodCallExpression = node});
+            _aggregateLinqInfoQuery.Query(new LambdaListSelectInfo
+            {
+                SelectInfos = _selectInfos, AggregateLinqInfo = AggregateLinqInfo, MethodCallExpression = node
+            });
             return base.VisitMethodCall(node);
         }
 
@@ -47,6 +55,4 @@ namespace ExpressionTreeVisitor
             return base.VisitConstant(node);
         }
     }
-
-    
 }

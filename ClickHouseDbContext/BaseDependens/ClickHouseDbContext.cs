@@ -26,8 +26,13 @@ namespace Context
                 .ForEach(x =>
                 {
                     var propertyType = x.PropertyType.GenericTypeArguments.First();
+                    var getDbSetOperations =
+                        typeof(GetDbSet).GetMethods().Single(xx => xx.Name == "GetDbSetOperations")
+                            .MakeGenericMethod(propertyType);
                     x.SetValue(this, Activator.CreateInstance(typeof(DbSet<>).MakeGenericType(propertyType),
-                        new ClickHouseQueryProvider(GetClickHouseProvider.Get(connectionString, _dbLoggers))));
+                        new ClickHouseQueryProvider(
+                            GetClickHouseProvider.Get(connectionString, _dbLoggers)),
+                        getDbSetOperations.Invoke(null, new object[] {connectionString, _dbLoggers})));
                 });
         }
 
@@ -40,12 +45,16 @@ namespace Context
             {
                 _operations = operations;
             }
-            public Task Add(IEnumerable<T> items) => _operations.Add(items);
 
-            public Task Remove(IEnumerable<T> item) =>
-                _enumerator == null ? throw new ArgumentException() : _operations.Remove(item, _enumerator);
+            public void Add(IEnumerable<T> items) => _operations.Add(items);
 
-            public Task Remove(Expression<Func<T, bool>> exprFilter) => _operations.Remove(exprFilter);
+            public void Remove(IEnumerable<T> item)
+            {
+                if (_enumerator == null) throw new ArgumentException();
+                _operations.Remove(item, _enumerator);
+            }
+
+            public void Remove(Expression<Func<T, bool>> exprFilter) => _operations.Remove(exprFilter);
 
             public void SaveChanges() => _operations.SaveChanges();
         }

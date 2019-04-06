@@ -10,7 +10,7 @@ using ReflectionCache;
 
 namespace DbContext
 {
-    public class ClassCreator : IGenericQuery<PropertiesNameValues>
+    public class ClassCreator : ITInGenericQuery<PropertiesNameValues>
     {
         private readonly IQuery<TypePropertiesInfo, Delegate> _delegateBuilder;
 

@@ -18,29 +18,29 @@ namespace ClickDbContextInfrastructure
         /// </summary>
         /// <param name="items"></param>
         /// <returns></returns>
-        Task Add(IEnumerable<T> items);
+        void Add(IEnumerable<T> items);
 
         /// <summary>
         /// Удаление списка элементов, если важна производительность используйте Remove(Expression<Func<T,bool>>)
         /// </summary>
         /// <returns></returns>
-        Task Remove(IEnumerable<T> item);
+        void Remove(IEnumerable<T> item);
 
         /// <summary>
         /// Удаление по данных по условию
         /// </summary>
         /// <param name="exprFilter">Условие удаления данных</param>
         /// <returns></returns>
-        Task Remove(Expression<Func<T, bool>> exprFilter);
+        void Remove(Expression<Func<T, bool>> exprFilter);
 
         void SaveChanges();
     }
 
     public interface IDbSetOperations<T>
     {
-        Task Add(IEnumerable<T> items);
-        Task Remove(IEnumerable<T> item, IEnumerator<T> enumerator);
-        Task Remove(Expression<Func<T, bool>> exprFilter);
+        void Add(IEnumerable<T> items);
+        void Remove(IEnumerable<T> item, IEnumerator<T> enumerator);
+        void Remove(Expression<Func<T, bool>> exprFilter);
 
         void SaveChanges();
     }

@@ -7,13 +7,13 @@ namespace DbContext
     //todo добавить кэширование MethodInfo
     public class ClassTypeBinder : IClassBinder
     {
-        private readonly IGenericQuery<PropertiesNameValues> _concreteClassNameValueListToObject;
-        private readonly IGenericQuery<PropertiesNameValues> _anonymousClassNameValueListToObject;
+        private readonly ITInGenericQuery<PropertiesNameValues> _concreteClassNameValueListToObject;
+        private readonly ITInGenericQuery<PropertiesNameValues> _anonymousClassNameValueListToObject;
 
 
         public ClassTypeBinder(
-            IGenericQuery<PropertiesNameValues> concreteClassNameValueListToObject,
-            IGenericQuery<PropertiesNameValues> anonymousClassNameValueListToObject)
+            ITInGenericQuery<PropertiesNameValues> concreteClassNameValueListToObject,
+            ITInGenericQuery<PropertiesNameValues> anonymousClassNameValueListToObject)
         {
             _concreteClassNameValueListToObject = concreteClassNameValueListToObject;
             _anonymousClassNameValueListToObject = anonymousClassNameValueListToObject;
@@ -21,7 +21,7 @@ namespace DbContext
 
         public T Handle<T>(PropertiesNameValues cells)
         {
-            IGenericQuery<PropertiesNameValues> nameValueListToObjectType;
+            ITInGenericQuery<PropertiesNameValues> nameValueListToObjectType;
 
             if (typeof(T).IsAnonymouseClass())
                 nameValueListToObjectType = _anonymousClassNameValueListToObject;

@@ -4,19 +4,20 @@ using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using ClickHouseDbContextExntensions.CQRS;
 using ExpressionTreeVisitor;
 
 namespace DbContext
 {
     public class ExpressionsToObject : IExpressionsToObject
     {
-        private readonly IExpressionToSqlConverter _toSqlConverter;
+        private readonly   IQuery<ForSqlRequestInfo, string> _toSqlConverter;
         private readonly IDbHandler _dbHandler;
-        private readonly IVisitorHandler _visitorHandler;
+        private readonly IQuery<Expression,AggregateLinqInfo> _visitorHandler;
 
         public ExpressionsToObject(
-            IExpressionToSqlConverter toSqlConverter,
-            IDbHandler dbHandler, IVisitorHandler visitorHandler)
+            IQuery<ForSqlRequestInfo, string> toSqlConverter,
+            IDbHandler dbHandler, IQuery<Expression,AggregateLinqInfo> visitorHandler)
         {
             _toSqlConverter = toSqlConverter;
             _dbHandler = dbHandler;
@@ -26,8 +27,8 @@ namespace DbContext
         //TResult type definition IEnumerator<T> where T DbSet type 
         public TResult Handle<TResult>(Expression expression)
         {
-            var aggregateInfo = _visitorHandler.Handle(expression);
-            var sql = _toSqlConverter.GetSql(aggregateInfo);
+            var aggregateInfo = _visitorHandler.Query(expression);
+            var sql = _toSqlConverter.Query(aggregateInfo);
             var enumerator = _dbHandler.GetData<TResult>(sql);
             return enumerator;
         }

@@ -1,22 +1,21 @@
 using System.Linq;
 using System.Linq.Expressions;
+using ClickHouseDbContextExntensions.CQRS;
 using ExpressionTreeVisitor;
 
 namespace DbContext
 {
-    public class ExpressionToSqlConverter : IExpressionToSqlConverter
+    public class ExpressionToSqlConverter : IQuery<ForSqlRequestInfo,string>
     {
         private readonly ISqlRequestHandler _sqlRequestHandler;
-        private AggregateLinqVisitor BaseVisitor { get; set; }
 
-        public ExpressionToSqlConverter(ISqlRequestHandler sqlRequestHandler, AggregateLinqVisitor baseVisitor)
+        public ExpressionToSqlConverter(ISqlRequestHandler sqlRequestHandler)
         {
             _sqlRequestHandler = sqlRequestHandler;
-            BaseVisitor = baseVisitor;
         }
 
         //TODO добавить нормальный pattern mathing
-        public string GetSql(ForSqlRequestInfo sqlRequestInfo)
+        public string Query(ForSqlRequestInfo sqlRequestInfo)
         {
             var sql = _sqlRequestHandler.Handle(sqlRequestInfo);
             var sqlString = $"SELECT {sql.Select} FROM {sql.TableName} ";
