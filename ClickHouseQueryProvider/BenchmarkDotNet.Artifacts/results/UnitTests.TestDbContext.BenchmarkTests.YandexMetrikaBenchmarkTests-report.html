@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>UnitTests.TestDbContext.BenchmarkTests.YandexMetrikaBenchmarkTests-20190406-032335</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet=v0.11.5, OS=ubuntu 18.04
+Intel Core i5-6200U CPU 2.30GHz (Skylake), 1 CPU, 4 logical and 2 physical cores
+.NET Core SDK=2.2.103
+  [Host]     : .NET Core 2.2.1 (CoreCLR 4.6.27207.03, CoreFX 4.6.27207.03), 64bit RyuJIT
+  DefaultJob : .NET Core 2.2.1 (CoreCLR 4.6.27207.03, CoreFX 4.6.27207.03), 64bit RyuJIT
+</code></pre>
+<pre><code></code></pre>
+
+<table>
+<thead><tr><th>                      Method</th><th>count</th><th> Mean</th><th>Error</th><th>StdDev</th>
+</tr>
+</thead><tbody><tr><td>SelectInAnonymouseClass5Properties</td><td>1000</td><td>63.34 ms</td><td>1.247 ms</td><td>1.748 ms</td>
+</tr><tr><td>AdoNetSelectFiveColums</td><td>1000</td><td>60.41 ms</td><td>1.430 ms</td><td>4.217 ms</td>
+</tr><tr><td>SelectInAnonymouseClass5Properties</td><td>10000</td><td>201.48 ms</td><td>4.334 ms</td><td>6.486 ms</td>
+</tr><tr><td>AdoNetSelectFiveColums</td><td>10000</td><td>94.31 ms</td><td>1.847 ms</td><td>3.732 ms</td>
+</tr><tr><td>SelectInAnonymouseClass5Properties</td><td>100000</td><td>1,546.16 ms</td><td>25.507 ms</td><td>23.859 ms</td>
+</tr><tr><td>AdoNetSelectFiveColums</td><td>100000</td><td>405.29 ms</td><td>7.933 ms</td><td>9.444 ms</td>
+</tr></tbody></table>
+</body>
+</html>

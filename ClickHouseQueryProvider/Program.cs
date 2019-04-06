@@ -86,7 +86,7 @@ namespace ClickHouseQueryProvider
 
         public class SelectOperation : DatabaseOperation
         {
-            public override string Query => "select * from hits_v1 LIMIT 10000";
+            public override string Query => "select * from mytable LIMIT 10000";
         }
 
 

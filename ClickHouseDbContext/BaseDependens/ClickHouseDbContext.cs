@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Threading.Tasks;
 using ClickDbContextInfrastructure;
 using DbContext;
 using ReflectionCache;
@@ -13,7 +14,7 @@ namespace Context
 {
     public class ClickHouseDbContext : IClickHouseDbContext
     {
-        private string ConnectionString { get;  }
+        private string ConnectionString { get; }
 
         protected ClickHouseDbContext(string connectionString)
         {
@@ -30,13 +31,26 @@ namespace Context
                 });
         }
 
-        public class DbSet<T> : ClickHouseQueryable<T>, IDbSet
+        public class DbSet<T> : ClickHouseQueryable<T>, IDbSet, IDbSet<T>
         {
-            public DbSet(IQueryProvider queryProvider) :
+            private readonly IDbSetOperations<T> _operations;
+
+            public DbSet(IQueryProvider queryProvider, IDbSetOperations<T> operations) :
                 base(GetInitialExpressionByType<T>(), queryProvider)
             {
+                _operations = operations;
             }
+            public Task Add(IEnumerable<T> items) => _operations.Add(items);
+
+            public Task Remove(IEnumerable<T> item) =>
+                _enumerator == null ? throw new ArgumentException() : _operations.Remove(item, _enumerator);
+
+            public Task Remove(Expression<Func<T, bool>> exprFilter) => _operations.Remove(exprFilter);
+
+            public void SaveChanges() => _operations.SaveChanges();
         }
+
+        #region helpers
 
         protected virtual IEnumerable<IDbLogger> _dbLoggers => new List<IDbLogger> {new StubConsoleLogger()};
 
@@ -55,5 +69,7 @@ namespace Context
                 Expression.Quote(lambda));
             return callExpression;
         }
+
+        #endregion helpers
     }
 }

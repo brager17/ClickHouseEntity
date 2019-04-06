@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClickHouseDbContextInterfac
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Root", "Root\Root.csproj", "{B793A572-12EB-4BA0-8234-A1E0E2FC7C03}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityMutations", "EntityMutations\EntityMutations.csproj", "{844FE4C9-FCEA-4152-8651-7B4037A173C1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{B793A572-12EB-4BA0-8234-A1E0E2FC7C03}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B793A572-12EB-4BA0-8234-A1E0E2FC7C03}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B793A572-12EB-4BA0-8234-A1E0E2FC7C03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{844FE4C9-FCEA-4152-8651-7B4037A173C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{844FE4C9-FCEA-4152-8651-7B4037A173C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{844FE4C9-FCEA-4152-8651-7B4037A173C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{844FE4C9-FCEA-4152-8651-7B4037A173C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
