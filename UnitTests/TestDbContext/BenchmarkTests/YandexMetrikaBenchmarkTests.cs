@@ -50,7 +50,8 @@ namespace UnitTests.TestDbContext.BenchmarkTests
 //        [Arguments(1000)]
         [Arguments(10000)]
         [Arguments(100000)]
-        [Benchmark]
+        [Arguments(1000000)]
+//        [Benchmark]
         public void SelectInDtoWith5Properties(int count)
         {
             var list = _metrikaDbContext.YandexMetrikaTable.Select(x => new SelectYandexMetrikaTestDto
@@ -60,16 +61,31 @@ namespace UnitTests.TestDbContext.BenchmarkTests
             }).Take(count).ToList();
         }
 
-        [Arguments(10)]
-        [Arguments(100)]
         [Arguments(1000)]
         [Arguments(10000)]
         [Arguments(100000)]
-//        [Benchmark]
+        [Benchmark]
+        public void SelectInAnonymouseClass5Properties(int count)
+        {
+            var list = _metrikaDbContext.YandexMetrikaTable.Select(x => new
+            {
+                x.Title,
+                x.EventDate,
+                x.GoodEvent,
+                x.JavaEnable,
+                x.WatchID
+            }).Take(count).ToList();
+        }
+
+        [Arguments(1000)]
+        [Arguments(10000)]
+        [Arguments(100000)]
+        [Benchmark]
         public void AdoNetSelectFiveColums(int count)
         {
             adoOperation.Get("SELECT Title,EventDate,GoodEvent,JavaEnable,WatchID FROM hits_v1 LIMIT " + count);
         }
+
         [Arguments(10)]
         [Arguments(100)]
         [Arguments(1000)]
@@ -80,7 +96,7 @@ namespace UnitTests.TestDbContext.BenchmarkTests
         {
             var s = _metrikaDbContext.YandexMetrikaTable.Select(x => x.Title).Take(count).ToList();
         }
-        
+
         [Arguments(10)]
         [Arguments(100)]
         [Arguments(1000)]
@@ -92,7 +108,6 @@ namespace UnitTests.TestDbContext.BenchmarkTests
             adoOperation.Get("SELECT Title FROM hits_v1 LIMIT " + count);
         }
 
-        
 
         public class AdoBenchMarkSelectOperation
         {

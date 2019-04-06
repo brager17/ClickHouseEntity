@@ -178,7 +178,9 @@ namespace UnitTests.TestDbContext
         [Test]
         public void ArraySelectTest()
         {
-            var all = _metrikaDbContext.YandexMetrikaTable.Select(x => x.RefererRegions).Take(10).ToList();
+            //ADONet clickHouse хреново написали свой провайдер,
+            //поэтому Take доверять незья, он может вернуть меньшее коичество записей
+            var all = _metrikaDbContext.YandexMetrikaTable.Select(x => x.RefererRegions).Take(20).ToList();
         }
     }
 }

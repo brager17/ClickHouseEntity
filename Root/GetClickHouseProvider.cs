@@ -57,16 +57,19 @@ namespace Root
                 }
             };
         }
-        
+
         private static ClassTypeBinder GetClassTypeBinder()
         {
             return new ClassTypeBinder(
-                new ConcreteClassNameValueListToObject(
+                new ClassCreator(
                     new CacheQueryWithHashCodeDto<TypePropertiesInfo, Delegate>(
                         new Aggregate2Query<TypePropertiesInfo, LambdaExpression, Delegate>(
                             new BuildCreationInitializerLambda(),
                             new LambdaCompileQuery()))),
-                new AnonymousClassNameValueListToObject());
+                new ClassCreator(
+                    new CacheQueryWithHashCodeDto<TypePropertiesInfo, Delegate>(
+                        new Aggregate2Query<TypePropertiesInfo, LambdaExpression, Delegate>(
+                            new BuildCreatorCtorLambda(), new LambdaCompileQuery()))));
         }
 
 
@@ -87,18 +90,16 @@ namespace Root
                             new TableNameRequestHandler(),
                             new WhereOperationRequestHandler(),
                             new TakeOperationRequestHandle(),
-                            new OrderOperationRequestHandle()),
+                            new OrderOperationRequestHandler()),
                         new AggregateLinqVisitor(new ConditionQuery<LambdaListSelectInfo, AggregateLinqInfo>(
                             AggregateLinqVisitorConditions()))), loggers),
                 new DbHandler(connectionString, new DataHandler(
-                    new SimpleTypeObjectBinder(new ValueTypeBinder()),
+                    new SimpleTypeObjectBinder(new PrimitiveTypeCreator()),
                     new ComplexObjectBinder(GetClassTypeBinder()),
-                    new ArrayObjectBinder(new SingleArrayObjectBinder()))),
+                    new ArrayObjectBinder(new ArrayCreator()))),
                 new VisitorsHandler(new PropertyMapInfoVisitor(new DtoToExpressionToLinqInfoHandler(),
                     new ValueTypeExpressionToLinqInfoHandler()), new AggregateLinqVisitor(
                     new ConditionQuery<LambdaListSelectInfo, AggregateLinqInfo>(
                         AggregateLinqVisitorConditions()))));
-
-       
     }
 }

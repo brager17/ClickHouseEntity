@@ -3,19 +3,15 @@ using System.Data;
 
 namespace DbContext
 {
-    public interface ISingleObjectBinder
+    public interface IPrimitiveTypeOrPrimitiveArrayBinder
     {
         T Handle<T>(NameValue nameValue);
     }
 
 
-    public interface IComplexEntityBinder
+    public interface IClassBinder
     {
         T Handle<T>(PropertiesNameValues cells);
     }
-
-    public interface IManyObjectBinder
-    {
-        T Handle<T>(IEnumerable<NameValue> nameValue);
-    }
+   
 }

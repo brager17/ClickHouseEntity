@@ -1,40 +1,13 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.CompilerServices;
 using ClickHouseDbContextExntensions.CQRS;
 using ExpressionTreeVisitor;
-using ReflectionCache;
 
 namespace DbContext
 {
-    public class ConcreteClassNameValueListToObject : IGenericQuery<PropertiesNameValues>
-    {
-        private readonly IQuery<TypePropertiesInfo, Delegate> _delegateBuilder;
-
-        public ConcreteClassNameValueListToObject(IQuery<TypePropertiesInfo, Delegate> delegateBuilder)
-        {
-            _delegateBuilder = delegateBuilder;
-        }
-
-        public T Query<T>(PropertiesNameValues cells)
-        {
-            var func = _delegateBuilder.Query(new TypePropertiesInfo {Type = typeof(T), Properties = cells.Properties});
-            var entity = (T) func.DynamicInvoke(cells.Values);
-            return entity;
-        }
-    }
-
-
-    public class LambdaCompileQuery : IQuery<LambdaExpression, Delegate>
-    {
-        public Delegate Query(LambdaExpression input) => input.Compile();
-    }
-
+    [Info("Optimize code")]
     public class BuildCreationInitializerLambda : IQuery<TypePropertiesInfo, LambdaExpression>
     {
         public LambdaExpression Query(TypePropertiesInfo input)
@@ -70,6 +43,7 @@ namespace DbContext
         }
 
         // todo убрать как только ClickHouseAdoNet начнет возвращать типизированные массивы а не всегда object[]
+        // UsedImplicitly//
         private static TItem[] ConvertArray<TItem>(object[] objects)
         {
             return objects.Select(x => Convert.ChangeType(x, typeof(TItem))).Cast<TItem>().ToArray();
@@ -79,21 +53,5 @@ namespace DbContext
             .GetMethod("ConvertArray", BindingFlags.NonPublic | BindingFlags.Static);
 
         //
-    }
-
-    public class TypePropertiesInfo
-    {
-        public override int GetHashCode()
-        {
-            return Type.GetHashCode();
-        }
-
-        public override bool Equals(object obj)
-        {
-            return ((dynamic) obj).Type == Type;
-        }
-
-        public Type Type { get; set; }
-        public IEnumerable<PropertyInfo> Properties { get; set; }
     }
 }

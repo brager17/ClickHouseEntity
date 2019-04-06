@@ -5,7 +5,7 @@ using ExpressionTreeVisitor;
 namespace DbContext
 {
     //todo добавить кэширование MethodInfo
-    public class ClassTypeBinder : IComplexEntityBinder
+    public class ClassTypeBinder : IClassBinder
     {
         private readonly IGenericQuery<PropertiesNameValues> _concreteClassNameValueListToObject;
         private readonly IGenericQuery<PropertiesNameValues> _anonymousClassNameValueListToObject;
@@ -27,7 +27,7 @@ namespace DbContext
                 nameValueListToObjectType = _anonymousClassNameValueListToObject;
             else
                 nameValueListToObjectType = _concreteClassNameValueListToObject;
-            var result = (T) nameValueListToObjectType.GetType().GetMethod("Query").MakeGenericMethod(typeof(T))
+            var result = (T) _concreteClassNameValueListToObject.GetType().GetMethod("Query").MakeGenericMethod(typeof(T))
                 .Invoke(nameValueListToObjectType, new object[] {cells});
 
             return result;
