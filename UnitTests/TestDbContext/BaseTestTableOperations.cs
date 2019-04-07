@@ -4,7 +4,8 @@ using NUnit.Framework;
 
 namespace UnitTests.TestDbContext
 {
-    public class BaseWriteTests
+    
+    public class BaseTestTableOperations
     {
         protected TestDbContext _context { get; set; }
 

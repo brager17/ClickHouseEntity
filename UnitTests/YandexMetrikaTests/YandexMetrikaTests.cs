@@ -10,6 +10,8 @@ using NUnit.Framework;
 
 namespace UnitTests.TestDbContext
 {
+    #region helpers
+
     public class SelectYandexMetrikaTestDto
     {
         public ulong watchID { get; set; }
@@ -26,9 +28,12 @@ namespace UnitTests.TestDbContext
         public int je { get; set; }
     }
 
+    #endregion helpers
 
     public class YandexMetrikaTests
     {
+        #region helpers
+
         private YandexMetrikaDbContext _metrikaDbContext { get; set; }
 
         private IQueryable<SelectYandexMetrikaTestDto> BaseSelect => _metrikaDbContext.YandexMetrikaTable
@@ -40,6 +45,8 @@ namespace UnitTests.TestDbContext
                 javaEnable = x.JavaEnable,
                 watchID = x.WatchID
             });
+
+        #endregion helpers
 
         [SetUp]
         public void SetUp()
@@ -59,15 +66,7 @@ namespace UnitTests.TestDbContext
         [Test]
         public void SelectTakeTest()
         {
-            var allMetrika = _metrikaDbContext.YandexMetrikaTable
-                .Select(x => new SelectYandexMetrikaTestDto()
-                {
-                    title = x.Title,
-                    eventTime = x.EventTime,
-                    goodEvent = x.GoodEvent,
-                    javaEnable = x.JavaEnable,
-                    watchID = x.WatchID
-                })
+            var allMetrika = BaseSelect
                 .Take(10)
                 .ToList();
 
@@ -77,72 +76,40 @@ namespace UnitTests.TestDbContext
         [Test]
         public void SelectWhereTakeTest()
         {
-            var sw = new Stopwatch();
-            sw.Start();
-            var allMetrika = _metrikaDbContext.YandexMetrikaTable.Select(x => new SelectYandexMetrikaTestDto()
-                {
-                    title = x.Title,
-                    eventTime = x.EventTime,
-                    goodEvent = x.GoodEvent,
-                    javaEnable = x.JavaEnable,
-                    watchID = x.WatchID
-                }).Where(x => x.title != "")
+            var allMetrika = BaseSelect
                 .Take(10)
                 .ToList();
-            Console.WriteLine(sw.Elapsed);
-            Assert.False(allMetrika.Any(x => x.title == ""));
+            Assert.AreEqual(10, allMetrika.Count);
         }
 
         [Test]
         public void SelectWhereSimpleSelectTakeTest()
         {
-            var sw = new Stopwatch();
-            sw.Start();
-
-            var allMetrika1 = _metrikaDbContext.YandexMetrikaTable.Select(x => new SelectYandexMetrikaTestDto()
-                {
-                    title = x.Title,
-                    eventTime = x.EventTime,
-                    goodEvent = x.GoodEvent,
-                    javaEnable = x.JavaEnable,
-                    watchID = x.WatchID
-                }).Where(x => x.title != "")
+            var data = BaseSelect
+                .Where(x => x.title != "")
                 .Select(x => x.title)
                 .Take(10)
                 .ToList();
-            Console.WriteLine(sw.Elapsed);
+            Assert.AreEqual(10, data.Count);
         }
 
         [Test]
         public void SelectWhereAnonymouseSelectTakeTest()
         {
-            var allMetrika = _metrikaDbContext.YandexMetrikaTable.Select(x => new SelectYandexMetrikaTestDto()
-                {
-                    title = x.Title,
-                    eventTime = x.EventTime,
-                    goodEvent = x.GoodEvent,
-                    javaEnable = x.JavaEnable,
-                    watchID = x.WatchID
-                }).Where(x => x.title != "" && x.javaEnable == 0)
+            var data = BaseSelect.Where(x => x.title != "" && x.javaEnable == 0)
                 .Select(x => new {x.title, x.javaEnable})
                 .Take(10)
                 .ToList();
 
-            Assert.True(allMetrika.Any(x => x.title != "" && x.javaEnable == 0));
+            Assert.True(data.Any(x => x.title != "" && x.javaEnable == 0));
+            Assert.AreEqual(10, data.Count);
         }
 
 
         [Test]
         public void SelectWhereConcreteSelectTakeTest()
         {
-            var allMetrika = _metrikaDbContext.YandexMetrikaTable.Select(x => new SelectYandexMetrikaTestDto()
-                {
-                    title = x.Title,
-                    eventTime = x.EventTime,
-                    goodEvent = x.GoodEvent,
-                    javaEnable = x.JavaEnable,
-                    watchID = x.WatchID
-                }).Where(x => x.title != "" && x.javaEnable == 0)
+            var data = BaseSelect.Where(x => x.title != "" && x.javaEnable == 0)
                 .Select(x => new SelectYandexMetrikaTestTitleDto()
                 {
                     t = x.title,
@@ -152,35 +119,38 @@ namespace UnitTests.TestDbContext
                 .Take(10)
                 .ToList();
 
-            Assert.True(allMetrika.Any(x => x.t != "" && x.je == 0));
+            Assert.True(data.Any(x => x.t != "" && x.je == 0));
+            Assert.AreEqual(10, data.Count);
         }
 
         [Test]
         public void WhereTakeTest()
         {
-            var allMetrika = _metrikaDbContext.YandexMetrikaTable
+            var data = _metrikaDbContext.YandexMetrikaTable
                 .Where(x => x.Title != "" && x.JavaEnable == 0)
                 .Take(10)
                 .ToList();
-            Assert.True(allMetrika.Any(x => x.Title != "" && x.JavaEnable == 0));
+            Assert.True(data.Any(x => x.Title != "" && x.JavaEnable == 0));
+            Assert.AreEqual(10, data.Count);
         }
 
         [Test]
         public void OrderByTest()
         {
-            var allMetrika = _metrikaDbContext.YandexMetrikaTable
+            var data = _metrikaDbContext.YandexMetrikaTable
                 .Take(10)
                 .OrderBy(x => new {x.Age, x.Sex}).ToList();
 
-            var lastItem = allMetrika.Last();
-            Assert.True(allMetrika.TrueForAll(x => x.Age <= lastItem.Age));
-            Assert.True(allMetrika.TrueForAll(x => x.Sex <= lastItem.Sex));
+            var lastItem = data.Last();
+            Assert.True(data.TrueForAll(x => x.Age <= lastItem.Age));
+            Assert.True(data.TrueForAll(x => x.Sex <= lastItem.Sex));
+            Assert.AreEqual(10, data.Count);
         }
 
         [Test]
         public void ArraySelectTest()
         {
-            //ADONet clickHouse хреново написали свой провайдер,
+            //ADONet ClickHouse хреново написали свой провайдер,
             //поэтому Take доверять незья, он может вернуть меньшее коичество записей
             var all = _metrikaDbContext.YandexMetrikaTable.Select(x => x.RefererRegions).Take(20).ToList();
         }

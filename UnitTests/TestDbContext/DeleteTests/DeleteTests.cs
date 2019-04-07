@@ -8,7 +8,7 @@ using NUnit.Framework.Internal;
 namespace UnitTests.TestDbContext.DeleteTests
 {
     [TestFixture]
-    public class DeleteTests:BaseWriteTests
+    public class DeleteTests:BaseTestTableOperations
     {
         private TestDbContext _context;
 

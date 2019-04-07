@@ -5,10 +5,13 @@ using System.Linq.Expressions;
 using NUnit.Framework;
 using Context;
 using Microsoft.VisualStudio.TestPlatform.Common.ExtensionFramework;
+using Tests.AdditionTests;
 using UnitTests.TestDbContext;
 
 namespace Tests
 {
+    #region helpers
+
     public class SomeDto
     {
         public DateTime Date { get; set; }
@@ -17,106 +20,6 @@ namespace Tests
         public ulong Long { get; set; }
     }
 
-    #region helpers
-
-    public static class TestHelper
-    {
-        public static IEnumerable<long> GetSomeInt()
-        {
-            return new[]
-            {
-                28194901262,
-                28194901262,
-                28194901262,
-                28194901262,
-                28194901262,
-                28194901262,
-                28194901262,
-                28194901262,
-            };
-        }
-
-        public static IEnumerable<string> GetSomeString()
-        {
-            return new[]
-            {
-                "8006-6129-3130-5580",
-                "8006-6129-3130-5580",
-                "8006-6129-3130-5580",
-                "8006-6129-3130-5580",
-                "8006-6129-3130-5580",
-                "8006-6129-3130-5580",
-                "8006-6129-3130-5580",
-                "8006-6129-3130-5580",
-            };
-        }
-
-
-        public static IEnumerable<object> GetSomeIntSomeData()
-        {
-            return new[]
-            {
-                new {s = (ulong) 28194901262, SomeDate = new DateTime(2010, 03, 10)},
-                new {s = (ulong) 28194901262, SomeDate = new DateTime(2010, 03, 10)},
-                new {s = (ulong) 28194901262, SomeDate = new DateTime(2010, 03, 10)},
-                new {s = (ulong) 28194901262, SomeDate = new DateTime(2010, 03, 10)},
-                new {s = (ulong) 28194901262, SomeDate = new DateTime(2010, 03, 10)},
-                new {s = (ulong) 28194901262, SomeDate = new DateTime(2010, 03, 10)},
-                new {s = (ulong) 28194901262, SomeDate = new DateTime(2010, 03, 10)},
-                new {s = (ulong) 28194901262, SomeDate = new DateTime(2010, 03, 10)},
-            };
-        }
-
-        public static IEnumerable<SomeDto> SomeDtoDate()
-        {
-            return new[]
-            {
-                new SomeDto
-                {
-                    Date = new DateTime(2010, 03, 10), Float = 1169, String = "8006-6129-3130-5580",
-                    Long = 28194901262
-                },
-                new SomeDto
-                {
-                    Date = new DateTime(2010, 03, 10), Float = 1169, String = "8006-6129-3130-5580",
-                    Long = 28194901262
-                },
-                new SomeDto
-                {
-                    Date = new DateTime(2010, 03, 10), Float = 1169, String = "8006-6129-3130-5580",
-                    Long = 28194901262
-                },
-                new SomeDto
-                {
-                    Date = new DateTime(2010, 03, 10), Float = 1169, String = "8006-6129-3130-5580",
-                    Long = 28194901262
-                },
-                new SomeDto
-                {
-                    Date = new DateTime(2010, 03, 10), Float = 1169, String = "8006-6129-3130-5580",
-                    Long = 28194901262
-                },
-                new SomeDto
-                {
-                    Date = new DateTime(2010, 03, 10), Float = 1169, String = "8006-6129-3130-5580",
-                    Long = 28194901262
-                },
-                new SomeDto
-                {
-                    Date = new DateTime(2010, 03, 10), Float = 1169, String = "8006-6129-3130-5580",
-                    Long = 28194901262
-                },
-                new SomeDto
-                {
-                    Date = new DateTime(2010, 03, 10), Float = 1169, String = "8006-6129-3130-5580",
-                    Long = 28194901262
-                },
-            };
-        }
-    }
-
-    #endregion helpers
-
     public class Dto
 
     {
@@ -124,113 +27,113 @@ namespace Tests
         public ulong SomeInt1 { get; set; }
     }
 
-    //todo придумать Assert'ы
-    public class TestTableTests
+    #endregion helpers
+
+    [TestFixture]
+    public class TestTableTests : BaseTestTableOperations
     {
-        private TestDbContext _context { get; set; }
+        #region helpers
+
+        private IEnumerable<ulong> SomeULong = AddData.Data10000.Select(x => x.SomeULong);
+        private IEnumerable<string> SomeString = AddData.Data10000.Select(x => x.SomeString);
+        private IEnumerable<DateTime> SomeDate = AddData.Data10000.Select(x => x.SomeDate);
+        private IEnumerable<float> SomeFloat = AddData.Data10000.Select(x => x.SomeFloat);
+
+        #endregion helpers
 
         [SetUp]
         public void Setup()
         {
+            _context.TestTables.Add(AddData.Data10000);
         }
 
         [Test]
         public void Test0()
         {
-            _context = new TestDbContext();
-            var s = _context.TestTables.ToList();
+            var data = _context.TestTables.ToList();
+            AssertCount(10000);
+            Assert.True(data.All(x => SomeULong.Contains(x.SomeULong)));
         }
 
         [Test]
         public void Test1()
         {
-            _context = new TestDbContext();
-            var expression = _context.TestTables
+            var data = _context.TestTables
                 .Select(x => new
                 {
                     SomeInt1 = x.SomeULong,
                     SomeStr = x.SomeString
                 })
-                .Select(x => x.SomeInt1);
-
-            var s = expression.ToList();
-//            CollectionAssert.AreEqual(TestHelper.GetSomeInt(), expression.ToList());
+                .Select(x => x.SomeInt1)
+                .ToList();
+            AssertCount(10000);
+            Assert.True(data.All(x => SomeULong.Contains(x)));
         }
 
         [Test]
         public void Test11()
         {
-            _context = new TestDbContext();
-            var expression = _context.TestTables
-                .Select(x => x.SomeString);
-//            CollectionAssert.AreEqual(TestHelper.GetSomeString(), expression.ToList());
+            var data = _context.TestTables
+                .Select(x => x.SomeString)
+                .ToList();
+
+            AssertCount(10000);
+            Assert.True(data.All(x => SomeString.Contains(x)));
         }
 
 
         [Test]
         public void Test2()
         {
-            _context = new TestDbContext();
-            var expression = _context.TestTables.Select(x => new {s = x.SomeULong, x.SomeDate}).ToList();
-//            CollectionAssert.AreEqual(TestHelper.GetSomeIntSomeData(), expression.ToList());
+            var data = _context.TestTables.Select(x => new {s = x.SomeULong, x.SomeDate}).ToList();
+            AssertCount(10000);
+            Assert.True(data.All(x => SomeULong.Contains(x.s)));
+            Assert.True(data.All(x => SomeDate.Contains(x.SomeDate)));
         }
 
         [Test]
         public void Test3()
         {
-            _context = new TestDbContext();
-            var expression = _context.TestTables.Select(x => new SomeDto
-                {
-                    Long = x.SomeULong, Date = x.SomeDate, Float = x.SomeFloat, String = x.SomeString
-                })
-                ;
-//            CollectionAssert.AreEqual(TestHelper.SomeDtoDate().Select(x => x.Date),
-//                expression.ToList().Select(x => x.Date));
-//            CollectionAssert.AreEqual(TestHelper.SomeDtoDate().Select(x => x.Long),
-//                expression.ToList().Select(x => x.Long));
-//            CollectionAssert.AreEqual(TestHelper.SomeDtoDate().Select(x => x.Float),
-//                expression.ToList().Select(x => x.Float));
-//            CollectionAssert.AreEqual(TestHelper.SomeDtoDate().Select(x => x.String),
-//                expression.ToList().Select(x => x.String));
+            var data = _context.TestTables.Select(x => new SomeDto
+            {
+                Long = x.SomeULong, Date = x.SomeDate, Float = x.SomeFloat, String = x.SomeString
+            }).ToList();
+            AssertCount(10000);
+            Assert.True(data.All(x => SomeULong.Contains(x.Long)));
+            Assert.True(data.All(x => SomeDate.Contains(x.Date)));
+            Assert.True(data.All(x => SomeString.Contains(x.String)));
+            Assert.True(data.All(x => SomeFloat.Contains(x.Float)));
         }
 
         [Test]
         public void Test4()
         {
-            _context = new TestDbContext();
-            var expression = _context.TestTables.Select(x => new SomeDto
+            var data = _context.TestTables.Select(x => new SomeDto
             {
                 Long = x.SomeULong, Date = x.SomeDate, Float = x.SomeFloat, String = x.SomeString
-            }).Select(x => x.Long);
-            ;
-//            CollectionAssert.AreEqual(TestHelper.SomeDtoDate().Select(x => x.Long),
-//                expression.ToList().Select(x => x));
+            }).Select(x => x.Long).ToList();
+            AssertCount(10000);
+            Assert.True(data.All(x => SomeULong.Contains(x)));
         }
 
         [Test]
         public void Test5()
         {
-            _context = new TestDbContext();
-            var expression = _context.TestTables.Select(x => new SomeDto
-            {
-                Long = x.SomeULong, Date = x.SomeDate, Float = x.SomeFloat, String = x.SomeString
-            }).Select(x => new {l = x.Long, f = x.Float});
-            ;
-
-//            CollectionAssert.AreEqual(TestHelper.SomeDtoDate().Select(x => x.Long),
-//                expression.ToList().Select(x => x.l));
-//
-//            CollectionAssert.AreEqual(TestHelper.SomeDtoDate().Select(x => x.Float),
-//                expression.ToList().Select(x => x.f));
+            var data = _context.TestTables.Select(x => new SomeDto
+                {
+                    Long = x.SomeULong, Date = x.SomeDate, Float = x.SomeFloat, String = x.SomeString
+                }).Select(x => new {l = x.Long, f = x.Float})
+                .ToList();
+            AssertCount(10000);
+            Assert.True(data.All(x => SomeULong.Contains(x.l)));
+            Assert.True(data.All(x => SomeFloat.Contains(x.f)));
         }
 
 
         [Test]
         public void Test6()
         {
-            _context = new TestDbContext();
-
-            var expression = _context.TestTables.Select(x => new SomeDto
+            var data = _context.TestTables.Select(x => new SomeDto
                 {
                     Long = x.SomeULong, Date = x.SomeDate, Float = x.SomeFloat, String = x.SomeString
                 }).Select(x => new {l = x.Long, f = x.Float})
@@ -238,22 +141,17 @@ namespace Tests
                 {
                     Long = x.l,
                     Float = x.f
-                });
-            ;
-
-//            CollectionAssert.AreEqual(TestHelper.SomeDtoDate().Select(x => x.Long),
-//                expression.ToList().Select(x => x.Long));
-//
-//            CollectionAssert.AreEqual(TestHelper.SomeDtoDate().Select(x => x.Float),
-//                expression.ToList().Select(x => x.Float));
+                }).ToList();
+            AssertCount(10000);
+            Assert.True(data.All(x => SomeULong.Contains(x.Long)));
+            Assert.True(data.All(x => SomeFloat.Contains(x.Float)));
         }
 
 
         [Test]
         public void Test7()
         {
-            _context = new TestDbContext();
-            var expression = _context.TestTables.Select(x => new SomeDto
+            var data = _context.TestTables.Select(x => new SomeDto
                 {
                     Long = x.SomeULong, Date = x.SomeDate, Float = x.SomeFloat, String = x.SomeString
                 }).Select(x => new {l = x.Long, f = x.Float})
@@ -262,11 +160,10 @@ namespace Tests
                     Long = x.l,
                     Float = x.f
                 })
-                .Select(x => x.Float);
-            ;
-
-//            CollectionAssert.AreEqual(TestHelper.SomeDtoDate().Select(x => x.Float),
-//                expression.ToList().Select(x => x));
+                .Select(x => x.Float)
+                .ToList();
+            AssertCount(10000);
+            Assert.True(data.All(x => SomeFloat.Contains(x)));
         }
     }
 }
