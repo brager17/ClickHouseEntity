@@ -1,4 +1,5 @@
 using System.Data;
+using System.Diagnostics;
 using ClickHouse.Ado;
 using ClickHouseDbContextExntensions.CQRS;
 using ExpressionTreeVisitor;
@@ -10,12 +11,6 @@ namespace EntityTracking
     {
         public AddingSql Query(InsertInfo input)
         {
-            var valuesStr = "";
-            for (int i = 0; i < input.Values.Length; i++)
-            {
-                valuesStr += $"({string.Join(",", input.Values[i])}),\n";
-            }
-
             var result = new AddingSql
             {
                 Sql = $"INSERT INTO {input.TableName} ({string.Join(',', input.InsertColumns)}) VALUES @bulk",
@@ -27,6 +22,15 @@ namespace EntityTracking
                 }
             };
             return result;
+        }
+    }
+
+    public class AddingSqlLoggingConverter : IQuery<AddingSql, string>
+    {
+        public string Query(AddingSql input)
+        {
+            var values = input.ClickHouseParameter.AsSubstitute();
+            return input.Sql.Replace("@bulk", values);
         }
     }
 }

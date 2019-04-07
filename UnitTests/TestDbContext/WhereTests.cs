@@ -26,7 +26,7 @@ namespace Tests
                 .Select(x => new Dto
                 {
                     SomeStr = x.SomeString,
-                    SomeInt1 = x.SomeInt
+                    SomeInt1 = x.SomeULong
                 })
                 .Select(x => new {s = x.SomeStr})
                 .Where(x => x.s == "8006-6129-3130-5580");

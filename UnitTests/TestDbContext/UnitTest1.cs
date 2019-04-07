@@ -118,12 +118,14 @@ namespace Tests
     #endregion helpers
 
     public class Dto
+
     {
         public string SomeStr { get; set; }
         public ulong SomeInt1 { get; set; }
     }
 
-    public class SelectTests
+    //todo придумать Assert'ы
+    public class TestTableTests
     {
         private TestDbContext _context { get; set; }
 
@@ -146,7 +148,7 @@ namespace Tests
             var expression = _context.TestTables
                 .Select(x => new
                 {
-                    SomeInt1 = x.SomeInt,
+                    SomeInt1 = x.SomeULong,
                     SomeStr = x.SomeString
                 })
                 .Select(x => x.SomeInt1);
@@ -169,7 +171,7 @@ namespace Tests
         public void Test2()
         {
             _context = new TestDbContext();
-            var expression = _context.TestTables.Select(x => new {s = x.SomeInt, x.SomeDate}).ToList();
+            var expression = _context.TestTables.Select(x => new {s = x.SomeULong, x.SomeDate}).ToList();
 //            CollectionAssert.AreEqual(TestHelper.GetSomeIntSomeData(), expression.ToList());
         }
 
@@ -179,7 +181,7 @@ namespace Tests
             _context = new TestDbContext();
             var expression = _context.TestTables.Select(x => new SomeDto
                 {
-                    Long = x.SomeInt, Date = x.SomeDate, Float = x.SomeFloat, String = x.SomeString
+                    Long = x.SomeULong, Date = x.SomeDate, Float = x.SomeFloat, String = x.SomeString
                 })
                 ;
 //            CollectionAssert.AreEqual(TestHelper.SomeDtoDate().Select(x => x.Date),
@@ -198,7 +200,7 @@ namespace Tests
             _context = new TestDbContext();
             var expression = _context.TestTables.Select(x => new SomeDto
             {
-                Long = x.SomeInt, Date = x.SomeDate, Float = x.SomeFloat, String = x.SomeString
+                Long = x.SomeULong, Date = x.SomeDate, Float = x.SomeFloat, String = x.SomeString
             }).Select(x => x.Long);
             ;
 //            CollectionAssert.AreEqual(TestHelper.SomeDtoDate().Select(x => x.Long),
@@ -211,7 +213,7 @@ namespace Tests
             _context = new TestDbContext();
             var expression = _context.TestTables.Select(x => new SomeDto
             {
-                Long = x.SomeInt, Date = x.SomeDate, Float = x.SomeFloat, String = x.SomeString
+                Long = x.SomeULong, Date = x.SomeDate, Float = x.SomeFloat, String = x.SomeString
             }).Select(x => new {l = x.Long, f = x.Float});
             ;
 
@@ -230,7 +232,7 @@ namespace Tests
 
             var expression = _context.TestTables.Select(x => new SomeDto
                 {
-                    Long = x.SomeInt, Date = x.SomeDate, Float = x.SomeFloat, String = x.SomeString
+                    Long = x.SomeULong, Date = x.SomeDate, Float = x.SomeFloat, String = x.SomeString
                 }).Select(x => new {l = x.Long, f = x.Float})
                 .Select(x => new SomeDto()
                 {
@@ -253,7 +255,7 @@ namespace Tests
             _context = new TestDbContext();
             var expression = _context.TestTables.Select(x => new SomeDto
                 {
-                    Long = x.SomeInt, Date = x.SomeDate, Float = x.SomeFloat, String = x.SomeString
+                    Long = x.SomeULong, Date = x.SomeDate, Float = x.SomeFloat, String = x.SomeString
                 }).Select(x => new {l = x.Long, f = x.Float})
                 .Select(x => new SomeDto()
                 {

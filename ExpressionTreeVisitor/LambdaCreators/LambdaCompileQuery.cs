@@ -4,8 +4,8 @@ using ClickHouseDbContextExntensions.CQRS;
 
 namespace DbContext
 {
-    public class LambdaCompileQuery : IQuery<LambdaExpression, Delegate>
+    public class LambdaCompileQuery<T> : IQuery<LambdaExpression, T>
     {
-        public Delegate Query(LambdaExpression input) => input.Compile();
+        public T Query(LambdaExpression input) => (T) (object) input.Compile();
     }
 }

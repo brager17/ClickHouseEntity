@@ -65,11 +65,11 @@ namespace Root
                     new CacheQueryWithHashCodeDto<TypePropertiesInfo, Delegate>(
                         new Aggregate2Query<TypePropertiesInfo, LambdaExpression, Delegate>(
                             new BuildCreationInitializerLambda(),
-                            new LambdaCompileQuery()))),
+                            new LambdaCompileQuery<Delegate>()))),
                 new ClassCreator(
                     new CacheQueryWithHashCodeDto<TypePropertiesInfo, Delegate>(
                         new Aggregate2Query<TypePropertiesInfo, LambdaExpression, Delegate>(
-                            new BuildCreatorCtorLambda(), new LambdaCompileQuery()))));
+                            new BuildCreatorCtorLambda(), new LambdaCompileQuery<Delegate>()))));
         }
 
 
@@ -92,7 +92,7 @@ namespace Root
         //todo add DI Container(хотя он тут нахуй не нужен
         public static ExpressionsToObject Get(string connectionString, IEnumerable<IDbLogger> loggers) =>
             new ExpressionsToObject(
-                new LoggerDecaoratorToSqlConverter<ForSqlRequestInfo>(
+                new LoggerDecorator<ForSqlRequestInfo>(
                     new ExpressionToSqlConverter(
                         new SqlRequestHandler(
                             new SelectRequestHandler(),

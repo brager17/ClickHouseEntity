@@ -10,7 +10,7 @@ namespace Context
         }
     }
 
-    public class StubConsoleLogger : IDbLogger
+    public class StubDBLogger : IDbLogger
     {
         public void WriteLog(LogLevel logLevel, string log)
         {

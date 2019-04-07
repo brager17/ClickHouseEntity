@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using ClickHouse.Ado;
 using ClickHouseDbContextExntensions.CQRS;
@@ -48,7 +49,9 @@ namespace EntityTracking
 
         public void Handle(IEnumerable<T> input)
         {
-            _insertHandler.Handle(_insertToSqlQuery.Query(_insertInfoQuery.Query(input.ToArray())));
+            var insertInfo = _insertInfoQuery.Query(input.ToArray());
+            var addingSql = _insertToSqlQuery.Query(insertInfo);
+            _insertHandler.Handle(addingSql);
         }
     }
 }

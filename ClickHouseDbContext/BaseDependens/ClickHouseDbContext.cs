@@ -61,7 +61,7 @@ namespace Context
 
         #region helpers
 
-        protected virtual IEnumerable<IDbLogger> _dbLoggers => new List<IDbLogger> {new StubConsoleLogger()};
+        protected virtual IEnumerable<IDbLogger> _dbLoggers => new List<IDbLogger> {new StubDBLogger()};
 
         private static MethodCallExpression GetInitialExpressionByType<T>()
         {
