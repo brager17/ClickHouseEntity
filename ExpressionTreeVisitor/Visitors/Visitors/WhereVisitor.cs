@@ -3,14 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using ClickHouseDbContextExntensions.CQRS;
 using DbContext;
 
 namespace ExpressionTreeVisitor
 {
+    public class InWhereToSqlVisitorInfo
+    {
+        public LambdaExpression Expression { get; set; }
+    }
+
+    public class WhereStr
+    {
+        public string SqlInfo { get; set; }
+    }
+
     public class WhereToSqlVisitor
     {
-        private readonly IHasMapPropInfo _hasMapPropInfo;
-        private IEnumerable<SelectInfo> _selectInfos { get; set; }
+        private ICanGetPropertyByMemberExpression _canGetPropertyByMemberExpression { get; set; }
 
         private string VisitUnaryExpression(UnaryExpression expression)
         {
@@ -20,15 +30,12 @@ namespace ExpressionTreeVisitor
             return VisitLambda((LambdaExpression) expression.Operand);
         }
 
-        public WhereToSqlVisitor(IHasMapPropInfo hasMapPropInfo)
+        public WhereStr Visit(
+            ICanGetPropertyByMemberExpression canGetPropertyByMemberExpression,
+            InWhereToSqlVisitorInfo input)
         {
-            _hasMapPropInfo = hasMapPropInfo;
-        }
-
-        public string Visit(IEnumerable<SelectInfo> Infos, LambdaExpression expression)
-        {
-            _selectInfos = Infos;
-            return VisitLambda(expression);
+            _canGetPropertyByMemberExpression = canGetPropertyByMemberExpression;
+            return new WhereStr {SqlInfo = VisitLambda(input.Expression)};
         }
 
         private string VisitLambda(LambdaExpression node)
@@ -67,7 +74,7 @@ namespace ExpressionTreeVisitor
             if (memberExpression.Expression is ConstantExpression)
                 return $"{GetValueFromFieldInAutoGenerateClass(memberExpression)}";
 
-            return $"{_hasMapPropInfo.GetNameMapProperty(_selectInfos, memberExpression)}";
+            return $"{_canGetPropertyByMemberExpression.GetNameMapProperty(memberExpression)}";
         }
 
         //todo refactoring сделать нормальное сравнение типов

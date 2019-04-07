@@ -13,10 +13,14 @@ namespace EntityTracking
     public class DbSetOperations<T> : IDbSetOperations<T>
     {
         private readonly IHandler<IEnumerable<T>> _addEnumerableHandler;
+        private readonly IHandler<DeleteInfo<T>> _deleteEnumerableHandler;
 
-        public DbSetOperations(IHandler<IEnumerable<T>> addEnumerableHandler)
+        public DbSetOperations(
+            IHandler<IEnumerable<T>> addEnumerableHandler,
+            IHandler<DeleteInfo<T>> deleteEnumerableHandler)
         {
             _addEnumerableHandler = addEnumerableHandler;
+            _deleteEnumerableHandler = deleteEnumerableHandler;
         }
 
         public void Add(IEnumerable<T> items)
@@ -29,9 +33,10 @@ namespace EntityTracking
             throw new NotImplementedException();
         }
 
-        public void Remove(Expression<Func<T, bool>> exprFilter)
+        public void Remove(Expression<Func<T, bool>> exprFilter, Expression dbSetInitialExpression)
         {
-            throw new NotImplementedException();
+            _deleteEnumerableHandler.Handle(new DeleteInfo<T>
+                {FilterExpression = exprFilter, DbSetInitialExpression = dbSetInitialExpression});
         }
 
         public void SaveChanges()

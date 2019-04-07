@@ -1,35 +1,10 @@
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using ClickHouse.Ado;
 using ClickHouseDbContextExntensions.CQRS;
 using ExpressionTreeVisitor;
 
 namespace EntityTracking
 {
-    public class DbInsertHandler : IHandler<AddingSql>
-    {
-        private readonly string _connectionString;
-
-        public DbInsertHandler(string connectionString)
-        {
-            _connectionString = connectionString;
-        }
-
-        public void Handle(AddingSql input)
-        {
-            var settings = new ClickHouseConnectionSettings(_connectionString);
-            using (var cnn = new ClickHouseConnection(settings))
-            {
-                cnn.Open();
-                var command = cnn.CreateCommand(input.Sql);
-                command.Parameters.Add(input.ClickHouseParameter);
-                command.ExecuteNonQuery();
-                cnn.Close();
-            }
-        }
-    }
-
     [Info("Optimize code")]
     public class InsertHandler<T> : IHandler<IEnumerable<T>>
     {

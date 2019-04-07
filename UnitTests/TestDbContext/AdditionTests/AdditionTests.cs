@@ -8,7 +8,8 @@ using UnitTests.TestDbContext;
 
 namespace Tests.AdditionTests
 {
-    public class AdditionTests
+    [TestFixture]
+    public class AdditionTests : BaseWriteTests
     {
         #region helpers
 
@@ -25,43 +26,31 @@ namespace Tests.AdditionTests
 
         #endregion
 
-
         private static IEnumerable<TestTable> Data100 = DataCountGenerate(100);
         private static IEnumerable<TestTable> Data1000 = DataCountGenerate(1000);
         private static IEnumerable<TestTable> Data10000 = DataCountGenerate(10000);
         private static IEnumerable<TestTable> Data100000 = DataCountGenerate(100000);
         private static IEnumerable<TestTable> Data1000000 = DataCountGenerate(1000000);
-        private TestDbContext _context { get; set; }
-
-        [SetUp]
-        public void SetUp()
-        {
-            _context = new TestDbContext();
-        }
-
         [Test]
         public void AddTest1000()
         {
             _context.TestTables.Add(Data1000);
-          
+            AssertCount(1000);
         }
 
         [Test]
         public void AddTest10000()
         {
             _context.TestTables.Add(Data10000);
+            AssertCount(10000);
         }
 
         [Test]
         public void AddTest100000()
         {
-            var added = Data100000;
-            var stopWatch = new Stopwatch();
-            stopWatch.Start();
-            _context.TestTables.Add(added);
-            Console.WriteLine();
-            Console.WriteLine(stopWatch.Elapsed);
-            Console.WriteLine();
+            _context.TestTables.Add(Data100000);
+
+            AssertCount(100000);
         }
 
 
@@ -69,6 +58,7 @@ namespace Tests.AdditionTests
         public void AddTest1000000()
         {
             _context.TestTables.Add(Data1000000);
+            AssertCount(1000000);
         }
     }
 }

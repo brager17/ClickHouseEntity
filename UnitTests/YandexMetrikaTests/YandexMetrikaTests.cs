@@ -31,6 +31,16 @@ namespace UnitTests.TestDbContext
     {
         private YandexMetrikaDbContext _metrikaDbContext { get; set; }
 
+        private IQueryable<SelectYandexMetrikaTestDto> BaseSelect => _metrikaDbContext.YandexMetrikaTable
+            .Select(x => new SelectYandexMetrikaTestDto()
+            {
+                title = x.Title,
+                eventTime = x.EventTime,
+                goodEvent = x.GoodEvent,
+                javaEnable = x.JavaEnable,
+                watchID = x.WatchID
+            });
+
         [SetUp]
         public void SetUp()
         {
@@ -62,14 +72,6 @@ namespace UnitTests.TestDbContext
                 .ToList();
 
             Assert.AreEqual(10, allMetrika.Count);
-        }
-
-        public class A : B
-        {
-        }
-
-        public class B
-        {
         }
 
         [Test]

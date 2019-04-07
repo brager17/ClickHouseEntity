@@ -40,7 +40,7 @@ namespace ClickDbContextInfrastructure
     {
         void Add(IEnumerable<T> items);
         void Remove(IEnumerable<T> item, IEnumerator<T> enumerator);
-        void Remove(Expression<Func<T, bool>> exprFilter);
+        void Remove(Expression<Func<T, bool>> exprFilter, Expression dbSetInitialExpression);
 
         void SaveChanges();
     }

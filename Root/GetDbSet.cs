@@ -6,6 +6,8 @@ using ClickHouseDbContextExntensions.CQRS;
 using Context;
 using DbContext;
 using EntityTracking;
+using EntityTracking.Delete;
+using ExpressionTreeVisitor;
 
 namespace Root
 {
@@ -25,12 +27,21 @@ namespace Root
                                         new LambdaCompileQuery<Func<T, object[]>>())
                                 ), new TableNameRequestHandler()), loggers),
                         new StopWatchQuery<InsertInfo, AddingSql>(
-//                            new LoggerDecoratorWithConverter<InsertInfo, AddingSql>(
-                                new InsertInfoToSqlString()/*,
-                                new AddingSqlLoggingConverter(), loggers)*/, loggers),
-                        new StopWatchHandler<AddingSql>(new DbInsertHandler(connectionString), loggers)
-                    ),
-                    loggers));
+                            new LoggerDecoratorWithConverter<InsertInfo, AddingSql>(
+                                new InsertInfoToSqlString(),
+                                new AddingSqlLoggingConverter(), loggers), loggers),
+                        new StopWatchHandler<AddingSql>(
+                            new WriteDbHandler<AddingSql>(connectionString, new DbInsertMutableQuery()), loggers)
+                    ), loggers),
+                new DeleteEnumerableHandler<T>(
+                    new PropertyMapInfoVisitor(
+                        new DtoToExpressionToLinqInfoHandler(),
+                        new ValueTypeExpressionToLinqInfoHandler()),
+                    new WhereToSqlVisitor(),
+                    new LoggerDecoratorWithConverter<WhereSqlTableInfo, DeleteStr>(
+                        new GetDeleteSql(new TableNameRequestHandler()), new DeleteStrLoggingConverter(), loggers),
+                    new GetPropsByMemberFactory(),
+                    new WriteDbHandler<HasSqlStringInfo>(connectionString, new StubMutableQuery())));
         }
     }
 }

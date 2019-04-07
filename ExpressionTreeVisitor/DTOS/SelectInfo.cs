@@ -18,6 +18,6 @@ namespace ExpressionTreeVisitor
 
     public class WhereInfo
     {
-        public string WhereStr { get; set; }
+        public WhereStr _WhereInfo { get; set; }
     }
 }

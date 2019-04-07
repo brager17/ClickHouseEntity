@@ -9,10 +9,12 @@ namespace ExpressionTreeVisitor
     public class OrderQuery : IQuery<LambdaListSelectInfo, AggregateLinqInfo>
     {
         private readonly OrderingToSqlVisitor _orderingToSqlVisitor;
+        private readonly GetPropsByMemberFactory _getPropsByMemberFactory;
 
-        public OrderQuery(OrderingToSqlVisitor _orderingToSqlVisitor)
+        public OrderQuery(OrderingToSqlVisitor _orderingToSqlVisitor, GetPropsByMemberFactory getPropsByMemberFactory)
         {
             this._orderingToSqlVisitor = _orderingToSqlVisitor;
+            _getPropsByMemberFactory = getPropsByMemberFactory;
         }
 
         public AggregateLinqInfo Query(LambdaListSelectInfo input)
@@ -26,7 +28,7 @@ namespace ExpressionTreeVisitor
             var orderInfo = new OrderInfo
             {
                 OrderType = Enum.Parse<OrderType>(input.MethodCallExpression.Method.Name),
-                OrderString = _orderingToSqlVisitor.Visit(input.SelectInfos, lambda)
+                OrderString = _orderingToSqlVisitor.Visit(_getPropsByMemberFactory.Create(input.SelectInfos), lambda)
             };
 
             input.AggregateLinqInfo.OrderInfo.Add(orderInfo);

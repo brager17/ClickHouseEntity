@@ -7,17 +7,11 @@ namespace ExpressionTreeVisitor
 {
     public class OrderingToSqlVisitor
     {
-        private readonly IHasMapPropInfo _hasMapPropInfo;
-        private IEnumerable<SelectInfo> _mapInfos { get; set; }
+        private  ICanGetPropertyByMemberExpression _canGetPropertyByMemberExpression { get; set; }
 
-        public OrderingToSqlVisitor(IHasMapPropInfo hasMapPropInfo)
+        public string Visit(ICanGetPropertyByMemberExpression canGetPropertyByMemberExpression, LambdaExpression lambdaExpression)
         {
-            _hasMapPropInfo = hasMapPropInfo;
-        }
-
-        public string Visit(IEnumerable<SelectInfo> mapInfos, LambdaExpression lambdaExpression)
-        {
-            _mapInfos = mapInfos;
+            _canGetPropertyByMemberExpression = canGetPropertyByMemberExpression;
             var visitMethodCallExpressionVisit = VisitLambda(lambdaExpression);
             return visitMethodCallExpressionVisit;
         }
@@ -34,7 +28,7 @@ namespace ExpressionTreeVisitor
 
         private string MemberExpressionVisit(MemberExpression memberExpression)
         {
-            return _hasMapPropInfo.GetNameMapProperty(_mapInfos, memberExpression);
+            return _canGetPropertyByMemberExpression.GetNameMapProperty(memberExpression);
         }
 
         private string MemberInitExpressionVisit(MemberInitExpression memberInitExpression)
@@ -45,7 +39,7 @@ namespace ExpressionTreeVisitor
         private string NewExpressionMember(NewExpression newExpression)
         {
             var newExpressionMember = string.Join(',', newExpression.Arguments.Select(x =>
-                _hasMapPropInfo.GetNameMapProperty(_mapInfos, (MemberExpression) x)));
+                _canGetPropertyByMemberExpression.GetNameMapProperty((MemberExpression) x)));
             return newExpressionMember;
         }
     }

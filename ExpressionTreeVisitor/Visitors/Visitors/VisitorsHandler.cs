@@ -20,7 +20,7 @@ namespace ExpressionTreeVisitor
 
         public AggregateLinqInfo Query(Expression expression)
         {
-            var selectInfos = _propertyMapInfoVisitor.GetInfo(expression).SelectInfos;
+            var selectInfos = _propertyMapInfoVisitor.Query(expression).SelectInfos;
             var aggregateLinqInfo = _aggregateLinqVisitor.Query(new AggregateLinqVisitorDto
                 {selectInfos = selectInfos, expression = expression});
             return aggregateLinqInfo;

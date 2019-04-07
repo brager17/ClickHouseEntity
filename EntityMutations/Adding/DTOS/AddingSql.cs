@@ -2,9 +2,8 @@ using ClickHouse.Ado;
 
 namespace EntityTracking
 {
-    public class AddingSql
+    public class AddingSql : HasSqlStringInfo
     {
-        public string Sql { get; set; }
         public ClickHouseParameter ClickHouseParameter { get; set; }
     }
 }

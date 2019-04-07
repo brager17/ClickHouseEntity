@@ -18,11 +18,11 @@ namespace DbContext
             _loggers = loggers;
         }
 
-        public string Query(TIn sqlRequestInfo)
+        public string Query(TIn input)
         {
-            var result = _query.Query(sqlRequestInfo);
+            var result = _query.Query(input);
             foreach (var loggerToSqlConverter in _loggers)
-                loggerToSqlConverter.WriteLog(LogLevel.Success, result);
+                loggerToSqlConverter.WriteLog(LogLevel.Success, $"\n{result}\n");
 
             return result;
         }
@@ -48,7 +48,7 @@ namespace DbContext
         public TOut Query(TIn input)
         {
             var result = _query.Query(input);
-            foreach (var logger in _loggers) logger.WriteLog(LogLevel.Success, _loggerConverter.Query(result));
+            foreach (var logger in _loggers) logger.WriteLog(LogLevel.Success, $"\n{_loggerConverter.Query(result)}\n");
             return result;
         }
     }

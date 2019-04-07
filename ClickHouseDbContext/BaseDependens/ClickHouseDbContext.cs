@@ -54,7 +54,7 @@ namespace Context
                 _operations.Remove(item, _enumerator);
             }
 
-            public void Remove(Expression<Func<T, bool>> exprFilter) => _operations.Remove(exprFilter);
+            public void Remove(Expression<Func<T, bool>> exprFilter) => _operations.Remove(exprFilter, Expression);
 
             public void SaveChanges() => _operations.SaveChanges();
         }

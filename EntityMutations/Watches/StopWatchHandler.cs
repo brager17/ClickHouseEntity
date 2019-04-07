@@ -24,9 +24,7 @@ namespace EntityTracking
             var time = stopWatch.Elapsed;
             stopWatch.Stop();
             foreach (var logger in _loggers)
-            {
                 logger.WriteLog(LogLevel.Success, time + " millisecond Handler " + _handler.GetType().Name);
-            }
         }
     }
 }

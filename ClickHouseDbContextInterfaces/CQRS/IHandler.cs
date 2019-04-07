@@ -17,6 +17,15 @@ namespace ClickHouseDbContextExntensions.CQRS
         TOut Query(TIn input);
     }
 
+    public interface IMutableQuery<in TIn, out TOut> : IQuery<TIn, TOut>
+    {
+    }
+
+    public interface IQueryFactory<in TIn, out TOut>
+    {
+        TOut Create(TIn input);
+    }
+
     public interface ITOutGenericQuery<out TOut>
     {
         TOut Query<TIn>(TIn input);

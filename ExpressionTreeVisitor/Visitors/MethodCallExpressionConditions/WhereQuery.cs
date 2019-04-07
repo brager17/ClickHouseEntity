@@ -7,10 +7,13 @@ namespace ExpressionTreeVisitor
 {
     public class WhereQuery : IQuery<LambdaListSelectInfo, AggregateLinqInfo>
     {
+        private readonly GetPropsByMemberFactory _getPropsByMemberFactory;
         private WhereToSqlVisitor _whereToSqlVisitor { get; set; }
 
-        public WhereQuery(WhereToSqlVisitor whereToSqlVisitor)
+        public 
+        WhereQuery(WhereToSqlVisitor whereToSqlVisitor, GetPropsByMemberFactory getPropsByMemberFactory)
         {
+            _getPropsByMemberFactory = getPropsByMemberFactory;
             _whereToSqlVisitor = whereToSqlVisitor;
         }
 
@@ -21,9 +24,12 @@ namespace ExpressionTreeVisitor
             var lambda = (LambdaExpression) ((UnaryExpression) input.MethodCallExpression.Arguments.Last()).Operand;
 
             input.AggregateLinqInfo.WhereInfo.Add(new WhereInfo
-                {WhereStr = _whereToSqlVisitor.Visit(input.SelectInfos, lambda)});
+            {
+                _WhereInfo = _whereToSqlVisitor.Visit(_getPropsByMemberFactory.Create(input.SelectInfos),
+                    new InWhereToSqlVisitorInfo {Expression = lambda})
+            });
 
             return input.AggregateLinqInfo;
         }
     }
-}
+}    

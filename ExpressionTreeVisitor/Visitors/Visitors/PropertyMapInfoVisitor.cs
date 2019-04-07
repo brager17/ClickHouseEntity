@@ -2,23 +2,25 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using ClickDbContextInfrastructure;
+using ClickHouseDbContextExntensions.CQRS;
 
 namespace ExpressionTreeVisitor
 {
-    public class PropertyMapInfoVisitor
+    public class PropertyMapInfoVisitor : IQuery<Expression, LinqInfoPropertiesMap>
     {
         private readonly IExpressionToLinqInfoHandler<SelectInfo> _dtoHandler;
         private readonly IExpressionToLinqInfoHandler<SelectInfo> _simpleTypeHandler;
         private LinqInfoPropertiesMap LinqInfoPropertiesMap { get; set; }
 
-        public PropertyMapInfoVisitor(IExpressionToLinqInfoHandler<SelectInfo> dtoWalker,
+        public PropertyMapInfoVisitor(
+            IExpressionToLinqInfoHandler<SelectInfo> dtoWalker,
             IExpressionToLinqInfoHandler<SelectInfo> primitiveTypeWalker)
         {
             _dtoHandler = dtoWalker;
             _simpleTypeHandler = primitiveTypeWalker;
         }
 
-        public LinqInfoPropertiesMap GetInfo(Expression expression)
+        public LinqInfoPropertiesMap Query(Expression expression)
         {
             LinqInfoPropertiesMap = new LinqInfoPropertiesMap();
             return Visit(expression);

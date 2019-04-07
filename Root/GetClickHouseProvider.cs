@@ -35,7 +35,7 @@ namespace Root
                     _predicate = x => GetMethodName(x.MethodCallExpression) == "Where"
                                       && x.MethodCallExpression.Arguments.Last() is UnaryExpression unary &&
                                       unary.Operand is LambdaExpression,
-                    _selector = new WhereQuery(new WhereToSqlVisitor(new HasMapPropInfo()))
+                    _selector = new WhereQuery(new WhereToSqlVisitor(), new GetPropsByMemberFactory())
                 },
                 new Condition<LambdaListSelectInfo, AggregateLinqInfo>
                 {
@@ -43,7 +43,7 @@ namespace Root
                         new[] {"OrderBy", "OrderByDescending"}.Contains(GetMethodName(x.MethodCallExpression)) &&
                         GetLambda(x.MethodCallExpression) is UnaryExpression unaryExpression &&
                         unaryExpression.Operand is LambdaExpression,
-                    _selector = new OrderQuery(new OrderingToSqlVisitor(new HasMapPropInfo()))
+                    _selector = new OrderQuery(new OrderingToSqlVisitor(), new GetPropsByMemberFactory())
                 },
                 new Condition<LambdaListSelectInfo, AggregateLinqInfo>
                 {

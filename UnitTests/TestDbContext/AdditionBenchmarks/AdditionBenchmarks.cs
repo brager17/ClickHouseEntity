@@ -30,6 +30,7 @@ namespace UnitTests.TestDbContext.AdditionBenchmarks
         private static IEnumerable<TestTable> Data1000 = DataCountGenerate(1000);
         private static IEnumerable<TestTable> Data10000 = DataCountGenerate(10000);
         private static IEnumerable<TestTable> Data100000 = DataCountGenerate(100000);
+        private static IEnumerable<TestTable> Data1000000 = DataCountGenerate(1000000);
      
 
 
@@ -49,15 +50,20 @@ namespace UnitTests.TestDbContext.AdditionBenchmarks
         [Benchmark]
         public void Add10000Rows()
         {
-            var data = Data1000;
             _context.TestTables.Add(Data10000);
         }
 
 
-//        [Benchmark]
+        [Benchmark]
         public void Add100000Rows()
         {
             _context.TestTables.Add(Data100000);
+        }
+        
+        [Benchmark]
+        public void Add1000000Rows()
+        {
+            _context.TestTables.Add(Data1000000);
         }
     }
 }

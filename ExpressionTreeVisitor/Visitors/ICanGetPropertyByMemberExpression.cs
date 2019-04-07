@@ -2,19 +2,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using ClickHouseDbContextExntensions.CQRS;
 using DbContext;
 
 namespace ExpressionTreeVisitor
 {
-    public interface IHasMapPropInfo
+    public interface ICanGetPropertyByMemberExpression
     {
-        PropertyInfo GetSourcePropInfo(IEnumerable<SelectInfo> infos, MemberExpression info);
-        string GetNameMapProperty(IEnumerable<SelectInfo> infos, MemberExpression memberExpression);
+        PropertyInfo GetSourcePropInfo(MemberExpression info);
+        string GetNameMapProperty(MemberExpression memberExpression);
     }
 
-    public class HasMapPropInfo : IHasMapPropInfo
+    public class GetPropByMember : ICanGetPropertyByMemberExpression
     {
-        public PropertyInfo GetSourcePropInfo(IEnumerable<SelectInfo> infos, MemberExpression memberExpression)
+        private readonly IEnumerable<SelectInfo> infos;
+
+        public GetPropByMember(IEnumerable<SelectInfo> selectInfos)
+        {
+            infos = selectInfos;
+        }
+
+        public PropertyInfo GetSourcePropInfo(MemberExpression memberExpression)
         {
             var selectInfo = infos.Select((x, i) => new
                 {
@@ -39,7 +47,12 @@ namespace ExpressionTreeVisitor
             return (PropertyInfo) memberProp.Member;
         }
 
-        public string GetNameMapProperty(IEnumerable<SelectInfo> infos, MemberExpression memberExpression) =>
-            GetSourcePropInfo(infos, memberExpression).GetColumnName();
+        public string GetNameMapProperty(MemberExpression memberExpression) =>
+            GetSourcePropInfo(memberExpression).GetColumnName();
+    }
+
+    public class GetPropsByMemberFactory : IQueryFactory<IEnumerable<SelectInfo>, ICanGetPropertyByMemberExpression>
+    {
+        public ICanGetPropertyByMemberExpression Create(IEnumerable<SelectInfo> input) => new GetPropByMember(input);
     }
 }
