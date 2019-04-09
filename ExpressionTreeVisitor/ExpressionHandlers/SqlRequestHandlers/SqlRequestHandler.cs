@@ -31,7 +31,7 @@ namespace DbContext
         public SqlRequest Handle(ForSqlRequestInfo linqInfo) => new SqlRequest()
         {
             Select = _selectRequestHandler.Handle(linqInfo.SelectInfo),
-            TableName = linqInfo.SetType.GetClassAttributeKey<string>(),
+            TableName = linqInfo.SetType.GetNameAttributeValueEnumMember<string>(),
             Where = _whereRequestHandler.Handle(linqInfo.WhereInfo),
             Take = _takeSkipInfo.Handle(linqInfo.TakeInfo),
             OrderBy = _orderRequestHandler.Handle(linqInfo.OrderInfo)

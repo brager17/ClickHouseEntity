@@ -17,13 +17,11 @@ namespace ClickHouseTableGenerator
     {
         private readonly IQuery<ClassType, HasSqlStringInfo> _sqlGenerator;
         private readonly WriteDbHandler<HasSqlStringInfo> _writeDbHandler;
-        private IEnumerable<Type> DbSetTableTypes;
 
         public TableGenerator(
             IQuery<ClassType, HasSqlStringInfo> sqlGenerator,
             WriteDbHandler<HasSqlStringInfo> writeDbHandler)
         {
-            DbSetTableTypes = DbSetExtension.DbSetTypes;
             _sqlGenerator = sqlGenerator;
             _writeDbHandler = writeDbHandler;
         }

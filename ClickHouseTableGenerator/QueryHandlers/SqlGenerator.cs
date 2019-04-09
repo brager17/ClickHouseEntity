@@ -14,12 +14,19 @@ namespace ClickHouseTableGenerator
     {
         private readonly IQueryFactory<ClassType, IQuery<ClassType, EngineDbInfo>> _engineDbInfoFactory;
         private readonly IQuery<Type, CreatingDbType> _cSharpToDbType;
-        private readonly IQuery<CreatingDbInfo, HasSqlStringInfo> _getSqlString;
+        private readonly IQuery<CreateDbInfo, HasSqlStringInfo> _getSqlString;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="engineDbInfoFactory"> Фабрика определяющая как строить EngineDbInfo, либо по атрибутам в классе,
+        /// либо по DbSetSettings</param>
+        /// <param name="cSharpToDbType">Интерфейс маппинга типов из c# в типы ClickHouse</param>
+        /// <param name="getSqlString">Строить SQL по CreateDbInfo</param>
         public SqlGenerator(
             IQueryFactory<ClassType, IQuery<ClassType, EngineDbInfo>> engineDbInfoFactory,
             IQuery<Type, CreatingDbType> cSharpToDbType,
-            IQuery<CreatingDbInfo, HasSqlStringInfo> getSqlString)
+            IQuery<CreateDbInfo, HasSqlStringInfo> getSqlString)
         {
             _engineDbInfoFactory = engineDbInfoFactory;
             _cSharpToDbType = cSharpToDbType;
@@ -28,15 +35,14 @@ namespace ClickHouseTableGenerator
 
         public HasSqlStringInfo Query(ClassType input)
         {
-            var tableClassType = input.classType;
             var props = input.classType.GetProperties().ToList();
-            var creatingDBType = new CreatingDbInfo
+            var creatingDBType = new CreateDbInfo
             {
-                TableName = tableClassType.GetClassAttributeKey<string>(),
-                DbColumns = props.Select(x => new DBColumn()
+                TableName = input.classType.GetNameAttributeValueEnumMember<string>(),
+                DbColumns = props.Select(x => new DBColumn
                 {
                     Name = x.GetColumnName(),
-                    DbTypeName = _cSharpToDbType.Query(x.PropertyType).GetClassAttributeKey()
+                    DbTypeName = _cSharpToDbType.Query(x.PropertyType).GetNameAttributeValueEnumMember()
                 }).ToList(),
                 EngineDbInfo = _engineDbInfoFactory.Create(input).Query(input),
             };

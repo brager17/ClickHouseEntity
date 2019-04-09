@@ -8,6 +8,6 @@ namespace DbContext
     {
         //todo сделано для OrderBy,OrderByDecsending
         public string Handle(IEnumerable<OrderInfo> operationInfo) =>
-            string.Join(',', operationInfo.Select(x => $"{x.OrderString} {IHasNameExtensions.GetClassAttributeKey(x.OrderType)}"));
+            string.Join(',', operationInfo.Select(x => $"{x.OrderString} {IHasNameExtensions.GetNameAttributeValueEnumMember(x.OrderType)}"));
     }
 }

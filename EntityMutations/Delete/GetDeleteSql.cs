@@ -10,7 +10,7 @@ namespace EntityTracking
 
         public DeleteStr Query(WhereSqlTableInfo input)
         {
-            var tableName = input.TableType.GetClassAttributeKey<string>();
+            var tableName = input.TableType.GetNameAttributeValueEnumMember<string>();
             var filter = input.WhereStr.SqlInfo;
             return new DeleteStr {Sql = $"ALTER TABLE {tableName} DELETE WHERE {filter}"};
         }

@@ -5,9 +5,12 @@ using ClickHouseDbContextExntensions.DTOS;
 
 namespace ClickHouseTableGenerator
 {
-    public class CreatingDbInfoToSqlInfoBy : IQuery<CreatingDbInfo, HasSqlStringInfo>
+    /// <summary>
+    /// Построение строки запроса, создающей базу данных
+    /// </summary>
+    public class CreatingDbInfoToSqlInfoBy : IQuery<CreateDbInfo, HasSqlStringInfo>
     {
-        public HasSqlStringInfo Query(CreatingDbInfo input)
+        public HasSqlStringInfo Query(CreateDbInfo input)
         {
             var partitions = $"({string.Join(',', input.EngineDbInfo.PartitionKeys)})";
             var orderKeys = $"({string.Join(',', input.EngineDbInfo.OrderKeys)})";

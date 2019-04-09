@@ -17,7 +17,7 @@ namespace DbContext
         /// </summary>
         /// <param name="type">тип класса</param>
         /// <returns></returns>
-        public static IEnumerable<string> GetColumnNameByAttributeOnProperty<TAttribute>(this Type type)
+        public static IEnumerable<string> GetColumnNameByAttributeOnPropertyInfo<TAttribute>(this Type type)
             where TAttribute : Attribute
         {
             if (!type.IsClassType()) throw new ArgumentException("Аргумент должен быть классом");

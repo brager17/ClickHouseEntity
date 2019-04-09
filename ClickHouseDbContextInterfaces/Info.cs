@@ -58,7 +58,7 @@ namespace ExpressionTreeVisitor
 
     public static class IHasNameExtensions
     {
-        public static string GetClassAttributeKey(this Enum @enum)
+        public static string GetNameAttributeValueEnumMember(this Enum @enum)
         {
             var enumType = @enum.GetType();
             var enumMember = enumType.GetMember(@enum.ToString()).Single();
@@ -68,7 +68,7 @@ namespace ExpressionTreeVisitor
         }
 
 
-        public static TKey GetClassAttributeKey<TKey>(this Type type, string AttributeName = null)
+        public static TKey GetNameAttributeValueEnumMember<TKey>(this Type type, string AttributeName = null)
         {
             if (!type.IsClassType())
                 throw new ArgumentException("Type должен быть классом");

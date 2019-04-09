@@ -4,6 +4,9 @@ using ClickHouseDbContextExntensions.CQRS;
 
 namespace ClickHouseTableGenerator
 {
+    /// <summary>
+    ///  маппинг типов c# в типы ClickHouse
+    /// </summary>
     public class DbTypeToCSharp : IQuery<Type, CreatingDbType>
     {
         private Dictionary<Type, CreatingDbType> _dic = new Dictionary<Type, CreatingDbType>

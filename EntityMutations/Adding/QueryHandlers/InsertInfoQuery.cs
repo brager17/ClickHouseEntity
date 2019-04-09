@@ -20,7 +20,7 @@ namespace EntityTracking
 
         public InsertInfo Query(T[] rows)
         {
-            var tableName = typeof(T).GetClassAttributeKey<string>();
+            var tableName = typeof(T).GetNameAttributeValueEnumMember<string>();
             var properties = typeof(T).GetProperties().ToArray();
             var rowsLength = rows.Length;
             var values = new object[rowsLength][];

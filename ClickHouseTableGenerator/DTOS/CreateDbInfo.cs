@@ -4,6 +4,9 @@ using ClickHouseDbContextExntensions.CQRS;
 
 namespace ClickHouseTableGenerator
 {
+    /// <summary>
+    /// Базовая информация о движке Clickhouse
+    /// </summary>
     public class EngineDbInfo
     {
         public int IndexGranularity { get; set; }
@@ -17,10 +20,10 @@ namespace ClickHouseTableGenerator
         }
     }
 
-    public class CreatingDbInfo
+    public class CreateDbInfo
     {
-        public virtual IEnumerable<DBColumn> DbColumns { get; set; }
-        public virtual string TableName { get; set; }
+        public  IEnumerable<DBColumn> DbColumns { get; set; }
+        public  string TableName { get; set; }
         public EngineDbInfo EngineDbInfo { get; set; }
     }
 }

@@ -3,6 +3,9 @@ using ExpressionTreeVisitor;
 
 namespace ClickHouseTableGenerator
 {
+    /// <summary>
+    /// Указать гранулярность (необязательный атрибут)
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public class IndexGranularity : Attribute, IHasKey<int>
     {

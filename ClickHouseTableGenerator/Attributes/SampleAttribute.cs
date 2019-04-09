@@ -2,7 +2,10 @@ using System;
 
 namespace ClickHouseTableGenerator
 {
-    public class SampleAttribute : Attribute
+    /// <summary>
+    /// ключи по которым нужно нужно сэмплировать
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property)] public class SampleAttribute : Attribute
     {
     }
 }
