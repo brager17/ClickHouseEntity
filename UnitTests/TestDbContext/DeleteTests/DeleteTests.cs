@@ -2,13 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
 
 namespace UnitTests.TestDbContext.DeleteTests
 {
     [TestFixture]
-    public class DeleteTests:BaseTestTableOperations
+    public class DeleteTests : BaseTestTableOperations
     {
         private TestDbContext _context;
 
@@ -30,6 +31,7 @@ namespace UnitTests.TestDbContext.DeleteTests
                 SomeString = "2",
                 SomeULong = (ulong) x
             });
+
         public void RemoveBy(Expression<Func<TestTable, bool>> filter)
         {
             _context.TestTables.Remove(filter);
@@ -60,6 +62,7 @@ namespace UnitTests.TestDbContext.DeleteTests
         public void TearDown()
         {
             ClearTestTable();
+            Thread.Sleep(1000);
         }
 
         [Test]

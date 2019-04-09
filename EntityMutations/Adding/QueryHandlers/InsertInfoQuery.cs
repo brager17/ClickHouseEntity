@@ -12,19 +12,15 @@ namespace EntityTracking
     public class InsertInfoQuery<T> : IQuery<T[], InsertInfo>
     {
         private readonly IQuery<TypeInfo, Func<T, object[]>> _createObjectArrayFunc;
-        private readonly IOperationRequestHandle<Type> _getTableName;
 
-        public InsertInfoQuery(
-            IQuery<TypeInfo, Func<T, object[]>> _createObjectArrayFunc,
-            IOperationRequestHandle<Type> getTableName)
+        public InsertInfoQuery(IQuery<TypeInfo, Func<T, object[]>> _createObjectArrayFunc)
         {
             this._createObjectArrayFunc = _createObjectArrayFunc;
-            _getTableName = getTableName;
         }
 
         public InsertInfo Query(T[] rows)
         {
-            var tableName = _getTableName.Handle(typeof(T));
+            var tableName = typeof(T).GetClassAttributeKey<string>();
             var properties = typeof(T).GetProperties().ToArray();
             var rowsLength = rows.Length;
             var values = new object[rowsLength][];
@@ -34,10 +30,10 @@ namespace EntityTracking
             {
                 values[i] = _createObjectArrayFunc.Query(typeInfo)(rows[i]);
             }
-       
+
             var insertPropertiesName = new string[properties.Length];
             for (int i = 0; i < properties.Length; i++) insertPropertiesName[i] = properties[i].GetColumnName();
-            
+
             return new InsertInfo
             {
                 Values = values, TableName = tableName, InsertColumns = insertPropertiesName

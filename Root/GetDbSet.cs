@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ClickDbContextInfrastructure;
 using ClickHouseDbContextExntensions.CQRS;
+using ClickHouseDbContextExntensions.DTOS;
 using Context;
 using DbContext;
 using EntityTracking;
@@ -25,7 +26,7 @@ namespace Root
                                     new Aggregate2Query<TypeInfo, Expression<Func<T, object[]>>, Func<T, object[]>>(
                                         new ObjectArrayLambdaCreator<T>(),
                                         new LambdaCompileQuery<Func<T, object[]>>())
-                                ), new TableNameRequestHandler()), loggers),
+                                )), loggers),
                         new StopWatchQuery<InsertInfo, AddingSql>(
                             new LoggerDecoratorWithConverter<InsertInfo, AddingSql>(
                                 new InsertInfoToSqlString(),
@@ -39,7 +40,7 @@ namespace Root
                         new ValueTypeExpressionToLinqInfoHandler()),
                     new WhereToSqlVisitor(),
                     new LoggerDecoratorWithConverter<WhereSqlTableInfo, DeleteStr>(
-                        new GetDeleteSql(new TableNameRequestHandler()), new DeleteStrLoggingConverter(), loggers),
+                        new GetDeleteSql(), new DeleteStrLoggingConverter(), loggers),
                     new GetPropsByMemberFactory(),
                     new WriteDbHandler<HasSqlStringInfo>(connectionString, new StubMutableQuery())));
         }

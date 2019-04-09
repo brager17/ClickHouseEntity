@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 
 namespace Context
 {
@@ -14,6 +15,21 @@ namespace Context
     {
         public void WriteLog(LogLevel logLevel, string log)
         {
+        }
+    }
+
+    public class FileDbLogger : IDbLogger
+    {
+        private readonly string _path;
+
+        public FileDbLogger(string path)
+        {
+            _path = path;
+        }
+
+        public void WriteLog(LogLevel logLevel, string log)
+        {
+            File.AppendAllText(_path, log);
         }
     }
 }

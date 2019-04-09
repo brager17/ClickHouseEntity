@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using ClickHouseDbContextExntensions.CQRS;
+using ClickHouseDbContextExntensions.DTOS;
 using ExpressionTreeVisitor;
 
 namespace EntityTracking

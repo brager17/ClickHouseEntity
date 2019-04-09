@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using ClickHouseDbContextExntensions.CQRS;
 using ExpressionTreeVisitor;
 
@@ -22,12 +21,12 @@ namespace DbContext
         public T Handle<T>(PropertiesNameValues cells)
         {
             ITInGenericQuery<PropertiesNameValues> nameValueListToObjectType;
-
             if (typeof(T).IsAnonymouseClass())
                 nameValueListToObjectType = _anonymousClassNameValueListToObject;
             else
                 nameValueListToObjectType = _concreteClassNameValueListToObject;
-            var result = (T) _concreteClassNameValueListToObject.GetType().GetMethod("Query").MakeGenericMethod(typeof(T))
+            var result = (T) _concreteClassNameValueListToObject.GetType().GetMethod("Query")
+                .MakeGenericMethod(typeof(T))
                 .Invoke(nameValueListToObjectType, new object[] {cells});
 
             return result;

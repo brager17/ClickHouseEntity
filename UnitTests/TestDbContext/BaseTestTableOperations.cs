@@ -4,7 +4,6 @@ using NUnit.Framework;
 
 namespace UnitTests.TestDbContext
 {
-    
     public class BaseTestTableOperations
     {
         protected TestDbContext _context { get; set; }
@@ -26,6 +25,7 @@ namespace UnitTests.TestDbContext
         {
             Assert.AreEqual(count, _context.TestTables.ToList().Count);
         }
+
         protected void ClearTestTable()
         {
             do

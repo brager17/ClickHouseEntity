@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using ClickHouse.Ado;
 using ClickHouseDbContextExntensions.CQRS;
+using ClickHouseDbContextExntensions.DTOS;
 
 namespace EntityTracking
 {
@@ -24,25 +25,10 @@ namespace EntityTracking
             {
                 cnn.Open();
                 var command = cnn.CreateCommand(input.Sql);
-                command = _commandQuery.Query(new DbCommandMutableInfo<T>() {Info = input, Command = command});
+                command = _commandQuery.Query(new DbCommandMutableInfo<T> {Info = input, Command = command});
                 command.ExecuteNonQuery();
                 cnn.Close();
             }
         }
-    }
-
-    public class DbInsertMutableQuery : IMutableQuery<DbCommandMutableInfo<AddingSql>, ClickHouseCommand>
-    {
-        public ClickHouseCommand Query(DbCommandMutableInfo<AddingSql> input)
-        {
-            var command = input.Command;
-            command.Parameters.Add(input.Info.ClickHouseParameter);
-            return command;
-        }
-    }
-
-    public class StubMutableQuery : IMutableQuery<DbCommandMutableInfo<HasSqlStringInfo>, ClickHouseCommand>
-    {
-        public ClickHouseCommand Query(DbCommandMutableInfo<HasSqlStringInfo> input) => input.Command;
     }
 }

@@ -8,7 +8,6 @@ namespace Tests.AdditionTests
     [TestFixture]
     public class AdditionTests : BaseTestTableOperations
     {
-
         [Test]
         public void AddTest1000()
         {

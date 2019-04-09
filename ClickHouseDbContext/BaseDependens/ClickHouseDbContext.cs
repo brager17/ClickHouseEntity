@@ -34,6 +34,7 @@ namespace Context
                             GetClickHouseProvider.Get(connectionString, _dbLoggers)),
                         getDbSetOperations.Invoke(null, new object[] {connectionString, _dbLoggers})));
                 });
+            GetClassGenerator.Get(ConnectionString, _dbLoggers).Generate(new ClassType() {classType = GetType()});
         }
 
         public class DbSet<T> : ClickHouseQueryable<T>, IDbSet, IDbSet<T>

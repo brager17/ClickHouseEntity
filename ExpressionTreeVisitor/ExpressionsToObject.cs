@@ -11,13 +11,13 @@ namespace DbContext
 {
     public class ExpressionsToObject : IExpressionsToObject
     {
-        private readonly   IQuery<ForSqlRequestInfo, string> _toSqlConverter;
+        private readonly IQuery<ForSqlRequestInfo, string> _toSqlConverter;
         private readonly IDbHandler _dbHandler;
-        private readonly IQuery<Expression,AggregateLinqInfo> _visitorHandler;
+        private readonly IQuery<Expression, AggregateLinqInfo> _visitorHandler;
 
         public ExpressionsToObject(
             IQuery<ForSqlRequestInfo, string> toSqlConverter,
-            IDbHandler dbHandler, IQuery<Expression,AggregateLinqInfo> visitorHandler)
+            IDbHandler dbHandler, IQuery<Expression, AggregateLinqInfo> visitorHandler)
         {
             _toSqlConverter = toSqlConverter;
             _dbHandler = dbHandler;

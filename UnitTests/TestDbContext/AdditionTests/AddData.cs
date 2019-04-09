@@ -13,7 +13,7 @@ namespace Tests.AdditionTests
         private static TestTable TestTableGenerate(int i) => new TestTable
         {
             SomeULong = (ulong) i,
-            SomeDate = new DateTime(1, 1, 1),
+            SomeDate = new DateTime(1995, 1, 1),
             SomeFloat = i,
             SomeString = $"{i}"
         };

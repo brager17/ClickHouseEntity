@@ -27,8 +27,14 @@ namespace DbContext
             throw new NotImplementedException();
         }
 
-        public TResult Execute<TResult>(Expression expression) => _expressionsToObject.Handle<TResult>(expression);
-        
+        public TResult Execute<TResult>(Expression expression)
+        {
+            if (!typeof(TResult).IsGenericType ||
+                !(typeof(TResult).GetGenericTypeDefinition() == typeof(IEnumerator<>)))
+                throw new ArgumentException();
 
+            var execute = _expressionsToObject.Handle<TResult>(expression);
+            return execute;
+        }
     }
 }

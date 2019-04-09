@@ -1,4 +1,5 @@
 using System;
+using ClickHouseTableGenerator;
 using DbContext;
 
 namespace UnitTests.TestDbContext
@@ -8,8 +9,21 @@ namespace UnitTests.TestDbContext
     // Int32 - int
     //Int64 - long
 
+    public class YandexMetrikaDbSetSettingProvider : ICreatingDbSettingsProvider
+    {
+        public EngineDbInfo Create()
+        {
+            return new EngineDbInfo
+            {
+                OrderKeys = new[] {"CounterID", " EventDate", "intHash32(UserID)"},
+                PartitionKeys = new[] {"toYYYYMM(EventDate)"},
+                Samples = new[] {"intHash32(UserID)"}
+            };
+        }
+    }
 
     [TableName("hits_v1")]
+    [DbSetSettings(typeof(YandexMetrikaDbSetSettingProvider))]
     public class YandexMetrikaTestTable
     {
         public ulong WatchID { get; set; }
@@ -113,8 +127,10 @@ namespace UnitTests.TestDbContext
         public int Income { get; set; }
 
         public int Interests { get; set; }
+
 //
         public int Robotness { get; set; }
+
 //
 //        public int[] GeneralInterests { get; set; }
         public long RemoteIP { get; set; }
@@ -146,7 +162,9 @@ namespace UnitTests.TestDbContext
         public string SocialSourcePage { get; set; }
         public long ParamPrice { get; set; }
         public string ParamOrderID { get; set; }
+
         public string ParamCurrency { get; set; }
+
 //
 //        public int ParamCurrencyID { get; set; }
 //

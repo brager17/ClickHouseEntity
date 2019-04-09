@@ -7,20 +7,17 @@ namespace DbContext
     public class SqlRequestHandler : ISqlRequestHandler
     {
         private readonly IOperationRequestHandle<IEnumerable<SelectInfo>> _selectRequestHandler;
-        private readonly IOperationRequestHandle<Type> _tableNameHandler;
         private readonly IOperationRequestHandle<IEnumerable<WhereInfo>> _whereRequestHandler;
         private readonly IOperationRequestHandle<TakeInfo> _takeSkipInfo;
         private readonly IOperationRequestHandle<IEnumerable<OrderInfo>> _orderRequestHandler;
 
         public SqlRequestHandler(
             IOperationRequestHandle<IEnumerable<SelectInfo>> selectRequestHandler,
-            IOperationRequestHandle<Type> tableNameHandler,
             IOperationRequestHandle<IEnumerable<WhereInfo>> whereRequestHandler,
             IOperationRequestHandle<TakeInfo> takeSkipInfo,
             IOperationRequestHandle<IEnumerable<OrderInfo>> orderRequestHandler)
         {
             _selectRequestHandler = selectRequestHandler;
-            _tableNameHandler = tableNameHandler;
             _whereRequestHandler = whereRequestHandler;
             _takeSkipInfo = takeSkipInfo;
             _orderRequestHandler = orderRequestHandler;
@@ -34,7 +31,7 @@ namespace DbContext
         public SqlRequest Handle(ForSqlRequestInfo linqInfo) => new SqlRequest()
         {
             Select = _selectRequestHandler.Handle(linqInfo.SelectInfo),
-            TableName = _tableNameHandler.Handle(linqInfo.SetType),
+            TableName = linqInfo.SetType.GetClassAttributeKey<string>(),
             Where = _whereRequestHandler.Handle(linqInfo.WhereInfo),
             Take = _takeSkipInfo.Handle(linqInfo.TakeInfo),
             OrderBy = _orderRequestHandler.Handle(linqInfo.OrderInfo)

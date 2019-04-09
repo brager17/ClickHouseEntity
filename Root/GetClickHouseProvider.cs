@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Http.Headers;
@@ -8,6 +9,7 @@ using System.Runtime.InteropServices.ComTypes;
 using ClickHouseDbContextExntensions.CQRS;
 using Context;
 using DbContext;
+using EntityTracking;
 using ExpressionTreeVisitor;
 
 namespace Root
@@ -92,22 +94,24 @@ namespace Root
         //todo add DI Container(хотя он тут нахуй не нужен
         public static ExpressionsToObject Get(string connectionString, IEnumerable<IDbLogger> loggers) =>
             new ExpressionsToObject(
-                new LoggerDecorator<ForSqlRequestInfo>(
-                    new ExpressionToSqlConverter(
-                        new SqlRequestHandler(
-                            new SelectRequestHandler(),
-                            new TableNameRequestHandler(),
-                            new WhereOperationRequestHandler(),
-                            new TakeOperationRequestHandle(),
-                            new OrderOperationRequestHandler())), loggers),
+                new StopWatchQuery<ForSqlRequestInfo, string>(
+                    new LoggerDecorator<ForSqlRequestInfo>(
+                        new ExpressionToSqlConverter(
+                            new SqlRequestHandler(
+                                new SelectRequestHandler(),
+                                new WhereOperationRequestHandler(),
+                                new TakeOperationRequestHandle(),
+                                new OrderOperationRequestHandler())), loggers), loggers),
                 new DbHandler(connectionString, new DataHandler(
                     new SimpleTypeObjectBinder(new PrimitiveTypeCreator()),
                     new ComplexObjectBinder(GetClassTypeBinder()),
                     new ArrayObjectBinder(new ArrayCreator()))),
+                new StopWatchQuery<Expression, AggregateLinqInfo>(
                 new VisitorsHandler(new PropertyMapInfoVisitor(new DtoToExpressionToLinqInfoHandler(),
                         new ValueTypeExpressionToLinqInfoHandler()),
-                    new CacheQuery<AggregateLinqVisitorDto, AggregateLinqInfo>(new AggregateLinqVisitor(
-                        new ConditionQuery<LambdaListSelectInfo, AggregateLinqInfo>(
-                            AggregateLinqVisitorConditions())), new EquatableByFuncAggregateLinqVisitorDto())));
+                    new CacheQuery<AggregateLinqVisitorDto, AggregateLinqInfo>(
+                        new AggregateLinqVisitor(
+                            new ConditionQuery<LambdaListSelectInfo, AggregateLinqInfo>(
+                                AggregateLinqVisitorConditions())), new EquatableByFuncAggregateLinqVisitorDto())),loggers));
     }
 }

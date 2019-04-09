@@ -13,7 +13,7 @@ namespace Tests
         public void Test0()
         {
             _testDbContext = new TestDbContext();
-            var l = _testDbContext.TestTables.Where(x=>x.SomeString == "соси").ToList();
+            var l = _testDbContext.TestTables.Where(x => x.SomeString == "соси").ToList();
             var s = l.ToList();
         }
 

@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using ExpressionTreeVisitor;
@@ -28,7 +30,7 @@ namespace DbContext
             PropertyInfo[] props;
             var names = Enumerable.Range(0, fields).Select(dataReader.GetName).ToArray();
             props = SortPropertiesByColumnName(typeof(T).GetProperties().ToArray(), names);
-
+            var s = new Stopwatch();
             do
             {
                 var values = new object[fields];

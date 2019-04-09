@@ -17,4 +17,8 @@
       <ProjectReference Include="..\ClickHouseDbContext\ClickHouseDbContext.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="SQL" />
+    </ItemGroup>
+
 </Project>

@@ -10,8 +10,4 @@
       <ProjectReference Include="..\ExpressionTreeVisitor\ExpressionTreeVisitor.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Adding\QueryHandlers\MutableQueries" />
-    </ItemGroup>
-
 </Project>

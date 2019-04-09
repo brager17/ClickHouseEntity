@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using ClickHouseTableGenerator;
 using Context;
 using DbContext;
 
@@ -8,10 +9,13 @@ namespace UnitTests.TestDbContext
     [TableName("mytable")]
     public class TestTable
     {
-        [ColumnName("some_date")] public DateTime SomeDate { get; set; }
-        [ColumnName("some_int")] public ulong SomeULong { get; set; }
-        [ColumnName("some_str")] public string SomeString { get; set; }
-        [ColumnName("some_float")] public float SomeFloat { get; set; }
+        [ColumnKey("some_date")]
+        [PartitionKey]
+        public DateTime SomeDate { get; set; }
+
+        [ColumnKey("some_int")] [OrderKey] public ulong SomeULong { get; set; }
+        [ColumnKey("some_str")] [OrderKey] public string SomeString { get; set; }
+        [ColumnKey("some_float")] public float SomeFloat { get; set; }
     }
 
 
@@ -23,6 +27,7 @@ namespace UnitTests.TestDbContext
         public TestDbContext() : base(ConnectionString)
         {
         }
+
         protected override IEnumerable<IDbLogger> _dbLoggers => new[] {new ConsoleDbLogger(),};
 
         public DbSet<TestTable> TestTables { get; set; }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
@@ -6,19 +7,43 @@ using System.Security.Cryptography.X509Certificates;
 namespace ExpressionTreeVisitor
 {
     // marker
-    public interface IHasName
+    public interface IHasKey<T> : IHasKey
     {
-        string Name { get; set; }
+        T Key { get; set; }
     }
 
-    public class NameAttribute : Attribute, IHasName
+    public interface IHasKey
     {
-        public string Name { get; set; }
+        object ObjectKey { get; set; }
+    }
+
+    public interface IHasKeys<T>
+    {
+        IEnumerable<T> Names { get; set; }
+    }
+
+    public class NameAttribute : Attribute, IHasKey<string>
+    {
+        public string Key { get; set; }
 
         public NameAttribute(string name)
         {
-            Name = name;
+            Key = name;
+            ObjectKey = name;
         }
+
+
+        public object ObjectKey { get; set; }
+    }
+
+    public abstract class NamesAttribute : Attribute, IHasKeys<string>
+    {
+        protected NamesAttribute(string[] names)
+        {
+            Names = names;
+        }
+
+        public IEnumerable<string> Names { get; set; }
     }
 
     public class InfoAttribute : NameAttribute
@@ -33,13 +58,47 @@ namespace ExpressionTreeVisitor
 
     public static class IHasNameExtensions
     {
-        public static string GetName(this Enum @enum)
+        public static string GetClassAttributeKey(this Enum @enum)
         {
             var enumType = @enum.GetType();
             var enumMember = enumType.GetMember(@enum.ToString()).Single();
             var attribute = enumMember.GetCustomAttribute<NameAttribute>();
-            var name = attribute?.Name ?? enumMember.Name;
+            var name = attribute?.Key ?? enumMember.Name;
             return name;
+        }
+
+
+        public static TKey GetClassAttributeKey<TKey>(this Type type, string AttributeName = null)
+        {
+            if (!type.IsClassType())
+                throw new ArgumentException("Type должен быть классом");
+
+            var values = GetKeyByType<TKey>(type.GetCustomAttributes(), AttributeName);
+            return values.SingleOrDefault();
+        }
+
+        private static IEnumerable<TKey> GetKeyByType<TKey>(IEnumerable<Attribute> attributes, string AttributeName)
+        {
+            var s = typeof(TKey);
+            bool FilterFunc(Attribute x) => typeof(IHasKey<>).MakeGenericType(typeof(TKey)).IsInstanceOfType(x);
+            var values = attributes
+                .Where(x => FilterFunc(x) && (AttributeName == null || x.GetType().Name == AttributeName))
+                .Cast<IHasKey>()
+                .Select(x => x.ObjectKey)
+                .ToList();
+
+            return values.Cast<TKey>();
+        }
+
+        public static TKey GetAttributeKeyByPropertyInfo<TKey>(this PropertyInfo propInfo,
+            string AttributeName = null) => GetKeyByType<TKey>(propInfo.GetCustomAttributes(), AttributeName).Single();
+
+        public static IEnumerable<TKey> GetPropertiesAttributesByClass<TKey>(this Type type,
+            string AttributeName = null)
+        {
+            if (!type.IsClassType())
+                throw new ArgumentException("Type должен быть классом");
+            return type.GetProperties().SelectMany(x => GetKeyByType<TKey>(x.GetCustomAttributes(), AttributeName));
         }
     }
 }

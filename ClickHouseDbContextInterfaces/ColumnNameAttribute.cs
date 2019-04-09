@@ -4,9 +4,9 @@ using ExpressionTreeVisitor;
 namespace DbContext
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public class ColumnNameAttribute : NameAttribute
+    public class ColumnKeyAttribute : NameAttribute
     {
-        public ColumnNameAttribute(string columnName) : base(columnName)
+        public ColumnKeyAttribute(string columnName) : base(columnName)
         {
         }
     }

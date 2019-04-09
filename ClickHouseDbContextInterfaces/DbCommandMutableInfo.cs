@@ -1,3 +1,4 @@
+
 using ClickHouse.Ado;
 
 namespace EntityTracking

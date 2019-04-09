@@ -1,4 +1,5 @@
 using ClickHouse.Ado;
+using ClickHouseDbContextExntensions.DTOS;
 
 namespace EntityTracking
 {

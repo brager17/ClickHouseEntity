@@ -9,4 +9,7 @@
             <HintPath>..\..\ReflectionCache\ReflectionCache\bin\Debug\netcoreapp2.2\ReflectionCache.dll</HintPath>
         </Reference>
     </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="ClickHouse.Ado" Version="1.1.13" />
+    </ItemGroup>
 </Project>
