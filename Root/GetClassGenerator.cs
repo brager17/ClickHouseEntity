@@ -17,7 +17,7 @@ namespace Root
             var tableGenerator = new TableGenerator(
                 new LoggerDecoratorWithConverter<ClassType, HasSqlStringInfo>(
                     new SqlGenerator(new EngineDbInfoFactory(), new DbTypeToCSharp(), new CreatingDbInfoToSqlInfoBy()),
-                    new HasSqlStringInfoLoggerAdapter(), new []{new FileDbLogger("../../../SQL/1.txt"), }),
+                    new HasSqlStringInfoLoggerAdapter(), new[] {new FileDbLogger("../../../SQL/SQL.txt"),}),
                 new WriteDbHandler<HasSqlStringInfo>(connectionString, new StubMutableQuery()));
             return tableGenerator;
         }

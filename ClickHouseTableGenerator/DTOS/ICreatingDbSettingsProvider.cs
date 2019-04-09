@@ -1,7 +1,8 @@
 namespace ClickHouseTableGenerator
 {
     /// <summary>
-    /// Реализуйте этот интерфейс,и укажите как аргумент атрибута DbSetSettings
+    /// Реализуйте этот интерфейс,когда используете SQL функции при опеделении партиции/ключа сортировки/сэмплирования
+    /// и укажите как аргумент атрибута DbSetSettings
     /// </summary>
     public interface ICreatingDbSettingsProvider
     {

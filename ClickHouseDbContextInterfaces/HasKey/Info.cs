@@ -6,58 +6,14 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace ExpressionTreeVisitor
 {
-    // marker
-    public interface IHasKey<T> : IHasKey
+    public static class HasKeyExtensions
     {
-        T Key { get; set; }
-    }
-
-    public interface IHasKey
-    {
-        object ObjectKey { get; set; }
-    }
-
-    public interface IHasKeys<T>
-    {
-        IEnumerable<T> Names { get; set; }
-    }
-
-    public class NameAttribute : Attribute, IHasKey<string>
-    {
-        public string Key { get; set; }
-
-        public NameAttribute(string name)
-        {
-            Key = name;
-            ObjectKey = name;
-        }
-
-
-        public object ObjectKey { get; set; }
-    }
-
-    public abstract class NamesAttribute : Attribute, IHasKeys<string>
-    {
-        protected NamesAttribute(string[] names)
-        {
-            Names = names;
-        }
-
-        public IEnumerable<string> Names { get; set; }
-    }
-
-    public class InfoAttribute : NameAttribute
-    {
-        public string Name { get; set; }
-
-        public InfoAttribute(string name) : base(name)
-        {
-            Name = name;
-        }
-    }
-
-    public static class IHasNameExtensions
-    {
+        /// <summary>
+        /// возвращает ключ атрибута NameAttribute, который повешен на элемента Enum'a,
+        /// если его нет то просто имя этого элемента
+        /// </summary>
+        /// <param name="enum"></param>
+        /// <returns></returns>
         public static string GetNameAttributeValueEnumMember(this Enum @enum)
         {
             var enumType = @enum.GetType();
@@ -67,7 +23,14 @@ namespace ExpressionTreeVisitor
             return name;
         }
 
-
+        /// <summary>
+        /// Возвращает ключ атрибута класса,реализующего IHasKey<TKey>
+        /// </summary>
+        /// <param name="type">Тип класса</param>
+        /// <param name="AttributeName">Имя атрибута добавленного на класс типа type</param>
+        /// <typeparam name="TKey">Generic интерфейса IHasKey<TKey></typeparam>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
         public static TKey GetNameAttributeValueEnumMember<TKey>(this Type type, string AttributeName = null)
         {
             if (!type.IsClassType())
@@ -90,9 +53,25 @@ namespace ExpressionTreeVisitor
             return values.Cast<TKey>();
         }
 
+        /// <summary>
+        /// Возвращает один ключ атрибута реализующего IHasKey<TKey> по PropertyType
+        /// </summary>
+        /// <param name="propInfo">PropertyType свойства на котором используется атрибут реализующий IHasKey<TKey></param>
+        /// <param name="AttributeName"></param>
+        /// <typeparam name="TKey">Generic интерфейса IHasKey<TKey></typeparam>
+        /// <returns></returns>
         public static TKey GetAttributeKeyByPropertyInfo<TKey>(this PropertyInfo propInfo,
             string AttributeName = null) => GetKeyByType<TKey>(propInfo.GetCustomAttributes(), AttributeName).Single();
 
+        /// <summary>
+        /// Метод собирает все атрибуты реализующие интерфейс IHasKey<TKey> которые повешены на свойства класса типа type
+        /// и возвращает их ключи
+        /// </summary>
+        /// <param name="type">Класс</param>
+        /// <param name="AttributeName">Имя атрибута</param>
+        /// <typeparam name="TKey">Generic интерфейса IHasKey<TKey></typeparam>
+        /// <returns>все ключи атрибутов свойтв реализующих интефейс IHasKey<TKey></returns>
+        /// <exception cref="ArgumentException"></exception>
         public static IEnumerable<TKey> GetPropertiesAttributesByClass<TKey>(this Type type,
             string AttributeName = null)
         {

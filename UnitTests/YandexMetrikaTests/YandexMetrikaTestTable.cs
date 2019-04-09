@@ -4,11 +4,6 @@ using DbContext;
 
 namespace UnitTests.TestDbContext
 {
-    // Int8 - int
-    // Int16-int
-    // Int32 - int
-    //Int64 - long
-
     public class YandexMetrikaDbSetSettingProvider : ICreatingDbSettingsProvider
     {
         public EngineDbInfo Create()
