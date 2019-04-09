@@ -6,6 +6,9 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace ExpressionTreeVisitor
 {
+    /// <summary>
+    /// Extension метода для типов на который повешены атрибуты реализующие интерфейс IHasKey<TKey>
+    /// </summary>
     public static class HasKeyExtensions
     {
         /// <summary>
