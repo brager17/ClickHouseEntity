@@ -16,6 +16,6 @@ namespace UnitTests.TestDbContext
         protected override IEnumerable<IDbLogger> _dbLoggers => new[] {new ConsoleDbLogger(),};
 
 //        protected override IEnumerable<IDbLogger> _dbLoggers => new[] {new StubConsoleLogger(),};
-        [NoCreateTable] public DbSet<YandexMetrikaTestTable> YandexMetrikaTable { get; set; }
+        [NoCreateTable] public MergeTreeDbSet<YandexMetrikaTestTable> YandexMetrikaTable { get; set; }
     }
 }

@@ -81,7 +81,6 @@ namespace Root
                 item1.Type.Name == item2.Type.Name;
         }
 
-        #endregion
 
         public class EquatableByFuncAggregateLinqVisitorDto : IEquatableByFunc<AggregateLinqVisitorDto>
         {
@@ -90,6 +89,7 @@ namespace Root
                 return item1.expression.ToString() == item2.expression.ToString();
             }
         }
+        #endregion
 
         public static ExpressionsToObject Get(string connectionString, IEnumerable<IDbLogger> loggers) =>
             new ExpressionsToObject(

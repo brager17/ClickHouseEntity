@@ -30,6 +30,6 @@ namespace UnitTests.TestDbContext
 
         protected override IEnumerable<IDbLogger> _dbLoggers => new[] {new ConsoleDbLogger(),};
 
-        public DbSet<TestTable> TestTables { get; set; }
+        public MergeTreeDbSet<TestTable> TestTables { get; set; }
     }
 }

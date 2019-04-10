@@ -12,5 +12,6 @@ namespace ExpressionTreeVisitor
 
         // todo refact this
         public static bool IsAnonymouseClass(this Type type) => type.Name.Contains("AnonymousType");
+        
     }
 }

@@ -10,12 +10,12 @@ using ClickHouseDbContextExntensions.CQRS;
 
 namespace EntityTracking
 {
-    public class DbSetOperations<T> : IDbSetOperations<T>
+    public class MergeTreeDbSetOperations<T> : IMergeTreeDbSetOperations<T>
     {
         private readonly IHandler<IEnumerable<T>> _addEnumerableHandler;
         private readonly IHandler<DeleteInfo<T>> _deleteEnumerableHandler;
 
-        public DbSetOperations(
+        public MergeTreeDbSetOperations(
             IHandler<IEnumerable<T>> addEnumerableHandler,
             IHandler<DeleteInfo<T>> deleteEnumerableHandler)
         {
@@ -28,20 +28,12 @@ namespace EntityTracking
             _addEnumerableHandler.Handle(items);
         }
 
-        public void Remove(IEnumerable<T> item, IEnumerator<T> enumerator)
-        {
-            throw new NotImplementedException();
-        }
-
         public void Remove(Expression<Func<T, bool>> exprFilter, Expression dbSetInitialExpression)
         {
             _deleteEnumerableHandler.Handle(new DeleteInfo<T>
                 {FilterExpression = exprFilter, DbSetInitialExpression = dbSetInitialExpression});
         }
 
-        public void SaveChanges()
-        {
-            throw new NotImplementedException();
-        }
+      
     }
 }

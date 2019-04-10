@@ -2,7 +2,7 @@
 <html lang='en'>
 <head>
 <meta charset='utf-8' />
-<title>UnitTests.TestDbContext.BenchmarkTests.YandexMetrikaBenchmarkTests-20190406-032335</title>
+<title>UnitTests.TestDbContext.BenchmarkTests.YandexMetrikaBenchmarkTests-20190410-081915</title>
 
 <style type="text/css">
 	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
@@ -22,14 +22,37 @@ Intel Core i5-6200U CPU 2.30GHz (Skylake), 1 CPU, 4 logical and 2 physical cores
 <pre><code></code></pre>
 
 <table>
-<thead><tr><th>                      Method</th><th>count</th><th> Mean</th><th>Error</th><th>StdDev</th>
+<thead><tr><th>                      Method</th><th>count</th><th>  Mean</th><th>Error</th><th>StdDev</th>
 </tr>
-</thead><tbody><tr><td>SelectInAnonymouseClass5Properties</td><td>1000</td><td>63.34 ms</td><td>1.247 ms</td><td>1.748 ms</td>
-</tr><tr><td>AdoNetSelectFiveColums</td><td>1000</td><td>60.41 ms</td><td>1.430 ms</td><td>4.217 ms</td>
-</tr><tr><td>SelectInAnonymouseClass5Properties</td><td>10000</td><td>201.48 ms</td><td>4.334 ms</td><td>6.486 ms</td>
-</tr><tr><td>AdoNetSelectFiveColums</td><td>10000</td><td>94.31 ms</td><td>1.847 ms</td><td>3.732 ms</td>
-</tr><tr><td>SelectInAnonymouseClass5Properties</td><td>100000</td><td>1,546.16 ms</td><td>25.507 ms</td><td>23.859 ms</td>
-</tr><tr><td>AdoNetSelectFiveColums</td><td>100000</td><td>405.29 ms</td><td>7.933 ms</td><td>9.444 ms</td>
+</thead><tbody><tr><td>SelectAll</td><td>10</td><td>86.11 ms</td><td>3.7074 ms</td><td>10.9313 ms</td>
+</tr><tr><td>AdoNetGetAll</td><td>10</td><td>93.09 ms</td><td>1.8532 ms</td><td>4.0287 ms</td>
+</tr><tr><td>SelectInPrimitiveType</td><td>10</td><td>50.01 ms</td><td>0.6496 ms</td><td>0.6076 ms</td>
+</tr><tr><td>AdoNetTestSelectInPrimitiveType</td><td>10</td><td>52.10 ms</td><td>0.4320 ms</td><td>0.4041 ms</td>
+</tr><tr><td>SelectAll</td><td>100</td><td>102.23 ms</td><td>3.7603 ms</td><td>11.0872 ms</td>
+</tr><tr><td>AdoNetGetAll</td><td>100</td><td>94.90 ms</td><td>1.8649 ms</td><td>3.0641 ms</td>
+</tr><tr><td>SelectInPrimitiveType</td><td>100</td><td>51.46 ms</td><td>0.7534 ms</td><td>0.7047 ms</td>
+</tr><tr><td>AdoNetTestSelectInPrimitiveType</td><td>100</td><td>53.86 ms</td><td>0.8965 ms</td><td>0.8386 ms</td>
+</tr><tr><td>SelectAll</td><td>1000</td><td>290.33 ms</td><td>5.7560 ms</td><td>13.1093 ms</td>
+</tr><tr><td>AdoNetGetAll</td><td>1000</td><td>136.38 ms</td><td>2.7109 ms</td><td>4.8186 ms</td>
+</tr><tr><td>SelectInAnonymouseClass5Properties</td><td>1000</td><td>82.76 ms</td><td>1.6469 ms</td><td>2.9274 ms</td>
+</tr><tr><td>AdoNetSelectFiveColums</td><td>1000</td><td>71.14 ms</td><td>1.3701 ms</td><td>1.5779 ms</td>
+</tr><tr><td>SelectInPrimitiveType</td><td>1000</td><td>63.08 ms</td><td>1.2167 ms</td><td>1.4484 ms</td>
+</tr><tr><td>AdoNetTestSelectInPrimitiveType</td><td>1000</td><td>67.15 ms</td><td>1.2888 ms</td><td>1.4325 ms</td>
+</tr><tr><td>SelectAll</td><td>10000</td><td>2,124.68 ms</td><td>18.4618 ms</td><td>17.2691 ms</td>
+</tr><tr><td>AdoNetGetAll</td><td>10000</td><td>572.70 ms</td><td>10.6841 ms</td><td>10.4932 ms</td>
+</tr><tr><td>SelectInDtoWith5Properties</td><td>10000</td><td>207.63 ms</td><td>4.1065 ms</td><td>9.5989 ms</td>
+</tr><tr><td>SelectInAnonymouseClass5Properties</td><td>10000</td><td>202.62 ms</td><td>4.0354 ms</td><td>9.8227 ms</td>
+</tr><tr><td>AdoNetSelectFiveColums</td><td>10000</td><td>107.10 ms</td><td>2.1133 ms</td><td>4.5035 ms</td>
+</tr><tr><td>SelectInPrimitiveType</td><td>10000</td><td>107.39 ms</td><td>2.1177 ms</td><td>5.0328 ms</td>
+</tr><tr><td>AdoNetTestSelectInPrimitiveType</td><td>10000</td><td>103.42 ms</td><td>2.0651 ms</td><td>5.1045 ms</td>
+</tr><tr><td>SelectAll</td><td>100000</td><td>20,035.78 ms</td><td>145.6007 ms</td><td>136.1950 ms</td>
+</tr><tr><td>AdoNetGetAll</td><td>100000</td><td>4,730.44 ms</td><td>37.9116 ms</td><td>35.4626 ms</td>
+</tr><tr><td>SelectInDtoWith5Properties</td><td>100000</td><td>1,464.93 ms</td><td>14.4586 ms</td><td>13.5245 ms</td>
+</tr><tr><td>SelectInAnonymouseClass5Properties</td><td>100000</td><td>1,477.50 ms</td><td>10.5184 ms</td><td>9.8389 ms</td>
+</tr><tr><td>AdoNetSelectFiveColums</td><td>100000</td><td>403.00 ms</td><td>8.0049 ms</td><td>12.4627 ms</td>
+</tr><tr><td>SelectInPrimitiveType</td><td>100000</td><td>460.72 ms</td><td>9.1018 ms</td><td>11.5109 ms</td>
+</tr><tr><td>AdoNetTestSelectInPrimitiveType</td><td>100000</td><td>404.48 ms</td><td>8.0009 ms</td><td>7.8579 ms</td>
+</tr><tr><td>SelectInDtoWith5Properties</td><td>1000000</td><td>14,160.45 ms</td><td>176.7752 ms</td><td>156.7066 ms</td>
 </tr></tbody></table>
 </body>
 </html>

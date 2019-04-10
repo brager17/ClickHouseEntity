@@ -15,15 +15,6 @@ using UnitTests.TestDbContext.BenchmarkTests;
 
 namespace ClickHouseQueryProvider
 {
-    /*var command = cnn.CreateCommand(@"create table testTable1
-                                    (
-                                      id      Int32,
-                                      name    String,
-                                      surname String
-                                    )
-                                    ENGINE = Memory
-                                    ");*/
-
     class Program
     {
         private const string ConnectionString =
@@ -31,8 +22,8 @@ namespace ClickHouseQueryProvider
 
         static void Main(string[] args)
         {
-//            var s = BenchmarkRunner.Run<YandexMetrikaBenchmarkTests>(new AllowNonOptimized());
-            var s = BenchmarkRunner.Run<AdditionBenchmarks>(new AllowNonOptimized());
+            var s = BenchmarkRunner.Run<YandexMetrikaBenchmarkTests>(new AllowNonOptimized());
+//            var s = BenchmarkRunner.Run<AdditionBenchmarks>(new AllowNonOptimized());
         }
 
         private class AllowNonOptimized : ManualConfig

@@ -18,30 +18,34 @@ namespace Context
 
         protected ClickHouseDbContext(string connectionString)
         {
+            #region initial
+
             ConnectionString = connectionString;
             // initial dbSets
             GetType().GetProperties()
-                .Where(x => x.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>))
+                .Where(x => x.PropertyType.GetGenericTypeDefinition() == typeof(MergeTreeDbSet<>))
                 .ToList()
                 .ForEach(x =>
                 {
                     var propertyType = x.PropertyType.GenericTypeArguments.First();
-                    var getDbSetOperations =
-                        typeof(GetDbSet).GetMethods().Single(xx => xx.Name == "GetDbSetOperations")
-                            .MakeGenericMethod(propertyType);
-                    x.SetValue(this, Activator.CreateInstance(typeof(DbSet<>).MakeGenericType(propertyType),
+                    var getDbSetOperations = typeof(GetDbSet).GetMethods().Single(xx => xx.Name == "GetDbSetOperations")
+                        .MakeGenericMethod(propertyType);
+                    x.SetValue(this, Activator.CreateInstance(typeof(MergeTreeDbSet<>).MakeGenericType(propertyType),
                         new ClickHouseQueryProvider(
                             GetClickHouseProvider.Get(connectionString, _dbLoggers)),
                         getDbSetOperations.Invoke(null, new object[] {connectionString, _dbLoggers})));
                 });
+            // table creating
             GetClassGenerator.Get(ConnectionString, _dbLoggers).Generate(new ClassType() {classType = GetType()});
+
+            #endregion
         }
 
-        public class DbSet<T> : ClickHouseQueryable<T>, IDbSet, IDbSet<T>
+        public class MergeTreeDbSet<T> : ClickHouseQueryable<T>, IDbSet, IMergeTreeDbSet<T>
         {
-            private readonly IDbSetOperations<T> _operations;
+            private readonly IMergeTreeDbSetOperations<T> _operations;
 
-            public DbSet(IQueryProvider queryProvider, IDbSetOperations<T> operations) :
+            public MergeTreeDbSet(IQueryProvider queryProvider, IMergeTreeDbSetOperations<T> operations) :
                 base(GetInitialExpressionByType<T>(), queryProvider)
             {
                 _operations = operations;
@@ -49,15 +53,7 @@ namespace Context
 
             public void Add(IEnumerable<T> items) => _operations.Add(items);
 
-            public void Remove(IEnumerable<T> item)
-            {
-                if (_enumerator == null) throw new ArgumentException();
-                _operations.Remove(item, _enumerator);
-            }
-
             public void Remove(Expression<Func<T, bool>> exprFilter) => _operations.Remove(exprFilter, Expression);
-
-            public void SaveChanges() => _operations.SaveChanges();
         }
 
         #region helpers
@@ -73,6 +69,7 @@ namespace Context
             var newExp = Expression.New(typeof(T));
             var memberInit = Expression.MemberInit(newExp, assignments);
             var lambda = Expression.Lambda<Func<T, T>>(memberInit, parameter);
+            //todo написать статическую обертку для всех Linq методов над IQueryable
             var SelectMethod = (MethodInfo) new CachedReflectionInfoTypeWrapper().GetMethod("Select_TSource_TResult_2")
                 .Invoke(null, new[] {typeof(T), typeof(T)});
             var callExpression = Expression.Call(null, SelectMethod, new T[] { }.AsQueryable().Expression,

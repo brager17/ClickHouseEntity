@@ -6,13 +6,14 @@ namespace EntityTracking
     {
         public override bool Equals(object obj)
         {
-            return ((TypeInfo) obj).Type.Name == Type.Name;
+            var typeInfo = ((TypeInfo) obj).Type;
+            return typeInfo.Name == Type.Name;
         }
 
         public override int GetHashCode()
         {
-            if (Type == null)return 0;
-            return Type.ToString().GetHashCode();
+            if (Type == null) return 0;
+            return Type.GetHashCode();
         }
 
         public Type Type { get; set; }

@@ -14,10 +14,9 @@ namespace Root
 {
     public static class GetDbSet
     {
-        public static IDbSetOperations<T> GetDbSetOperations<T>(string connectionString, IEnumerable<IDbLogger> loggers)
+        public static IMergeTreeDbSetOperations<T> GetDbSetOperations<T>(string connectionString, IEnumerable<IDbLogger> loggers)
         {
-            
-            return new DbSetOperations<T>(
+            return new MergeTreeDbSetOperations<T>(
                 new StopWatchHandler<IEnumerable<T>>(
                     new InsertHandler<T>(
                         new StopWatchQuery<T[], InsertInfo>(

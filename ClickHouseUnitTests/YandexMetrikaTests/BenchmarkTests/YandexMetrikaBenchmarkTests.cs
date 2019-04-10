@@ -28,7 +28,7 @@ namespace UnitTests.TestDbContext.BenchmarkTests
         [Arguments(1000)]
         [Arguments(10000)]
         [Arguments(100000)]
-//        [Benchmark]
+        [Benchmark]
         public void SelectAll(int count)
         {
             var list = _metrikaDbContext.YandexMetrikaTable.Take(count).ToList();
@@ -39,7 +39,7 @@ namespace UnitTests.TestDbContext.BenchmarkTests
         [Arguments(1000)]
         [Arguments(10000)]
         [Arguments(100000)]
-//        [Benchmark]
+        [Benchmark]
         public void AdoNetGetAll(int count)
         {
             adoOperation.Get("SELECT * FROM hits_v1 LIMIT " + count);
@@ -51,7 +51,7 @@ namespace UnitTests.TestDbContext.BenchmarkTests
         [Arguments(10000)]
         [Arguments(100000)]
         [Arguments(1000000)]
-//        [Benchmark]
+        [Benchmark]
         public void SelectInDtoWith5Properties(int count)
         {
             var list = _metrikaDbContext.YandexMetrikaTable.Select(x => new SelectYandexMetrikaTestDto
@@ -91,7 +91,7 @@ namespace UnitTests.TestDbContext.BenchmarkTests
         [Arguments(1000)]
         [Arguments(10000)]
         [Arguments(100000)]
-//        [Benchmark]
+        [Benchmark]
         public void SelectInPrimitiveType(int count)
         {
             var s = _metrikaDbContext.YandexMetrikaTable.Select(x => x.Title).Take(count).ToList();
@@ -102,7 +102,7 @@ namespace UnitTests.TestDbContext.BenchmarkTests
         [Arguments(1000)]
         [Arguments(10000)]
         [Arguments(100000)]
-//        [Benchmark]
+        [Benchmark]
         public void AdoNetTestSelectInPrimitiveType(int count)
         {
             adoOperation.Get("SELECT Title FROM hits_v1 LIMIT " + count);

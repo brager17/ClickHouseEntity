@@ -23,6 +23,7 @@ namespace Root
         }
     }
 
+    #region factory
     public class EngineDbInfoFactory : IQueryFactory<ClassType, IQuery<ClassType, EngineDbInfo>>
     {
         public IQuery<ClassType, EngineDbInfo> Create(ClassType input)
@@ -31,4 +32,5 @@ namespace Root
             return new EngineInfoByAttributesName();
         }
     }
+    #endregion
 }

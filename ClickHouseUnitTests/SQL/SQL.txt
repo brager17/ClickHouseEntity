@@ -178,3 +178,63 @@ ENGINE = MergeTree()
 PARTITION BY (some_date)
 ORDER BY (some_int,some_str)
 SETTINGS index_granularity = 8172;
+
+CREATE TABLE IF NOT EXISTS mytable 
+(some_date   DateTime,
+some_int   DateTime,
+some_str   String,
+some_float   Float) 
+ENGINE = MergeTree()
+PARTITION BY (some_date)
+ORDER BY (some_int,some_str)
+SETTINGS index_granularity = 8172;
+
+CREATE TABLE IF NOT EXISTS mytable 
+(some_date   DateTime,
+some_int   DateTime,
+some_str   String,
+some_float   Float) 
+ENGINE = MergeTree()
+PARTITION BY (some_date)
+ORDER BY (some_int,some_str)
+SETTINGS index_granularity = 8172;
+
+CREATE TABLE IF NOT EXISTS mytable 
+(some_date   DateTime,
+some_int   DateTime,
+some_str   String,
+some_float   Float) 
+ENGINE = MergeTree()
+PARTITION BY (some_date)
+ORDER BY (some_int,some_str)
+SETTINGS index_granularity = 8172;
+
+CREATE TABLE IF NOT EXISTS mytable 
+(some_date   DateTime,
+some_int   DateTime,
+some_str   String,
+some_float   Float) 
+ENGINE = MergeTree()
+PARTITION BY (some_date)
+ORDER BY (some_int,some_str)
+SETTINGS index_granularity = 8172;
+
+CREATE TABLE IF NOT EXISTS mytable 
+(some_date   DateTime,
+some_int   DateTime,
+some_str   String,
+some_float   Float) 
+ENGINE = MergeTree()
+PARTITION BY (some_date)
+ORDER BY (some_int,some_str)
+SETTINGS index_granularity = 8172;
+
+CREATE TABLE IF NOT EXISTS mytable 
+(some_date   DateTime,
+some_int   DateTime,
+some_str   String,
+some_float   Float) 
+ENGINE = MergeTree()
+PARTITION BY (some_date)
+ORDER BY (some_int,some_str)
+SETTINGS index_granularity = 8172;

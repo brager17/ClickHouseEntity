@@ -22,7 +22,6 @@ namespace UnitTests.TestDbContext.AdditionBenchmarks
             SomeString = $"{i}"
         };
 
-        #endregion
 
         private TestDbContext _context = new TestDbContext();
 
@@ -31,6 +30,7 @@ namespace UnitTests.TestDbContext.AdditionBenchmarks
         private static IEnumerable<TestTable> Data10000 = DataCountGenerate(10000);
         private static IEnumerable<TestTable> Data100000 = DataCountGenerate(100000);
         private static IEnumerable<TestTable> Data1000000 = DataCountGenerate(1000000);
+        #endregion
 
 
         [Benchmark]
