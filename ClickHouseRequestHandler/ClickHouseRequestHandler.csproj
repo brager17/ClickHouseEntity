@@ -10,7 +10,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ClickHouse.DbContextInterfaces\ClickHouse.DbContextInterfaces.csproj" />
       <ProjectReference Include="..\ClickHouseDbContextInterfaces\ClickHouseDbContextInterfaces.csproj" />
     </ItemGroup>
 

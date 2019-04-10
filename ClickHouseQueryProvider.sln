@@ -4,9 +4,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClickHouseQueryProvider", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClickHouseRequestHandler", "ClickHouseRequestHandler\ClickHouseRequestHandler.csproj", "{146B59BC-5D54-4ADA-8F50-B83A1A84BFB8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClickHouse.DbContext", "ClickHouse.DbContext\ClickHouse.DbContext.csproj", "{ADB96FAB-F5B5-41A6-995F-68831546F5D0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClickHouseDbContext", "ClickHouseDbContext\ClickHouseDbContext.csproj", "{ADB96FAB-F5B5-41A6-995F-68831546F5D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{9E2D6B8A-B430-45B0-905D-D10D0530B282}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClickHouseUnitTests", "ClickHouseUnitTests\ClickHouseUnitTests.csproj", "{9E2D6B8A-B430-45B0-905D-D10D0530B282}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClickHouseRoot", "ClickHouseRoot\ClickHouseRoot.csproj", "{B793A572-12EB-4BA0-8234-A1E0E2FC7C03}"
 EndProject
@@ -14,7 +14,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClickHouseEntityMutations",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClickHouseTableGenerator", "ClickHouseTableGenerator\ClickHouseTableGenerator.csproj", "{F74993C2-0A17-4F76-A750-DDD363EB8AB5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClickHouse.DbContextInterfaces", "ClickHouse.DbContextInterfaces\ClickHouse.DbContextInterfaces.csproj", "{85AB0855-BF07-4C87-938B-DEB9E7B60B4D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClickHouseDbContextInterfaces", "ClickHouseDbContextInterfaces\ClickHouseDbContextInterfaces.csproj", "{85AB0855-BF07-4C87-938B-DEB9E7B60B4D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
