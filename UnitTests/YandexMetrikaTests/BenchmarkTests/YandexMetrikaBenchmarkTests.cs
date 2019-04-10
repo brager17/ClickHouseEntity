@@ -109,7 +109,7 @@ namespace UnitTests.TestDbContext.BenchmarkTests
         }
 
 
-        public class AdoBenchMarkSelectOperation
+        private class AdoBenchMarkSelectOperation
         {
             private string ConnectionString =>
                 "Host=localhost;Port=9000;User=default;Password=;SocketTimeout=600000;Database=datasets";

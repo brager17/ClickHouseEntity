@@ -14,11 +14,13 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ClickHouseDbContext\ClickHouseDbContext.csproj" />
+      <Folder Include="SQL" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="SQL" />
+      <ProjectReference Include="..\ClickHouse.DbContextInterfaces\ClickHouse.DbContextInterfaces.csproj" />
+      <ProjectReference Include="..\ClickHouse.DbContext\ClickHouse.DbContext.csproj" />
+      <ProjectReference Include="..\ClickHouseTableGenerator\ClickHouseTableGenerator.csproj" />
     </ItemGroup>
 
 </Project>

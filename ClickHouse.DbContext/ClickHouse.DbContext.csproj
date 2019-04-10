@@ -9,7 +9,7 @@
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\ClickHouseDbContextInterfaces\ClickHouseDbContextInterfaces.csproj" />
-      <ProjectReference Include="..\Root\Root.csproj" />
+      <ProjectReference Include="..\ClickHouseRoot\ClickHouseRoot.csproj" />
     </ItemGroup>
     <ItemGroup>
       <Reference Include="ReflectionCache, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">

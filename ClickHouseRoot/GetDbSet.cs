@@ -14,9 +14,9 @@ namespace Root
 {
     public static class GetDbSet
     {
-        //todo инкапсулировать connection string в одном классе
         public static IDbSetOperations<T> GetDbSetOperations<T>(string connectionString, IEnumerable<IDbLogger> loggers)
         {
+            
             return new DbSetOperations<T>(
                 new StopWatchHandler<IEnumerable<T>>(
                     new InsertHandler<T>(

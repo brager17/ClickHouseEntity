@@ -91,7 +91,6 @@ namespace Root
             }
         }
 
-        //todo add DI Container(хотя он тут нахуй не нужен
         public static ExpressionsToObject Get(string connectionString, IEnumerable<IDbLogger> loggers) =>
             new ExpressionsToObject(
                 new StopWatchQuery<ForSqlRequestInfo, string>(

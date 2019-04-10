@@ -7,7 +7,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\ClickHouseDbContextInterfaces\ClickHouseDbContextInterfaces.csproj" />
-      <ProjectReference Include="..\ExpressionTreeVisitor\ExpressionTreeVisitor.csproj" />
+      <ProjectReference Include="..\ClickHouseRequestHandler\ClickHouseRequestHandler.csproj" />
     </ItemGroup>
 
 </Project>

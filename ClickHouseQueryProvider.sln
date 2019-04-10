@@ -2,19 +2,19 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClickHouseQueryProvider", "ClickHouseQueryProvider\ClickHouseQueryProvider.csproj", "{C1318322-69C3-4D5C-AC13-E757F376420A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressionTreeVisitor", "ExpressionTreeVisitor\ExpressionTreeVisitor.csproj", "{146B59BC-5D54-4ADA-8F50-B83A1A84BFB8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClickHouseRequestHandler", "ClickHouseRequestHandler\ClickHouseRequestHandler.csproj", "{146B59BC-5D54-4ADA-8F50-B83A1A84BFB8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClickHouseDbContext", "ClickHouseDbContext\ClickHouseDbContext.csproj", "{ADB96FAB-F5B5-41A6-995F-68831546F5D0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClickHouse.DbContext", "ClickHouse.DbContext\ClickHouse.DbContext.csproj", "{ADB96FAB-F5B5-41A6-995F-68831546F5D0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{9E2D6B8A-B430-45B0-905D-D10D0530B282}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClickHouseDbContextInterfaces", "ClickHouseDbContextInterfaces\ClickHouseDbContextInterfaces.csproj", "{B50DD5B6-CD70-446D-8891-2A2B46FED688}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClickHouseRoot", "ClickHouseRoot\ClickHouseRoot.csproj", "{B793A572-12EB-4BA0-8234-A1E0E2FC7C03}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Root", "Root\Root.csproj", "{B793A572-12EB-4BA0-8234-A1E0E2FC7C03}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityMutations", "EntityMutations\EntityMutations.csproj", "{844FE4C9-FCEA-4152-8651-7B4037A173C1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClickHouseEntityMutations", "ClickHouseEntityMutations\ClickHouseEntityMutations.csproj", "{844FE4C9-FCEA-4152-8651-7B4037A173C1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClickHouseTableGenerator", "ClickHouseTableGenerator\ClickHouseTableGenerator.csproj", "{F74993C2-0A17-4F76-A750-DDD363EB8AB5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClickHouse.DbContextInterfaces", "ClickHouse.DbContextInterfaces\ClickHouse.DbContextInterfaces.csproj", "{85AB0855-BF07-4C87-938B-DEB9E7B60B4D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,10 +38,6 @@ Global
 		{9E2D6B8A-B430-45B0-905D-D10D0530B282}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E2D6B8A-B430-45B0-905D-D10D0530B282}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E2D6B8A-B430-45B0-905D-D10D0530B282}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B50DD5B6-CD70-446D-8891-2A2B46FED688}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B50DD5B6-CD70-446D-8891-2A2B46FED688}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B50DD5B6-CD70-446D-8891-2A2B46FED688}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B50DD5B6-CD70-446D-8891-2A2B46FED688}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B793A572-12EB-4BA0-8234-A1E0E2FC7C03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B793A572-12EB-4BA0-8234-A1E0E2FC7C03}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B793A572-12EB-4BA0-8234-A1E0E2FC7C03}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -54,5 +50,9 @@ Global
 		{F74993C2-0A17-4F76-A750-DDD363EB8AB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F74993C2-0A17-4F76-A750-DDD363EB8AB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F74993C2-0A17-4F76-A750-DDD363EB8AB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85AB0855-BF07-4C87-938B-DEB9E7B60B4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85AB0855-BF07-4C87-938B-DEB9E7B60B4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85AB0855-BF07-4C87-938B-DEB9E7B60B4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85AB0855-BF07-4C87-938B-DEB9E7B60B4D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

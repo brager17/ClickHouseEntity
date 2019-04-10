@@ -2,6 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp2.2</TargetFramework>
+        <RootNamespace>ExpressionTreeVisitor</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -9,6 +10,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\ClickHouse.DbContextInterfaces\ClickHouse.DbContextInterfaces.csproj" />
       <ProjectReference Include="..\ClickHouseDbContextInterfaces\ClickHouseDbContextInterfaces.csproj" />
     </ItemGroup>
 
